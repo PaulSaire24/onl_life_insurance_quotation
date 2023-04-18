@@ -14,7 +14,6 @@
 	<description>Deployment unit onl_life_insurance_quotation of uuaa rbvd</description>
 	<properties>
 		<apx.core.online.version>7.8.9</apx.core.online.version>
-		<outputDirectoryDTOs>../../../target/dtos</outputDirectoryDTOs>
 		<outputDirectoryLibraries>../../../target/libraries</outputDirectoryLibraries>
 		<outputDirectoryTransactions>../../../target/transactions</outputDirectoryTransactions>
 		<jacoco.no.coverage>0.00</jacoco.no.coverage>
@@ -22,7 +21,6 @@
 		<jacoco.type.coverage>COMPLEXITY</jacoco.type.coverage>
 	</properties>
 	<modules>
-		<module>artifact/dtos</module>
 		<module>artifact/libraries</module>
 		<module>artifact/transactions</module>
 	</modules>
