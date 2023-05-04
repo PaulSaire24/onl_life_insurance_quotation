@@ -14,10 +14,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.client.RestClientException;
 
 import java.nio.charset.StandardCharsets;
+
+import static java.util.Collections.singletonMap;
 
 public class RBVDR303Impl extends RBVDR303Abstract {
 
@@ -31,18 +34,26 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 
 		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Request body: {}", requestBody);
 
-		String uri = this.applicationConfigurationService.getProperty(RBVDProperties.QUOTATION_EASYES_RIMAC_URI.getValue());
+		final String key = "ideCotizacion";
+
+		String uriFromConsole = this.applicationConfigurationService.
+				getProperty(RBVDProperties.QUOTATION_EASYES_RIMAC_URI.getValue());
+
+		String uri = uriFromConsole.replace(key, rimacQuotation);
+
+		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** URI: {}", uri);
 
 		SignatureAWS signature = this.pisdR014.executeSignatureConstruction(requestBody,
-				HttpMethod.POST.toString(), uri, null, traceId);
+				HttpMethod.PATCH.toString(), uri, null, traceId);
 
 		HttpHeaders headers = this.createHttpHeaders(signature);
 
 		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
 		try {
-			EasyesQuotationBO easyQuotationRimacResponse = this.externalApiConnector.postForObject(RBVDProperties.QUOTATION_EASYES_RIMAC.getValue(), entity,
-					EasyesQuotationBO.class, rimacQuotation);
+			ResponseEntity<EasyesQuotationBO> responseEntity = this.externalApiConnector.exchange(
+					RBVDProperties.QUOTATION_EASYES_RIMAC.getValue(), HttpMethod.PATCH, entity, EasyesQuotationBO.class, singletonMap(key, rimacQuotation));
+			EasyesQuotationBO easyQuotationRimacResponse = responseEntity.getBody();
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Response body: {}", getRequestBodyAsJsonFormat(easyQuotationRimacResponse));
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac END *****");
 			return easyQuotationRimacResponse;
@@ -61,10 +72,10 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
-		headers.set("Authorization", signature.getAuthorization());
-		headers.set("X-Amz-Date", signature.getxAmzDate());
-		headers.set("x-api-key", signature.getxApiKey());
-		headers.set("traceId", signature.getTraceId());
+		headers.set(RBVDProperties.AUTHORIZATION_HEADER.getValue(), signature.getAuthorization());
+		headers.set(RBVDProperties.XAMZDATE_HEADER.getValue(), signature.getxAmzDate());
+		headers.set(RBVDProperties.XAPIKEY_HEADER.getValue(), signature.getxApiKey());
+		headers.set(RBVDProperties.TRACEID_HEADER.getValue(), signature.getTraceId());
 		return headers;
 	}
 

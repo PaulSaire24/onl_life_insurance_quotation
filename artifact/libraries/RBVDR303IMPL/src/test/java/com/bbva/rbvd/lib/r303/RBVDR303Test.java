@@ -9,8 +9,10 @@ import com.bbva.elara.utility.api.connector.APIConnector;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.lib.r014.PISDR014;
 
+import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.impl.RBVDR303Impl;
 
 import org.junit.Before;
@@ -18,9 +20,13 @@ import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestClientException;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -50,6 +56,9 @@ public class RBVDR303Test {
 		applicationConfigurationService = mock(ApplicationConfigurationService.class);
 		rbvdR303.setApplicationConfigurationService(applicationConfigurationService);
 
+		when(this.applicationConfigurationService.getProperty(RBVDProperties.QUOTATION_EASYES_RIMAC_URI.getValue()))
+				.thenReturn("/api-vida/V1/cotizaciones/ideCotizacion/seleccionar");
+
 		externalApiConnector = mock(APIConnector.class);
 		rbvdR303.setExternalApiConnector(externalApiConnector);
 
@@ -61,19 +70,28 @@ public class RBVDR303Test {
 	}
 	
 	@Test
-	public void executeEasyesQuotationRimacOK() {
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any(), (Object) anyVararg())).
-				thenReturn(new EasyesQuotationBO());
+	public void executeEasyesQuotationRimacOK() throws IOException {
+		EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
+				thenReturn(new ResponseEntity(rimacResponse, HttpStatus.OK));
 
 		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
 				"rimacQuotation", "traceId");
 
 		assertNotNull(validation);
+		assertNotNull(validation.getPayload());
+		assertNotNull(validation.getPayload().getStatus());
+		assertNotNull(validation.getPayload().getMensaje());
+		assertNotNull(validation.getPayload().getDetalleCotizacion());
+		assertNotNull(validation.getPayload().getDetalleCotizacion().get(0));
+		assertNotNull(validation.getPayload().getDetalleCotizacion().get(0).getFechaCreacion());
+		assertNotNull(validation.getPayload().getDetalleCotizacion().get(0).getFechaExpiracion());
 	}
 
 	@Test
 	public void executeEasyesQuotationRimacWithRestClientException() {
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any(), (Object) anyVararg())).
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
 				thenThrow(new RestClientException("Something went wrong!!"));
 
 		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),

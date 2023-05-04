@@ -3,7 +3,7 @@ package com.bbva.rbvd;
 import com.bbva.elara.transaction.AbstractTransaction;
 import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.BankDTO;
 
 /**
  * In this class, the input and output data is defined automatically through the setters and getters.
@@ -19,13 +19,6 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected InsuranceProductDTO getProduct(){
 		return (InsuranceProductDTO)this.getParameter("product");
-	}
-
-	/**
-	 * Return value for input parameter insuredAmount
-	 */
-	protected InsuredAmountDTO getInsuredamount(){
-		return (InsuredAmountDTO)this.getParameter("insuredAmount");
 	}
 
 	/**
@@ -50,6 +43,13 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter bank
+	 */
+	protected BankDTO getBank(){
+		return (BankDTO)this.getParameter("bank");
+	}
+
+	/**
 	 * Set value for String output parameter id
 	 */
 	protected void setId(final String field){
@@ -61,13 +61,6 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setProduct(final InsuranceProductDTO field){
 		this.addParameter("product", field);
-	}
-
-	/**
-	 * Set value for InsuredAmountDTO output parameter insuredAmount
-	 */
-	protected void setInsuredamount(final InsuredAmountDTO field){
-		this.addParameter("insuredAmount", field);
 	}
 
 	/**
@@ -89,5 +82,12 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setExternalsimulationid(final String field){
 		this.addParameter("externalSimulationId", field);
+	}
+
+	/**
+	 * Set value for BankDTO output parameter bank
+	 */
+	protected void setBank(final BankDTO field){
+		this.addParameter("bank", field);
 	}
 }
