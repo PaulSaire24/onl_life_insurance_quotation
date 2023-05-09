@@ -4,6 +4,7 @@ import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r304.impl.dao.impl.DAOServiceImpl;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
@@ -102,14 +103,14 @@ public class DAOServiceImplTest {
 
     @Test(expected = BusinessException.class)
     public void executeQuotationModQueryWithBusinessException() {
-        this.daoServiceImpl.executeQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO());
+        this.daoServiceImpl.executeQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO(), new EasyesQuotationBO());
     }
 
     @Test
     public void executeQuotationModQuery_OK() {
         when(this.pisdr350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION_MOD.getValue(), new HashMap<>())).thenReturn(1);
 
-        this.daoServiceImpl.executeQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO());
+        this.daoServiceImpl.executeQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO(), new EasyesQuotationBO());
     }
 
 }

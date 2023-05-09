@@ -2,6 +2,8 @@ package com.bbva.rbvd.lib.r304.impl.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 
@@ -19,6 +21,9 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationPayloadBO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r303.RBVDR303;
+import org.joda.time.LocalDate;
+
 import java.math.BigDecimal;
 
 import java.sql.Timestamp;
@@ -31,10 +36,14 @@ import java.util.Map;
 
 import static java.math.BigDecimal.valueOf;
 import static java.util.Collections.singletonList;
+import static java.util.Objects.nonNull;
 
 public class MapperHelper {
 
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
     private ApplicationConfigurationService applicationConfigurationService;
+    private RBVDR303 rbvdR303;
 
     public EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO easyesQuotationDao, final String policyQuotaInternalId) {
         EasyesQuotationBO easyesQuotationBO = new EasyesQuotationBO();
@@ -65,13 +74,12 @@ public class MapperHelper {
     }
 
     public InsuranceQuotationDAO createInsuranceQuotationDAO(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation) {
-        InsuranceQuotationDAO insuranceQuotationDAO = new InsuranceQuotationDAO();
+        final InsuranceQuotationDAO insuranceQuotationDAO = new InsuranceQuotationDAO();
         insuranceQuotationDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
         insuranceQuotationDAO.setInsuranceSimulationId(quotationDao.getInsuranceSimulationId());
         insuranceQuotationDAO.setInsuranceCompanyQuotaId(easyesQuotation.getExternalSimulationId());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        insuranceQuotationDAO.setQuoteDate(dateFormat.format(new Date()));
+        insuranceQuotationDAO.setQuoteDate(this.dateFormat.format(new Date()));
 
         insuranceQuotationDAO.setPolicyQuotaEndValidityDate(quotationDao.getCustSimulationExpiredDate());
         insuranceQuotationDAO.setCustomerId(easyesQuotation.getHolder().getId());
@@ -83,7 +91,7 @@ public class MapperHelper {
     }
 
     public Map<String, Object> createArgumentsQuotationDao(final InsuranceQuotationDAO insuranceQuotationDao) {
-        Map<String, Object> arguments = new HashMap<>();
+        final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), insuranceQuotationDao.getInsuranceSimulationId());
         arguments.put(RBVDProperties.FIELD_INSURANCE_COMPANY_QUOTA_ID.getValue(), insuranceQuotationDao.getInsuranceCompanyQuotaId());
@@ -99,11 +107,12 @@ public class MapperHelper {
         return arguments;
     }
 
-    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation) {
+    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation,
+                                                          final EasyesQuotationBO easyesQuotationBO) {
 
         InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
 
-        com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO insuranceQuotationModDAO = new InsuranceQuotationModDAO();
+        final com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO insuranceQuotationModDAO = new InsuranceQuotationModDAO();
         insuranceQuotationModDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
         insuranceQuotationModDAO.setInsuranceProductId(quotationDao.getInsuranceProductId());
         insuranceQuotationModDAO.setInsuranceModalityType(plan.getId());
@@ -116,19 +125,27 @@ public class MapperHelper {
         String paymentFrequency = this.applicationConfigurationService.getProperty(installment.getPeriod().getId());
         insuranceQuotationModDAO.setPolicyPaymentFrequencyType(paymentFrequency);
 
-        insuranceQuotationModDAO.setFinancingStartDate("01/01/2023"); //FALTA CAMBIAR
-        insuranceQuotationModDAO.setFinancingEndDate("01/02/2023"); //FALTA CAMBIARQ
+        final String rimacFechaInicio = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+                getFinanciamientos().get(0).getFechaInicio();
+        final String rimacFechaFin = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+                getFinanciamientos().get(0).getFechaFin();
+
+        LocalDate localDateFechaInicio = new LocalDate(rimacFechaInicio);
+        LocalDate localDateFechaFin = new LocalDate(rimacFechaFin);
+
+        insuranceQuotationModDAO.setFinancingStartDate(this.dateFormat.format(localDateFechaInicio.toDateTimeAtStartOfDay().toDate()));
+        insuranceQuotationModDAO.setFinancingEndDate(this.dateFormat.format(localDateFechaFin.toDateTimeAtStartOfDay().toDate()));
 
         insuranceQuotationModDAO.setPremiumAmount(installment.getPaymentAmount().getAmount());
         insuranceQuotationModDAO.setPremiumCurrencyId(installment.getPaymentAmount().getCurrency());
 
-        insuranceQuotationModDAO.setSaveQuotationIndType(null); //FALTA CAMBIARQ
+        insuranceQuotationModDAO.setSaveQuotationIndType(null);
         insuranceQuotationModDAO.setLastChangeBranchId(easyesQuotation.getBank().getBranch().getId());
         insuranceQuotationModDAO.setSourceBranchId(easyesQuotation.getBank().getBranch().getId());
         insuranceQuotationModDAO.setCreationUser(easyesQuotation.getCreationUser());
         insuranceQuotationModDAO.setUserAudit(easyesQuotation.getUserAudit());
-        insuranceQuotationModDAO.setContactEmailDesc(null);  //FALTA CAMBIARQ
-        insuranceQuotationModDAO.setCustomerPhoneDesc(null);  //FALTA CAMBIARQ
+        insuranceQuotationModDAO.setContactEmailDesc(null);
+        insuranceQuotationModDAO.setCustomerPhoneDesc(null);
         insuranceQuotationModDAO.setDataTreatmentIndType((easyesQuotation.getIsDataTreatment() ? "S" : "N"));
         return insuranceQuotationModDAO;
     }
@@ -157,16 +174,31 @@ public class MapperHelper {
     }
 
     public void mappingOutputFields(final EasyesQuotationDTO easyesQuotation, final EasyesQuotationDAO easyesQuotationDao) {
-        easyesQuotation.getHolder().setFirstName("Fulano"); //FALTA CAMBIAR!!!!!!!!
-        easyesQuotation.getHolder().setLastName("Sultano"); //FALTA CAMBIAR!!!!!!!!
-        easyesQuotation.getHolder().setFullName("Fulano Sultano"); //FALTA CAMBIAR!!!!!!!!
+
+        final String defaultValue = "";
+
+        CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(easyesQuotation.getHolder().getId());
+
+        if(nonNull(customerInformation)) {
+            easyesQuotation.getHolder().setFirstName(customerInformation.getFirstName());
+            easyesQuotation.getHolder().setLastName(customerInformation.getLastName());
+            final String fullName = customerInformation.getFirstName().concat(" ").
+                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName());
+            easyesQuotation.getHolder().setFullName(fullName);
+        } else {
+            easyesQuotation.getHolder().setFirstName(defaultValue);
+            easyesQuotation.getHolder().setLastName(defaultValue);
+            easyesQuotation.getHolder().setFullName(defaultValue);
+        }
+
         easyesQuotation.getProduct().setName(easyesQuotationDao.getInsuranceProductDescription());
         easyesQuotation.getProduct().getPlans().get(0).setName(easyesQuotationDao.getInsuranceModalityName());
-        //easyesQuotation.getProduct().getPlans().get(0).getTotalInstallment().getPeriod().setName();
         easyesQuotation.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
                 .setName(easyesQuotationDao.getPaymentFrequencyName());
     }
 
     public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
+
+    public void setRbvdR303(RBVDR303 rbvdR303) {this.rbvdR303 = rbvdR303;}
 
 }

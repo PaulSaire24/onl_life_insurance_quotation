@@ -66,7 +66,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 			this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
 
-			this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation);
+			this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
 
 			this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
 
@@ -75,6 +75,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 			return easyesQuotation;
 		} catch (BusinessException exception) {
 			this.printErrorMessage(exception.getMessage());
+			this.addAdvice(exception.getAdviceCode());
 			return null;
 		}
 	}

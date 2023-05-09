@@ -2,10 +2,13 @@ package com.bbva.rbvd.lib.r304.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
 
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 
+import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
@@ -17,6 +20,7 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 
 import org.junit.Before;
@@ -35,12 +39,14 @@ import static java.math.BigDecimal.valueOf;
 import static java.util.Collections.singletonMap;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
 
 public class MapperHelperTest {
 
     private final MapperHelper mapperHelper = new MapperHelper();
 
     private ApplicationConfigurationService applicationConfigurationService;
+    private RBVDR303 rbvdR303;
 
     private EasyesQuotationDAO easyesQuotationDao;
     private EasyesQuotationDTO easyesQuotationDto;
@@ -54,6 +60,9 @@ public class MapperHelperTest {
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
         this.mapperHelper.setApplicationConfigurationService(applicationConfigurationService);
 
+        rbvdR303 = mock(RBVDR303.class);
+        this.mapperHelper.setRbvdR303(rbvdR303);
+
         easyesQuotationDao = mock(EasyesQuotationDAO.class);
 
         when(easyesQuotationDao.getInsuranceSimulationId()).thenReturn(valueOf(432));
@@ -61,6 +70,9 @@ public class MapperHelperTest {
         when(easyesQuotationDao.getInsuranceBusinessName()).thenReturn("EASYYES01");
         when(easyesQuotationDao.getInsuranceProductId()).thenReturn(valueOf(4));
         when(easyesQuotationDao.getInsuranceCompanyModalityId()).thenReturn("5441");
+        when(easyesQuotationDao.getInsuranceProductDescription()).thenReturn("SEGURO DE VIDA YA!");
+        when(easyesQuotationDao.getInsuranceModalityName()).thenReturn("PLAN BASICO");
+        when(easyesQuotationDao.getPaymentFrequencyName()).thenReturn("Mensual");
 
         easyesQuotationDto = MockData.getInstance().getEasyesInsuranceQuotationRequest();
         easyesQuotationDto.setId("0814000004380");
@@ -224,10 +236,12 @@ public class MapperHelperTest {
     }
 
     @Test
-    public void createQuotationModDao_OK() {
+    public void createQuotationModDao_OK() throws IOException {
         when(this.applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
-        InsuranceQuotationModDAO validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto);
+        EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+
+        InsuranceQuotationModDAO validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
 
         assertNotNull(validation.getPolicyQuotaInternalId());
         assertNotNull(validation.getInsuranceProductId());
@@ -235,8 +249,8 @@ public class MapperHelperTest {
         assertNotNull(validation.getSaleChannelId());
         assertNotNull(validation.getPaymentTermNumber());
         assertNotNull(validation.getPolicyPaymentFrequencyType());
-        //assertNotNull(validation.getFinancingStartDate());
-        //assertNotNull(validation.getFinancingEndDate());
+        assertNotNull(validation.getFinancingStartDate());
+        assertNotNull(validation.getFinancingEndDate());
         assertNotNull(validation.getPremiumAmount());
         assertNotNull(validation.getPremiumCurrencyId());
         //assertNotNull(validation.getSaveQuotationIndType());
@@ -259,8 +273,8 @@ public class MapperHelperTest {
 
         assertEquals(valueOf(installment.getPaymentsTotalNumber()), validation.getPaymentTermNumber());
         assertEquals("M", validation.getPolicyPaymentFrequencyType());
-        //assertEquals(, validation.getFinancingStartDate());
-        //assertEquals(, validation.getFinancingEndDate());
+        assertEquals("17/04/2023", validation.getFinancingStartDate());
+        assertEquals("17/04/2024", validation.getFinancingEndDate());
         assertEquals(installment.getPaymentAmount().getAmount(), validation.getPremiumAmount());
         assertEquals(installment.getPaymentAmount().getCurrency(), validation.getPremiumCurrencyId());
         assertEquals(easyesQuotationDto.getBank().getBranch().getId(), validation.getLastChangeBranchId());
@@ -311,5 +325,41 @@ public class MapperHelperTest {
         assertEquals(insuranceQuotationModDao.getContactEmailDesc(), validation.get(RBVDProperties.FIELD_CONTACT_EMAIL_DESC.getValue()));
         assertEquals(insuranceQuotationModDao.getCustomerPhoneDesc(), validation.get(RBVDProperties.FIELD_CUSTOMER_PHONE_DESC.getValue()));
         assertEquals(insuranceQuotationModDao.getDataTreatmentIndType(), validation.get(RBVDProperties.FIELD_DATA_TREATMENT_IND_TYPE.getValue()));
+    }
+
+    @Test
+    public void mappingOutputFieldsOK() throws IOException {
+        CustomerListASO customerList = MockDTO.getInstance().getCustomerDataResponse();
+        CustomerBO customerInformation = customerList.getData().get(0);
+
+        when(this.rbvdR303.executeListCustomerService(anyString())).thenReturn(customerInformation);
+
+        this.mapperHelper.mappingOutputFields(easyesQuotationDto, easyesQuotationDao);
+
+        assertNotNull(easyesQuotationDto.getProduct().getName());
+        assertNotNull(easyesQuotationDto.getProduct().getPlans().get(0).getName());
+        assertNotNull(easyesQuotationDto.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getName());
+        assertNotNull(easyesQuotationDto.getHolder().getFirstName());
+        assertNotNull(easyesQuotationDto.getHolder().getLastName());
+        assertNotNull(easyesQuotationDto.getHolder().getFullName());
+
+        String fullName = customerInformation.getFirstName().concat(" ").
+                concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName());
+
+        assertEquals(easyesQuotationDao.getInsuranceProductDescription(), easyesQuotationDto.getProduct().getName());
+        assertEquals(easyesQuotationDao.getInsuranceModalityName(), easyesQuotationDto.getProduct().getPlans().get(0).getName());
+        assertEquals(easyesQuotationDao.getPaymentFrequencyName(),
+                easyesQuotationDto.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getName());
+        assertEquals(customerInformation.getFirstName(), easyesQuotationDto.getHolder().getFirstName());
+        assertEquals(customerInformation.getLastName(), easyesQuotationDto.getHolder().getLastName());
+        assertEquals(fullName, easyesQuotationDto.getHolder().getFullName());
+
+        when(this.rbvdR303.executeListCustomerService(anyString())).thenReturn(null);
+
+        this.mapperHelper.mappingOutputFields(easyesQuotationDto, easyesQuotationDao);
+
+        assertEquals("", easyesQuotationDto.getHolder().getFirstName());
+        assertEquals("", easyesQuotationDto.getHolder().getLastName());
+        assertEquals("", easyesQuotationDto.getHolder().getFullName());
     }
 }

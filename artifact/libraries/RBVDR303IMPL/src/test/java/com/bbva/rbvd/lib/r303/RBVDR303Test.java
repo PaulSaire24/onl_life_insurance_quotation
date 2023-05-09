@@ -7,6 +7,9 @@ import com.bbva.elara.domain.transaction.ThreadContext;
 import com.bbva.elara.utility.api.connector.APIConnector;
 
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r014.PISDR014;
 
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
@@ -47,7 +50,10 @@ public class RBVDR303Test {
 
 	private ApplicationConfigurationService applicationConfigurationService;
 	private APIConnector externalApiConnector;
+	private APIConnector internalApiConnector;
 	private PISDR014 pisdr014;
+
+	private String errorMessage;
 
 	@Before
 	public void setUp() {
@@ -62,11 +68,16 @@ public class RBVDR303Test {
 		externalApiConnector = mock(APIConnector.class);
 		rbvdR303.setExternalApiConnector(externalApiConnector);
 
+		internalApiConnector = mock(APIConnector.class);
+		rbvdR303.setInternalApiConnector(internalApiConnector);
+
 		pisdr014 = mock(PISDR014.class);
 		rbvdR303.setPisdR014(pisdr014);
 
 		when(this.pisdr014.executeSignatureConstruction(anyString(), anyString(), anyString(), anyString(), anyString())).
 				thenReturn(new SignatureAWS());
+
+		errorMessage = "Something went wrong!!";
 	}
 	
 	@Test
@@ -92,7 +103,7 @@ public class RBVDR303Test {
 	@Test
 	public void executeEasyesQuotationRimacWithRestClientException() {
 		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
-				thenThrow(new RestClientException("Something went wrong!!"));
+				thenThrow(new RestClientException(errorMessage));
 
 		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
 				"rimacQuotation", "traceId");
@@ -100,4 +111,28 @@ public class RBVDR303Test {
 		assertNull(validation);
 	}
 
+	@Test
+	public void executeListCustomerServiceOK() throws IOException {
+		CustomerListASO customerList = MockDTO.getInstance().getCustomerDataResponse();
+
+		when(this.internalApiConnector.getForObject(anyString(), (Class<CustomerListASO>) any(), anyMap())).
+				thenReturn(customerList);
+
+		CustomerBO validation = this.rbvdR303.executeListCustomerService("customerId");
+
+		assertNotNull(validation);
+		assertNotNull(validation.getFirstName());
+		assertNotNull(validation.getLastName());
+		assertNotNull(validation.getSecondLastName());
+	}
+
+	@Test
+	public void executeListCustomerServiceWithRestClientException() {
+		when(this.internalApiConnector.getForObject(anyString(), (Class<CustomerListASO>) any(), anyMap())).
+				thenThrow(new RestClientException(errorMessage));
+
+		CustomerBO validation = this.rbvdR303.executeListCustomerService("customerId");
+
+		assertNull(validation);
+	}
 }

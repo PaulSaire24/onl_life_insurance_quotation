@@ -84,7 +84,7 @@
 							</dto>
 						</dto>
 					</list>
-					<list order="4" name="coverages" mandatory="0">
+					<list order="5" name="coverages" mandatory="0">
 						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO" artifactId="RBVDC301">
 							<parameter order="1" name="id" mandatory="1" type="String" size="6"/>
 							<parameter order="2" name="name" mandatory="0" type="String" size="1000"/>

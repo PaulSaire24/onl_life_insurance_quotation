@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyMap;
@@ -92,6 +93,7 @@ public class RBVDR304Test {
 		when(this.daoService.executeGetSimulationInformation(easyesQuotationDto.getExternalSimulationId())).
 				thenThrow(build(RBVDErrors.INVALID_RIMAC_QUOTATION_ID));
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.INVALID_RIMAC_QUOTATION_ID.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
 		assertNull(validation);
 	}
 
@@ -103,6 +105,7 @@ public class RBVDR304Test {
 		when(this.daoService.executeGetRequiredInformation(productType, planId)).
 				thenThrow(build(RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE));
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
 		assertNull(validation);
 	}
 
@@ -110,6 +113,7 @@ public class RBVDR304Test {
 	public void executeBusinessLogicEasyesQutationWithRimacErrorResponse() {
 		when(this.rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(null);
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
 		assertNull(validation);
 	}
 
@@ -118,14 +122,16 @@ public class RBVDR304Test {
 		doThrow(build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG)).
 				when(this.daoService).executeQuotationQuery(anyObject(), anyObject());
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
 		assertNull(validation);
 	}
 
 	@Test
 	public void executeBusinessLogicEasyesQutationWithQuotationModInsertionWrong() {
 		doThrow(build(RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG)).
-				when(this.daoService).executeQuotationModQuery(anyObject(), anyObject());
+				when(this.daoService).executeQuotationModQuery(anyObject(), anyObject(), anyObject());
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
 		assertNull(validation);
 	}
 
