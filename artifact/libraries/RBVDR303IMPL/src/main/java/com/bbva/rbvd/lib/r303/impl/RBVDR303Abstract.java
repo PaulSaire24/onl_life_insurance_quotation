@@ -18,6 +18,8 @@ public abstract class RBVDR303Abstract extends AbstractLibrary implements RBVDR3
 
 	protected APIConnector externalApiConnector;
 
+	protected APIConnector internalApiConnector;
+
 	protected PISDR014 pisdR014;
 
 
@@ -40,6 +42,13 @@ public abstract class RBVDR303Abstract extends AbstractLibrary implements RBVDR3
 	*/
 	public void setExternalApiConnector(APIConnector externalApiConnector) {
 		this.externalApiConnector = externalApiConnector;
+	}
+
+	/**
+	* @param internalApiConnector the this.internalApiConnector to set
+	*/
+	public void setInternalApiConnector(APIConnector internalApiConnector) {
+		this.internalApiConnector = internalApiConnector;
 	}
 
 	/**

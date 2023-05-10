@@ -1,5 +1,6 @@
 package com.bbva.rbvd;
 
+import com.bbva.elara.domain.transaction.RequestHeaderParamsName;
 import com.bbva.elara.domain.transaction.Severity;
 import com.bbva.elara.domain.transaction.response.HttpResponseCode;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
@@ -23,20 +24,25 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 
 		EasyesQuotationDTO easyesQuotation = new EasyesQuotationDTO();
 		easyesQuotation.setProduct(this.getProduct());
-		easyesQuotation.setInsuredAmount(this.getInsuredamount());
 		easyesQuotation.setHolder(this.getHolder());
 		easyesQuotation.setIsDataTreatment(this.getIsdatatreatment());
 		easyesQuotation.setExternalSimulationId(this.getExternalsimulationid());
+		easyesQuotation.setBank(this.getBank());
+
+		easyesQuotation.setTraceId((String) this.getContext().getTransactionRequest().getHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
+		easyesQuotation.setSaleChannelId((String) this.getContext().getTransactionRequest().getHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE));
+		easyesQuotation.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
+		easyesQuotation.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 
 		EasyesQuotationDTO response = rbvdR304.executeBusinessLogicEasyesQutation(easyesQuotation);
 
 		if(nonNull(response)) {
 			this.setId(response.getId());
 			this.setProduct(response.getProduct());
-			this.setInsuredamount(response.getInsuredAmount());
 			this.setHolder(response.getHolder());
 			this.setIsdatatreatment(response.getIsDataTreatment());
 			this.setExternalsimulationid(response.getExternalSimulationId());
+			this.setBank(response.getBank());
 
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
