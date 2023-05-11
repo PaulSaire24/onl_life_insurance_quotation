@@ -282,6 +282,13 @@ public class MapperHelperTest {
         assertEquals(easyesQuotationDto.getCreationUser(), validation.getCreationUser());
         assertEquals(easyesQuotationDto.getUserAudit(), validation.getUserAudit());
         assertEquals("S", validation.getDataTreatmentIndType());
+
+        easyesQuotationDto.setIsDataTreatment(false);
+
+        validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
+
+        assertEquals("N", validation.getDataTreatmentIndType());
+
     }
 
     @Test
