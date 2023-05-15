@@ -12,6 +12,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r304.impl.dao.DAOService;
 
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
@@ -64,9 +65,10 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
-			final Integer doesQuotationExist = this.daoService.executeValidateQuotation(easyesQuotation.getId());
+			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
+			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
 
-			if(doesQuotationExist.equals(1)) {
+			if(BigDecimal.ONE.compareTo(resultCount) == 0) {
 				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
 			} else {
 				this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
