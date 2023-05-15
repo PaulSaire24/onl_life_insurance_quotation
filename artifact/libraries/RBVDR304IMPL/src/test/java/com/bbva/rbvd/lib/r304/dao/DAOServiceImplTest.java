@@ -16,6 +16,9 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -87,6 +90,24 @@ public class DAOServiceImplTest {
                 thenReturn(mockResponse);
         Map<String, Object> validation = this.daoServiceImpl.executeGetPaymentFrequencyName(mockFrequencyTypeId);
         assertNotNull(validation);
+    }
+
+    @Test
+    public void executeValidateQuotation_OK() {
+        when(this.pisdr350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+        Integer validation = this.daoServiceImpl.executeValidateQuotation("policyQuotaInternalId");
+        assertEquals(Integer.valueOf(1), validation);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void executeUpdateQuotationModQueryWithBusinessException() {
+        this.daoServiceImpl.executeUpdateQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO());
+    }
+
+    @Test
+    public void executeUpdateQuotationModQuery_OK() {
+        when(this.pisdr350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+        this.daoServiceImpl.executeUpdateQuotationModQuery(new EasyesQuotationDAO(), new EasyesQuotationDTO());
     }
 
     @Test(expected = BusinessException.class)

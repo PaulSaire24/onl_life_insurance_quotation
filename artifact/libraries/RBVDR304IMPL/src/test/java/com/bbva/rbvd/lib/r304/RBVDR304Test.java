@@ -118,6 +118,16 @@ public class RBVDR304Test {
 	}
 
 	@Test
+	public void executeBusinessLogicEasyesQutationWithWrongUpdateQuotationMod() {
+		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(1);
+		doThrow(build(RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG))
+				.when(this.daoService).executeUpdateQuotationModQuery(anyObject(), anyObject());
+		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertEquals(RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
+		assertNull(validation);
+	}
+
+	@Test
 	public void executeBusinessLogicEasyesQutationWithQuotationInsertionWrong() {
 		doThrow(build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG)).
 				when(this.daoService).executeQuotationQuery(anyObject(), anyObject());
@@ -136,9 +146,15 @@ public class RBVDR304Test {
 	}
 
 	@Test
-	public void executeBusinessLogicEasyesQutationOK() {
+	public void executeBusinessLogicEasyesQutationWithCreationFlowOK() {
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
 		assertNotNull(validation);
 	}
 
+	@Test
+	public void executeBusinessLogicEasyesQutationWithUpdateFlowOK() {
+		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(1);
+		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertNotNull(validation);
+	}
 }
