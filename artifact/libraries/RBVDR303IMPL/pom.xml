@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_life_insurance_quotation</artifactId>
-		<version>0.5.2</version>
+		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR303IMPL</artifactId>
 	<name>RBVDR303IMPL</name>
-	<version>0.5.2</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<description>Lib to execute required services to get some information</description>
 	<properties>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd</groupId>
 			<artifactId>RBVDR303</artifactId>
-			<version>0.5.2</version>
+			<version>0.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bbva.elara</groupId>
