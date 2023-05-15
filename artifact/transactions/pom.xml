@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>onl_life_insurance_quotation</artifactId>
 		<groupId>com.bbva.rbvd</groupId>
-		<version>0.5.1</version>
+		<version>0.5.2</version>
 		<relativePath>../../</relativePath>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>TRANSACTIONS-onl_life_insurance_quotation</artifactId>
-	<version>0.5.1</version>
+	<version>0.5.2</version>
 	<packaging>pom</packaging>
 	<name>TRANSACTIONS-onl_life_insurance_quotation</name>
 	<modules>
