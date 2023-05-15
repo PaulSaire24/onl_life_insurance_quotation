@@ -36,6 +36,7 @@ import java.util.Map;
 
 import static java.math.BigDecimal.valueOf;
 import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static java.util.Objects.nonNull;
 
 public class MapperHelper {
@@ -57,6 +58,32 @@ public class MapperHelper {
 
         easyesQuotationBO.setPayload(payload);
         return easyesQuotationBO;
+    }
+
+    public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
+        return singletonMap(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), policyQuotaInternalId);
+    }
+
+    public InsuranceQuotationModDAO createUpdateQuotationModDao(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {
+        final InsurancePlanDTO plan = easyesQuotationDTO.getProduct().getPlans().get(0);
+
+        final InsuranceQuotationModDAO insuranceQuotationModDao = new InsuranceQuotationModDAO();
+        insuranceQuotationModDao.setPolicyQuotaInternalId(easyesQuotationDTO.getId());
+        insuranceQuotationModDao.setInsuranceProductId(easyesQuotationDAO.getInsuranceProductId());
+        insuranceQuotationModDao.setInsuranceModalityType(plan.getId());
+        insuranceQuotationModDao.setPremiumAmount(plan.getInstallmentPlans().get(0).getPaymentAmount().getAmount());
+        insuranceQuotationModDao.setLastChangeBranchId(easyesQuotationDTO.getBank().getBranch().getId());
+        return insuranceQuotationModDao;
+    }
+
+    public Map<String, Object> createUpdateQuotationModArguments(final InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
+        final Map<String, Object> arguments = new HashMap<>();
+        arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), updateInsuranceQuotationModDao.getPolicyQuotaInternalId());
+        arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), updateInsuranceQuotationModDao.getInsuranceProductId());
+        arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), updateInsuranceQuotationModDao.getInsuranceModalityType());
+        arguments.put(RBVDProperties.FIELD_PREMIUM_AMOUNT.getValue(), updateInsuranceQuotationModDao.getPremiumAmount());
+        arguments.put(RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue(), updateInsuranceQuotationModDao.getLastChangeBranchId());
+        return arguments;
     }
 
     public EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
@@ -102,7 +129,7 @@ public class MapperHelper {
         arguments.put(RBVDProperties.FIELD_SOURCE_BRANCH_ID.getValue(), insuranceQuotationDao.getSourceBranchId());
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(), insuranceQuotationDao.getCreationUser());
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(), insuranceQuotationDao.getUserAudit());
-        arguments.put(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue(), null); //FALTA CAMBIAR
+        arguments.put(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue(), null);
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue(), insuranceQuotationDao.getParticipantPersonalId());
         return arguments;
     }
@@ -110,7 +137,7 @@ public class MapperHelper {
     public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation,
                                                           final EasyesQuotationBO easyesQuotationBO) {
 
-        InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
+        final InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
 
         final com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO insuranceQuotationModDAO = new InsuranceQuotationModDAO();
         insuranceQuotationModDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
