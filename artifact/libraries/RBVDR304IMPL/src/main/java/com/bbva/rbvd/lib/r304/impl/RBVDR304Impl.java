@@ -64,9 +64,14 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
-			this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
+			final Integer doesQuotationExist = this.daoService.executeValidateQuotation(easyesQuotation.getId());
 
-			this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+			if(doesQuotationExist.equals(1)) {
+				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
+			} else {
+				this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
+				this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+			}
 
 			this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
 

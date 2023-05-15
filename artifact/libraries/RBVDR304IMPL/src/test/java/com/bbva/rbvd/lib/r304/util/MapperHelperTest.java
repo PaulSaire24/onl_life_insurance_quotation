@@ -135,6 +135,54 @@ public class MapperHelperTest {
     }
 
     @Test
+    public void createArgumentForValidateQuotation_OK() {
+        final String policyQuotaInternalId = "0814000004321";
+        Map<String, Object> validation = this.mapperHelper.createArgumentForValidateQuotation(policyQuotaInternalId);
+        assertEquals(policyQuotaInternalId, validation.get(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue()));
+    }
+
+    @Test
+    public void createUpdateQuotationModDao_OK() {
+        InsuranceQuotationModDAO validation = this.mapperHelper.createUpdateQuotationModDao(easyesQuotationDao, easyesQuotationDto);
+
+        assertNotNull(validation.getPolicyQuotaInternalId());
+        assertNotNull(validation.getInsuranceProductId());
+        assertNotNull(validation.getInsuranceModalityType());
+        assertNotNull(validation.getPremiumAmount());
+        assertNotNull(validation.getLastChangeBranchId());
+
+        final InsurancePlanDTO plan = easyesQuotationDto.getProduct().getPlans().get(0);
+
+        assertEquals(easyesQuotationDto.getId(), validation.getPolicyQuotaInternalId());
+        assertEquals(easyesQuotationDao.getInsuranceProductId(), validation.getInsuranceProductId());
+        assertEquals(plan.getId(), validation.getInsuranceModalityType());
+        assertEquals(plan.getInstallmentPlans().get(0).getPaymentAmount().getAmount(), validation.getPremiumAmount());
+        assertEquals(easyesQuotationDto.getBank().getBranch().getId(), validation.getLastChangeBranchId());
+    }
+
+    @Test
+    public void createUpdateQuotationModArguments_OK() {
+        Map<String, Object> validation = this.mapperHelper.createUpdateQuotationModArguments(insuranceQuotationModDao);
+
+        assertNotNull(validation.get(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue()));
+        assertNotNull(validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
+        assertNotNull(validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue()));
+        assertNotNull(validation.get(RBVDProperties.FIELD_PREMIUM_AMOUNT.getValue()));
+        assertNotNull(validation.get(RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue()));
+
+        assertEquals(insuranceQuotationModDao.getPolicyQuotaInternalId(),
+                validation.get(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue()));
+        assertEquals(insuranceQuotationModDao.getInsuranceProductId(),
+                validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
+        assertEquals(insuranceQuotationModDao.getInsuranceModalityType(),
+                validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue()));
+        assertEquals(insuranceQuotationModDao.getPremiumAmount(),
+                validation.get(RBVDProperties.FIELD_PREMIUM_AMOUNT.getValue()));
+        assertEquals(insuranceQuotationModDao.getLastChangeBranchId(),
+                validation.get(RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue()));
+    }
+
+    @Test
     public void createQuotationDao_OK() {
 
         Map<String, Object> responseGetSimulationIdAndExpirationDate = new HashMap<>();
@@ -219,7 +267,7 @@ public class MapperHelperTest {
         assertNotNull(validation.get(RBVDProperties.FIELD_SOURCE_BRANCH_ID.getValue()));
         assertNotNull(validation.get(RBVDProperties.FIELD_CREATION_USER_ID.getValue()));
         assertNotNull(validation.get(RBVDProperties.FIELD_USER_AUDIT_ID.getValue()));
-        assertNull(validation.get(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue())); //VALIDAAAAAAAR!!!
+        assertNull(validation.get(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue()));
         assertNotNull(validation.get(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue()));
 
         assertEquals(insuranceQuotationDao.getPolicyQuotaInternalId(), validation.get(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue()));

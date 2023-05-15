@@ -59,6 +59,20 @@ public class DAOServiceImpl implements DAOService {
     }
 
     @Override
+    public Integer executeValidateQuotation(String policyQuotaInternalId) {
+        Map<String, Object> argument = this.mapperHelper.createArgumentForValidateQuotation(policyQuotaInternalId);
+        return this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_VALIDATE_IF_QUOTATION_EXISTS.getValue(), argument);
+    }
+
+    @Override
+    public void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
+        InsuranceQuotationModDAO updateInsuranceQuotationModDao = this.mapperHelper.createUpdateQuotationModDao(easyesQuotationDAO, easyesQuotationDTO);
+        Map<String, Object> argumentsUpdateQuotationMod = this.mapperHelper.createUpdateQuotationModArguments(updateInsuranceQuotationModDao);
+        Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);
+        validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
+    }
+
+    @Override
     public void executeQuotationQuery(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {
         InsuranceQuotationDAO insuranceQuotationDao = this.mapperHelper.createInsuranceQuotationDAO(easyesQuotationDAO, easyesQuotationDTO);
         Map<String, Object> argumentsQuotationDao = this.mapperHelper.createArgumentsQuotationDao(insuranceQuotationDao);
