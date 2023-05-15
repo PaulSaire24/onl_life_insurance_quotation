@@ -11,6 +11,7 @@ import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,9 +95,9 @@ public class DAOServiceImplTest {
 
     @Test
     public void executeValidateQuotation_OK() {
-        when(this.pisdr350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-        Integer validation = this.daoServiceImpl.executeValidateQuotation("policyQuotaInternalId");
-        assertEquals(Integer.valueOf(1), validation);
+        when(this.pisdr350.executeGetASingleRow(anyString(), anyMap())).thenReturn(singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ONE));
+        Map<String, Object> validation = this.daoServiceImpl.executeValidateQuotation("policyQuotaInternalId");
+        assertEquals(BigDecimal.ONE, validation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue()));
     }
 
     @Test(expected = BusinessException.class)

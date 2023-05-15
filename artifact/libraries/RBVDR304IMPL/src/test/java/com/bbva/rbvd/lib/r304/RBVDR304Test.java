@@ -11,6 +11,7 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 
@@ -27,7 +28,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Map;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -86,6 +89,9 @@ public class RBVDR304Test {
 		rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
 		when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
+
+		when(this.daoService.executeValidateQuotation(anyString())).
+				thenReturn(singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ZERO));
 	}
 
 	@Test
@@ -119,7 +125,8 @@ public class RBVDR304Test {
 
 	@Test
 	public void executeBusinessLogicEasyesQutationWithWrongUpdateQuotationMod() {
-		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(1);
+		Map<String, Object> resultCount = singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ONE);
+		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(resultCount);
 		doThrow(build(RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG))
 				.when(this.daoService).executeUpdateQuotationModQuery(anyObject(), anyObject());
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
@@ -153,7 +160,8 @@ public class RBVDR304Test {
 
 	@Test
 	public void executeBusinessLogicEasyesQutationWithUpdateFlowOK() {
-		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(1);
+		Map<String, Object> resultCount = singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ONE);
+		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(resultCount);
 		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
 		assertNotNull(validation);
 	}

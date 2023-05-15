@@ -11,7 +11,7 @@ public interface DAOService {
     Map<String, Object> executeGetSimulationInformation(String externalSimulationId);
     Map<String, Object> executeGetRequiredInformation(String productType, String planId);
     Map<String, Object> executeGetPaymentFrequencyName(String frequencyTypeId);
-    Integer executeValidateQuotation(String policyQuotaInternalId);
+    Map<String, Object> executeValidateQuotation(String policyQuotaInternalId);
     void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO);
     void executeQuotationQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO);
     void executeQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO, EasyesQuotationBO easyesQuotationBO);
