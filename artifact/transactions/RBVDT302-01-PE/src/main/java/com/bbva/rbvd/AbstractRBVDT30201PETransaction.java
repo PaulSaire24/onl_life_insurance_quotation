@@ -3,7 +3,10 @@ package com.bbva.rbvd;
 import com.bbva.elara.transaction.AbstractTransaction;
 import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.BankDTO;
+import java.util.List;
 
 /**
  * In this class, the input and output data is defined automatically through the setters and getters.
@@ -50,6 +53,20 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter refunds
+	 */
+	protected List<RefundsDTO> getRefunds(){
+		return (List<RefundsDTO>)this.getParameter("refunds");
+	}
+
+	/**
+	 * Return value for input parameter term
+	 */
+	protected TermDTO getTerm(){
+		return (TermDTO)this.getParameter("term");
+	}
+
+	/**
 	 * Set value for String output parameter id
 	 */
 	protected void setId(final String field){
@@ -89,5 +106,19 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setBank(final BankDTO field){
 		this.addParameter("bank", field);
+	}
+
+	/**
+	 * Set value for List<RefundsDTO> output parameter refunds
+	 */
+	protected void setRefunds(final List<RefundsDTO> field){
+		this.addParameter("refunds", field);
+	}
+
+	/**
+	 * Set value for TermDTO output parameter term
+	 */
+	protected void setTerm(final TermDTO field){
+		this.addParameter("term", field);
 	}
 }

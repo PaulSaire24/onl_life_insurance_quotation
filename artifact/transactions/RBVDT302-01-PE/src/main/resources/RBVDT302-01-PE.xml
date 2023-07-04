@@ -53,6 +53,20 @@
 				<parameter order="1" name="id" mandatory="1" type="String" size="8"/>
 			</dto>
 		</dto>
+		<list order="6" name="refunds" mandatory="0">
+			<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO" artifactId="RBVDC301">
+				<dto order="1" name="unit" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO" artifactId="RBVDC301">
+					<parameter order="1" name="unitType" mandatory="1" type="String" size="20"/>
+					<parameter order="2" name="amount" mandatory="0" type="Double" size="18"/>
+					<parameter order="3" name="currency" mandatory="0" type="String" size="3"/>
+					<parameter order="4" name="percentage" mandatory="0" type="Double" size="6"/>
+				</dto>
+			</dto>
+		</list>
+		<dto order="7" name="term" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO" artifactId="RBVDC301">
+			<parameter order="1" name="number" mandatory="1" type="Long" size="2"/>
+			<parameter order="2" name="unit" mandatory="1" type="String" size="10"/>
+		</dto>
 	</paramsIn>
 	<paramsOut>
 		<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
@@ -126,6 +140,20 @@
 			<dto order="2" name="branch" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.quotation.BranchDTO" artifactId="RBVDC301">
 				<parameter order="1" name="id" mandatory="1" type="String" size="8"/>
 			</dto>
+		</dto>
+		<list order="7" name="refunds" mandatory="0">
+			<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO" artifactId="RBVDC301">
+				<dto order="1" name="unit" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO" artifactId="RBVDC301">
+					<parameter order="1" name="unitType" mandatory="1" type="String" size="20"/>
+					<parameter order="2" name="percentage" mandatory="0" type="Double" size="6"/>
+					<parameter order="3" name="amount" mandatory="0" type="Double" size="18"/>
+					<parameter order="4" name="currency" mandatory="0" type="String" size="3"/>
+				</dto>
+			</dto>
+		</list>
+		<dto order="8" name="term" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO" artifactId="RBVDC301">
+			<parameter order="1" name="number" mandatory="1" type="Long" size="2"/>
+			<parameter order="2" name="unit" mandatory="1" type="String" size="10"/>
 		</dto>
 	</paramsOut>
 	<description>Trx to create an easy-yes insurance quotation</description>
