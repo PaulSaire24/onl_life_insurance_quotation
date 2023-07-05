@@ -185,6 +185,8 @@ public class MapperHelperTest {
     @Test
     public void createQuotationDao_OK() {
 
+        String rimacProductName = "PRODUCT_SHORT_DESC";
+
         Map<String, Object> responseGetSimulationIdAndExpirationDate = new HashMap<>();
         responseGetSimulationIdAndExpirationDate.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), valueOf(432));
         responseGetSimulationIdAndExpirationDate.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(),
@@ -195,7 +197,7 @@ public class MapperHelperTest {
         responseGetRequiredInformation.put(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue(), "54421");
         responseGetRequiredInformation.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), valueOf(4));
         responseGetRequiredInformation.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(), "SEGURO DE VIDA EASY-YES");
-        responseGetRequiredInformation.put(RBVDProperties.FIELD_INSURANCE_BUSINESS_NAME.getValue(), "EASYYES01");
+        responseGetRequiredInformation.put(rimacProductName, "EASYYES01");
 
         Map<String, Object> responseGetPaymentFrequencyName = singletonMap(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue(), "Mensual");
 
@@ -222,8 +224,7 @@ public class MapperHelperTest {
                 validation.getInsuranceProductId());
         assertEquals(responseGetRequiredInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()),
                 validation.getInsuranceProductDescription());
-        assertEquals(responseGetRequiredInformation.get(RBVDProperties.FIELD_INSURANCE_BUSINESS_NAME.getValue()),
-                validation.getInsuranceBusinessName());
+        assertEquals(responseGetRequiredInformation.get(rimacProductName), validation.getInsuranceBusinessName());
         assertEquals(responseGetPaymentFrequencyName.get(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue()),
                 validation.getPaymentFrequencyName());
     }

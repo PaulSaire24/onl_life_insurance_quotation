@@ -41,6 +41,8 @@ import static java.util.Objects.nonNull;
 
 public class MapperHelper {
 
+    private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private ApplicationConfigurationService applicationConfigurationService;
@@ -95,7 +97,7 @@ public class MapperHelper {
         quotationDao.setInsuranceCompanyModalityId((String) responseGetRequiredInformation.get(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue()));
         quotationDao.setInsuranceProductId((BigDecimal) responseGetRequiredInformation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
         quotationDao.setInsuranceProductDescription((String) responseGetRequiredInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()));
-        quotationDao.setInsuranceBusinessName((String) responseGetRequiredInformation.get(RBVDProperties.FIELD_INSURANCE_BUSINESS_NAME.getValue()));
+        quotationDao.setInsuranceBusinessName((String) responseGetRequiredInformation.get(RIMAC_PRODUCT_NAME));
         quotationDao.setPaymentFrequencyName((String) responseGetPaymentFrequencyName.get(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue()));
         return quotationDao;
     }
