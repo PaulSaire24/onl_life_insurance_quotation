@@ -46,13 +46,6 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
-	 * Return value for input parameter bank
-	 */
-	protected BankDTO getBank(){
-		return (BankDTO)this.getParameter("bank");
-	}
-
-	/**
 	 * Return value for input parameter refunds
 	 */
 	protected List<RefundsDTO> getRefunds(){
@@ -64,6 +57,13 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected TermDTO getTerm(){
 		return (TermDTO)this.getParameter("term");
+	}
+
+	/**
+	 * Return value for input parameter bank
+	 */
+	protected BankDTO getBank(){
+		return (BankDTO)this.getParameter("bank");
 	}
 
 	/**
@@ -102,13 +102,6 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
-	 * Set value for BankDTO output parameter bank
-	 */
-	protected void setBank(final BankDTO field){
-		this.addParameter("bank", field);
-	}
-
-	/**
 	 * Set value for List<RefundsDTO> output parameter refunds
 	 */
 	protected void setRefunds(final List<RefundsDTO> field){
@@ -120,5 +113,12 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setTerm(final TermDTO field){
 		this.addParameter("term", field);
+	}
+
+	/**
+	 * Set value for BankDTO output parameter bank
+	 */
+	protected void setBank(final BankDTO field){
+		this.addParameter("bank", field);
 	}
 }
