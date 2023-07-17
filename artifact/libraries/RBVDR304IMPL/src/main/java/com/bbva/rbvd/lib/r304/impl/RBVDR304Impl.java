@@ -38,37 +38,62 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation START *****");
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Param: {}", easyesQuotation);
 
+		//el primer objeto de planes
 		InsurancePlanDTO selectedPlan = easyesQuotation.getProduct().getPlans().get(0);
 
+		//841
 		final String productType = easyesQuotation.getProduct().getId();
+
+		//plan: 01 o 02
 		final String selectedPlanId = selectedPlan.getId();
+
+		// periodicidad: MONTHLY, QUARTERLY, SEMIANNUAL, ANNUAL
 		final String periodId = selectedPlan.getInstallmentPlans().get(0).getPeriod().getId();
+
+		//frecuencia de pago convertida: M, T, S, A
 		final String frequencyTypeId = this.applicationConfigurationService.getProperty(periodId);
 
 		try {
+			//query a la tabla de simulacion: simulation_id y expiracion simulacion
 			final Map<String, Object> responseGetSimulationInformation = this.daoService.
 					executeGetSimulationInformation(easyesQuotation.getExternalSimulationId());
+
+			//query a la tabla de producto inner tabla modalidad:
+			//codigo producto, nombre producto que envia a rimac, product desc,nombre plan,codigo plan rimac (5678456)
 			final Map<String, Object> responseGetRequiredInformation = this.daoService.executeGetRequiredInformation(productType, selectedPlanId);
+
+			//nombre frecuencia pago en español (MENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL)
 			final Map<String, Object> responsePaymentFrequencyName = this.daoService.executeGetPaymentFrequencyName(frequencyTypeId);
 
+			//bean
 			final EasyesQuotationDAO easyesQuotationDao = this.mapperHelper.
 					createQuotationDao(responseGetSimulationInformation, responseGetRequiredInformation, responsePaymentFrequencyName);
 
+			//crea el codigo de cotizacion
 			final String policyQuotaInternalId = this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
 
+			//inserta en la trx
 			easyesQuotation.setId(policyQuotaInternalId);
 
-			final EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
 
-			final EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
-					easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
+			EasyesQuotationBO rimacQuotationRequest = new EasyesQuotationBO();
+			EasyesQuotationBO rimacQuotationResponse = new EasyesQuotationBO();
 
-			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
+			if(!easyesQuotation.getProduct().getId().equals("841")){
+				rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
+				rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
+						easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
 
+				validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
+			}
+
+			//valida si existe el codigo cotizacion en la tabla de cotizacion
 			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
 			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
 
+			//si es que ya existe la cotizacion, actualiza en la tabla de cotizacion_mod, si no existe la cotizacion la inserta en cotizacion y cotizacion_mod
 			if(BigDecimal.ONE.compareTo(resultCount) == 0) {
+				//actualiza modalidad, prima, oficina
 				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
 			} else {
 				this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);

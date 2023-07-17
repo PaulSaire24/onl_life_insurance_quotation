@@ -154,10 +154,18 @@ public class MapperHelper {
         String paymentFrequency = this.applicationConfigurationService.getProperty(installment.getPeriod().getId());
         insuranceQuotationModDAO.setPolicyPaymentFrequencyType(paymentFrequency);
 
-        final String rimacFechaInicio = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
-                getFinanciamientos().get(0).getFechaInicio();
-        final String rimacFechaFin = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
-                getFinanciamientos().get(0).getFechaFin();
+        String rimacFechaInicio = null;
+        String rimacFechaFin = null;
+        if(easyesQuotationBO != null && easyesQuotationBO.getPayload() != null){
+            rimacFechaInicio = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+                    getFinanciamientos().get(0).getFechaInicio();
+            rimacFechaFin = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+                    getFinanciamientos().get(0).getFechaFin();
+        }else{
+            LocalDate today = new LocalDate();
+            rimacFechaInicio = today.toString();
+            rimacFechaFin = today.plusYears(1).toString();
+        }
 
         LocalDate localDateFechaInicio = new LocalDate(rimacFechaInicio);
         LocalDate localDateFechaFin = new LocalDate(rimacFechaFin);
