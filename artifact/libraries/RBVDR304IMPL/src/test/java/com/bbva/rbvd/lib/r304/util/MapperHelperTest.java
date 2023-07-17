@@ -23,12 +23,14 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -337,6 +339,25 @@ public class MapperHelperTest {
         validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
 
         assertEquals("N", validation.getDataTreatmentIndType());
+
+    }
+
+    @Test
+    public void createQuotationModDaoWithRimacResponseNull_OK() throws IOException {
+        when(this.applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
+
+        EasyesQuotationBO rimacResponse = new EasyesQuotationBO();
+        easyesQuotationDto.getProduct().setId("841");
+
+        InsuranceQuotationModDAO validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
+
+        assertNotNull(validation);
+        assertNotNull(validation.getFinancingStartDate());
+        assertNotNull(validation.getFinancingEndDate());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        assertEquals(dateFormat.format(new LocalDate().toDateTimeAtStartOfDay().toDate()),validation.getFinancingStartDate());
+        assertEquals(dateFormat.format(new LocalDate().plusYears(1).toDateTimeAtStartOfDay().toDate()),validation.getFinancingEndDate());
 
     }
 
