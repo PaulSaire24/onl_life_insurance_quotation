@@ -3,6 +3,7 @@ package com.bbva.rbvd;
 import com.bbva.elara.transaction.AbstractTransaction;
 import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.BankDTO;
@@ -67,6 +68,13 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter insuredAmount
+	 */
+	protected InsuredAmountDTO getInsuredamount(){
+		return (InsuredAmountDTO)this.getParameter("insuredAmount");
+	}
+
+	/**
 	 * Set value for String output parameter id
 	 */
 	protected void setId(final String field){
@@ -120,5 +128,12 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setBank(final BankDTO field){
 		this.addParameter("bank", field);
+	}
+
+	/**
+	 * Set value for InsuredAmountDTO output parameter insuredAmount
+	 */
+	protected void setInsuredamount(final InsuredAmountDTO field){
+		this.addParameter("insuredAmount", field);
 	}
 }
