@@ -30,6 +30,7 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 		easyesQuotation.setBank(this.getBank());
 		easyesQuotation.setRefunds(this.getRefunds());
 		easyesQuotation.setTerm(this.getTerm());
+		easyesQuotation.setInsuredAmount(this.getInsuredamount());
 
 		easyesQuotation.setTraceId((String) this.getContext().getTransactionRequest().getHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
 		easyesQuotation.setSaleChannelId((String) this.getContext().getTransactionRequest().getHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE));
@@ -47,6 +48,7 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 			this.setRefunds(response.getRefunds());
 			this.setTerm(response.getTerm());
 			this.setBank(response.getBank());
+			this.setInsuredamount(response.getInsuredAmount());
 
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
