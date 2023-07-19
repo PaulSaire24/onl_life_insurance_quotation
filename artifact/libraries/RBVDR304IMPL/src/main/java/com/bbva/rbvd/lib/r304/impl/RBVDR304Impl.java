@@ -17,6 +17,7 @@ import com.bbva.rbvd.lib.r304.impl.dao.DAOService;
 
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 
+import com.bbva.rbvd.lib.r304.impl.util.MockResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,17 +76,21 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 			//inserta en la trx
 			easyesQuotation.setId(policyQuotaInternalId);
 
-
-			EasyesQuotationBO rimacQuotationRequest = new EasyesQuotationBO();
-			EasyesQuotationBO rimacQuotationResponse = new EasyesQuotationBO();
-
-			if(!easyesQuotation.getProduct().getId().equals("841")){
-				rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
+			EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
+			EasyesQuotationBO rimacQuotationResponse = null;
+			if(easyesQuotation.getProduct().getId().equals("841")){
+				if(this.applicationConfigurationService.getProperty("MOCK_SELECT_PLAN_DYNAMIC_LIFE").equals("S")){
+					rimacQuotationResponse = new MockResponse().getMockResponseRimacService();
+				}else{
+					rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
+							easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
+				}
+			}else{
 				rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
 						easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
-
-				validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 			}
+
+			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
 			//valida si existe el codigo cotizacion en la tabla de cotizacion
 			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());

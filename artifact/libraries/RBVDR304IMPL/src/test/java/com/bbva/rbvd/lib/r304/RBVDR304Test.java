@@ -159,6 +159,22 @@ public class RBVDR304Test {
 	}
 
 	@Test
+	public void executeBusinessLogicEasyesQutationProductDnynamiLifeWithMockResponseRimacOK() {
+		when(this.applicationConfigurationService.getProperty("MOCK_SELECT_PLAN_DYNAMIC_LIFE")).thenReturn("S");
+		easyesQuotationDto.getProduct().setId("841");
+		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertNotNull(validation);
+	}
+
+	@Test
+	public void executeBusinessLogicEasyesQutationProductDnynamiLifeWithNotMockResponseRimacOK() {
+		when(this.applicationConfigurationService.getProperty("MOCK_SELECT_PLAN_DYNAMIC_LIFE")).thenReturn("N");
+		easyesQuotationDto.getProduct().setId("841");
+		EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(easyesQuotationDto);
+		assertNotNull(validation);
+	}
+
+	@Test
 	public void executeBusinessLogicEasyesQutationWithUpdateFlowOK() {
 		Map<String, Object> resultCount = singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ONE);
 		when(this.daoService.executeValidateQuotation(anyString())).thenReturn(resultCount);
