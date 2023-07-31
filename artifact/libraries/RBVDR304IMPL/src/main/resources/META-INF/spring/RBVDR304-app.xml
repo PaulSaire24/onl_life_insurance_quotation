@@ -5,7 +5,7 @@
 		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
 		<property name="rbvdR303" ref="rbvdR303"/>
 	</bean>
-	<bean id="daoService" class="com.bbva.rbvd.lib.r304.impl.dao.impl.DAOServiceImpl">
+	<bean id="daoService" class="com.bbva.rbvd.lib.r304.service.dao.impl.DAOServiceImpl">
 		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
 		<property name="pisdR350" ref="pisdR350"/>
 		<property name="mapperHelper" ref="mapperHelper"/>

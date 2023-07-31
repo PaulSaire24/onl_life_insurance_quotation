@@ -13,7 +13,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r304.impl.dao.DAOService;
+import com.bbva.rbvd.lib.r304.service.dao.DAOService;
 
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 

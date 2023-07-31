@@ -15,7 +15,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 
-import com.bbva.rbvd.lib.r304.impl.dao.DAOService;
+import com.bbva.rbvd.lib.r304.service.dao.DAOService;
 
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 

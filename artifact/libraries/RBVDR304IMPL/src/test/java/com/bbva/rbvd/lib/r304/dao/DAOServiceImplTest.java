@@ -6,7 +6,7 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r304.impl.dao.impl.DAOServiceImpl;
+import com.bbva.rbvd.lib.r304.service.dao.impl.DAOServiceImpl;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 import org.junit.Before;
 import org.junit.Test;
