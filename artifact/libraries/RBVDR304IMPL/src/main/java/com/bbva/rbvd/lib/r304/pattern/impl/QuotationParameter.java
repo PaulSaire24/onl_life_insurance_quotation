@@ -29,10 +29,16 @@ public class QuotationParameter implements PreQuotation {
     public PayloadConfig getConfig(EasyesQuotationDTO input) {
         LOGGER.info("***** QuotationParameter getConfig START *****");
         LOGGER.info("***** QuotationParameter getConfig - input : {} *****",input);
+
         PayloadConfig payloadConfig = new PayloadConfig();
 
         LOGGER.info("***** QuotationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);
         return payloadConfig;
     }
+
+    public void getSimnulacion(){    }
+    public void getProduct(){}
+    public void getPaymentFrequency(){}
+    public void generatePolicyQuotaid(){}
 
 }
