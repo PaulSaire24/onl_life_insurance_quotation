@@ -5,4 +5,5 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 
 public interface PreQuotation {
     PayloadConfig getConfig(EasyesQuotationDTO input);
+
 }
