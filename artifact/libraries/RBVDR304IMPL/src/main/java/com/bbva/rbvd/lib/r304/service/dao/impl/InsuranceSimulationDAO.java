@@ -13,6 +13,10 @@ import static java.util.Collections.singletonMap;
 public class InsuranceSimulationDAO implements IInsuranceSimulationDAO {
     PISDR350 pisdR350;
 
+    public InsuranceSimulationDAO(PISDR350 pisdR350) {
+        this.pisdR350 = pisdR350;
+    }
+
     @Override
     public Map<String, Object> executeGetSimulationInformation(String externalSimulationId) {
         final Map<String, Object> responseGetSimulationIdAndExpirationDate = this.pisdR350.executeGetASingleRow(
