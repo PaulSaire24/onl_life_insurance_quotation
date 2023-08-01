@@ -32,15 +32,15 @@ public class DAOServiceImpl implements DAOService {
     protected PISDR350 pisdR350;
     protected MapperHelper mapperHelper;
 
-    @Override
+   /* @Override
     public Map<String, Object> executeGetSimulationInformation(final String externalSimulationId) {
         final Map<String, Object> responseGetSimulationIdAndExpirationDate = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_SIMULATION_INFORMATION_FOR_EASYES_QUOTATION.getValue(),
                 singletonMap(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(), externalSimulationId));
         validateSelectionQueries(responseGetSimulationIdAndExpirationDate, RBVDErrors.INVALID_RIMAC_QUOTATION_ID);
         return responseGetSimulationIdAndExpirationDate;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Map<String, Object> executeGetRequiredInformation(final String productType, final String planId) {
         final Map<String, Object> argumentsGetRequiredInformation = new HashMap<>();
         argumentsGetRequiredInformation.put(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue(), productType);
@@ -50,27 +50,28 @@ public class DAOServiceImpl implements DAOService {
                 RBVDProperties.QUERY_GET_REQUIRED_INFORMATION_FOR_EASYES_QUOTATION.getValue(), argumentsGetRequiredInformation);
         validateSelectionQueries(responseGetRequiredInformation, RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE);
         return responseGetRequiredInformation;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Map<String, Object> executeGetPaymentFrequencyName(final String frequencyTypeId) {
         return this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PAYMENT_FREQUENCY_NAME.getValue(),
                 singletonMap(RBVDProperties.FIELD_POLICY_PAYMENT_FREQUENCY_TYPE.getValue(), frequencyTypeId));
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public Map<String, Object> executeValidateQuotation(String policyQuotaInternalId) {
         Map<String, Object> argument = this.mapperHelper.createArgumentForValidateQuotation(policyQuotaInternalId);
         return this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_VALIDATE_IF_QUOTATION_EXISTS.getValue(), argument);
     }
-
-    @Override
+   */
+    /*@Override
     public void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
         InsuranceQuotationModDAO updateInsuranceQuotationModDao = this.mapperHelper.createUpdateQuotationModDao(easyesQuotationDAO, easyesQuotationDTO);
         Map<String, Object> argumentsUpdateQuotationMod = this.mapperHelper.createUpdateQuotationModArguments(updateInsuranceQuotationModDao);
         Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);
+
         validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
-    }
+    }*/
 
     @Override
     public void executeQuotationQuery(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {

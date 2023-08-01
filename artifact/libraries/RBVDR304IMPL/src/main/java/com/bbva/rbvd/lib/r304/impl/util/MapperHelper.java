@@ -62,11 +62,11 @@ public class MapperHelper {
         return easyesQuotationBO;
     }
 
-    public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
+    /*public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
         return singletonMap(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), policyQuotaInternalId);
     }
-
-    public InsuranceQuotationModDAO createUpdateQuotationModDao(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {
+*/
+ /*   public InsuranceQuotationModDAO createUpdateQuotationModDao(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {
         final InsurancePlanDTO plan = easyesQuotationDTO.getProduct().getPlans().get(0);
 
         final InsuranceQuotationModDAO insuranceQuotationModDao = new InsuranceQuotationModDAO();
@@ -77,8 +77,8 @@ public class MapperHelper {
         insuranceQuotationModDao.setLastChangeBranchId(easyesQuotationDTO.getBank().getBranch().getId());
         return insuranceQuotationModDao;
     }
-
-    public Map<String, Object> createUpdateQuotationModArguments(final InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
+*/
+/*    public Map<String, Object> createUpdateQuotationModArguments(final InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), updateInsuranceQuotationModDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), updateInsuranceQuotationModDao.getInsuranceProductId());
@@ -87,7 +87,7 @@ public class MapperHelper {
         arguments.put(RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue(), updateInsuranceQuotationModDao.getLastChangeBranchId());
         return arguments;
     }
-
+*/
     public EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
                                                   final Map<String, Object> responseGetPaymentFrequencyName) {
         EasyesQuotationDAO quotationDao = new EasyesQuotationDAO();
