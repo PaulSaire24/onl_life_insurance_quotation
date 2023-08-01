@@ -1,43 +1,50 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
-import java.util.List;
-
 public class PayloadProperties {
-    private String documentTypeId;
-    private String documentTypeIdAsText;
-    private List<Boolean> segmentLifePlans;
+    private String productType;
+    private String selectedPlanId;
+    private String periodId;
+    private String frequencyTypeId;
 
-    public String getDocumentTypeId() {
-        return documentTypeId;
+    public String getProductType() {
+        return productType;
     }
 
-    public void setDocumentTypeId(String documentTypeId) {
-        this.documentTypeId = documentTypeId;
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
-    public List<Boolean> getSegmentLifePlans() {
-        return segmentLifePlans;
+    public String getSelectedPlanId() {
+        return selectedPlanId;
     }
 
-    public void setSegmentLifePlans(List<Boolean> segmentLifePlans) {
-        this.segmentLifePlans = segmentLifePlans;
+    public void setSelectedPlanId(String selectedPlanId) {
+        this.selectedPlanId = selectedPlanId;
     }
 
-    public String getDocumentTypeIdAsText() {
-        return documentTypeIdAsText;
+    public String getPeriodId() {
+        return periodId;
     }
 
-    public void setDocumentTypeIdAsText(String documentTypeIdAsText) {
-        this.documentTypeIdAsText = documentTypeIdAsText;
+    public void setPeriodId(String periodId) {
+        this.periodId = periodId;
+    }
+
+    public String getFrequencyTypeId() {
+        return frequencyTypeId;
+    }
+
+    public void setFrequencyTypeId(String frequencyTypeId) {
+        this.frequencyTypeId = frequencyTypeId;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PayloadProperties{");
-        sb.append("documentTypeId='").append(documentTypeId).append('\'');
-        sb.append(", documentTypeIdAsText='").append(documentTypeIdAsText).append('\'');
-        sb.append(", segmentLifePlans=").append(segmentLifePlans);
-        sb.append('}');
-        return sb.toString();
+        return "PayloadProperties{" +
+                "productType='" + productType + '\'' +
+                ", selectedPlanId='" + selectedPlanId + '\'' +
+                ", periodId='" + periodId + '\'' +
+                ", frequencyTypeId='" + frequencyTypeId + '\'' +
+                '}';
     }
 }

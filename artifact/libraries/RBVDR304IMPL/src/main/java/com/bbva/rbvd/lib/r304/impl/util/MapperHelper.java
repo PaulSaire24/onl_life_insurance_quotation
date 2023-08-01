@@ -88,7 +88,7 @@ public class MapperHelper {
         return arguments;
     }
 */
-    public EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
+/*    public EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
                                                   final Map<String, Object> responseGetPaymentFrequencyName) {
         EasyesQuotationDAO quotationDao = new EasyesQuotationDAO();
         quotationDao.setInsuranceSimulationId((BigDecimal) responseGetSimulationIdAndExpirationDate.get(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue()));
@@ -101,7 +101,7 @@ public class MapperHelper {
         quotationDao.setPaymentFrequencyName((String) responseGetPaymentFrequencyName.get(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue()));
         return quotationDao;
     }
-
+*/
 /*    public InsuranceQuotationDAO createInsuranceQuotationDAO(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation) {
         final InsuranceQuotationDAO insuranceQuotationDAO = new InsuranceQuotationDAO();
         insuranceQuotationDAO.setPolicyQuotaInternalId(easyesQuotation.getId());

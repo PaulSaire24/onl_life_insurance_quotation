@@ -13,6 +13,10 @@ import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateSelectionQ
 public class InsuranceProductModalityDAO implements IInsuranceProductModalityDAO {
     private PISDR350 pisdR350;
 
+    public InsuranceProductModalityDAO(PISDR350 pisdR350) {
+        this.pisdR350 = pisdR350;
+    }
+
     @Override
     public Map<String, Object> executeGetRequiredInformation(String productType, String planId) {
         InsuranceSimulationMap insuranceSimulation = new InsuranceSimulationMap();
