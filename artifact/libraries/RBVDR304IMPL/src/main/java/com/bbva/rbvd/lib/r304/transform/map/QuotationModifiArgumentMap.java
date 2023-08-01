@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuotationModifiArgumentMap {
+    private QuotationModifiArgumentMap(){}
     public Map<String, Object> createUpdateQuotationModArguments(final InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), updateInsuranceQuotationModDao.getPolicyQuotaInternalId());

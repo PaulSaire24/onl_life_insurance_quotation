@@ -102,7 +102,7 @@ public class MapperHelper {
         return quotationDao;
     }
 
-    public InsuranceQuotationDAO createInsuranceQuotationDAO(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation) {
+/*    public InsuranceQuotationDAO createInsuranceQuotationDAO(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation) {
         final InsuranceQuotationDAO insuranceQuotationDAO = new InsuranceQuotationDAO();
         insuranceQuotationDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
         insuranceQuotationDAO.setInsuranceSimulationId(quotationDao.getInsuranceSimulationId());
@@ -118,8 +118,8 @@ public class MapperHelper {
         insuranceQuotationDAO.setUserAudit(easyesQuotation.getUserAudit());
         return insuranceQuotationDAO;
     }
-
-    public Map<String, Object> createArgumentsQuotationDao(final InsuranceQuotationDAO insuranceQuotationDao) {
+*/
+/*    public Map<String, Object> createArgumentsQuotationDao(final InsuranceQuotationDAO insuranceQuotationDao) {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), insuranceQuotationDao.getInsuranceSimulationId());
@@ -135,7 +135,7 @@ public class MapperHelper {
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue(), insuranceQuotationDao.getParticipantPersonalId());
         return arguments;
     }
-
+*/
     public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation,
                                                           final EasyesQuotationBO easyesQuotationBO) {
 

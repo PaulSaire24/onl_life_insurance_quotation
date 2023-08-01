@@ -40,7 +40,7 @@ public class DAOServiceImpl implements DAOService {
         return responseGetSimulationIdAndExpirationDate;
     }*/
 
-    /*@Override
+/*    @Override
     public Map<String, Object> executeGetRequiredInformation(final String productType, final String planId) {
         final Map<String, Object> argumentsGetRequiredInformation = new HashMap<>();
         argumentsGetRequiredInformation.put(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue(), productType);
@@ -50,8 +50,8 @@ public class DAOServiceImpl implements DAOService {
                 RBVDProperties.QUERY_GET_REQUIRED_INFORMATION_FOR_EASYES_QUOTATION.getValue(), argumentsGetRequiredInformation);
         validateSelectionQueries(responseGetRequiredInformation, RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE);
         return responseGetRequiredInformation;
-    }*/
-
+    }
+*/
     /*@Override
     public Map<String, Object> executeGetPaymentFrequencyName(final String frequencyTypeId) {
         return this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PAYMENT_FREQUENCY_NAME.getValue(),
@@ -73,14 +73,14 @@ public class DAOServiceImpl implements DAOService {
         validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }*/
 
-    @Override
+/*    @Override
     public void executeQuotationQuery(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO) {
         InsuranceQuotationDAO insuranceQuotationDao = this.mapperHelper.createInsuranceQuotationDAO(easyesQuotationDAO, easyesQuotationDTO);
         Map<String, Object> argumentsQuotationDao = this.mapperHelper.createArgumentsQuotationDao(insuranceQuotationDao);
         Integer quotationResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION.getValue(), argumentsQuotationDao);
         validateInsertionQueries(quotationResult, RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
     }
-
+*/
     @Override
     public void executeQuotationModQuery(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO,
                                          final EasyesQuotationBO easyesQuotationBO) {

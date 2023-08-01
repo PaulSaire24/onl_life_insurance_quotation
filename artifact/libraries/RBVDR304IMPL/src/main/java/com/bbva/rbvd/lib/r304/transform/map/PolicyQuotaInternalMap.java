@@ -7,6 +7,7 @@ import java.util.Map;
 import static java.util.Collections.singletonMap;
 
 public class PolicyQuotaInternalMap {
+    private  PolicyQuotaInternalMap(){}
     public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
         return singletonMap(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), policyQuotaInternalId);
     }
