@@ -81,15 +81,17 @@ public class DAOServiceImpl implements DAOService {
         validateInsertionQueries(quotationResult, RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
     }
 */
-    @Override
-    public void executeQuotationModQuery(final EasyesQuotationDAO easyesQuotationDAO, final EasyesQuotationDTO easyesQuotationDTO,
-                                         final EasyesQuotationBO easyesQuotationBO) {
+/*    @Override
+    public void executeQuotationModQuery(final EasyesQuotationDAO easyesQuotationDAO,
+                                         final EasyesQuotationDTO easyesQuotationDTO,
+                                         final EasyesQuotationBO easyesQuotationBO)
+    {
         InsuranceQuotationModDAO insuranceQuotationModDao = this.mapperHelper.createQuotationModDao(easyesQuotationDAO, easyesQuotationDTO, easyesQuotationBO);
         Map<String, Object> argumentsQuotationModDao = this.mapperHelper.createArgumentsQuotationModDao(insuranceQuotationModDao);
         Integer quotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION_MOD.getValue(), argumentsQuotationModDao);
         validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }
-
+*/
     public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
 
     public void setPisdR350(PISDR350 pisdR350) {this.pisdR350 = pisdR350;}

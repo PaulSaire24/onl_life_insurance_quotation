@@ -9,7 +9,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceModalityTypeUpdateDAO;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
-import com.bbva.rbvd.lib.r304.transform.map.QuotationModifiArgumentMap;
+import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationModMap;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateInsertionQ
 public class InsuranceModalityTypeUpdateDAO implements IInsuranceModalityTypeUpdateDAO {
     private PISDR350 pisdR350;
     private InsuranceQuotationModBean insurancePlan;
-    private QuotationModifiArgumentMap quotationModifiArgument;
+    private InsuranceQuotationModMap quotationModifiArgument;
     @Override
     public void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
         InsuranceQuotationModDAO updateInsuranceQuotationModDao = this.insurancePlan.createUpdateQuotationModDao(easyesQuotationDAO, easyesQuotationDTO);

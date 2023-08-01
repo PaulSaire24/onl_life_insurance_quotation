@@ -57,7 +57,8 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 			final String policyQuotaInternalId = this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
 
 			easyesQuotation.setId(policyQuotaInternalId);
-
+			//config
+//------------------------------------------------------------------------------------------------------------------------------------
 			final EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
 
 			final EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
@@ -65,6 +66,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
+//----------------------------------------------post------------------------------------------------------------------------
 			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
 			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
 

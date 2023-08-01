@@ -136,8 +136,10 @@ public class MapperHelper {
         return arguments;
     }
 */
-    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao, final EasyesQuotationDTO easyesQuotation,
-                                                          final EasyesQuotationBO easyesQuotationBO) {
+    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
+                                                          final EasyesQuotationDTO easyesQuotation,
+                                                          final EasyesQuotationBO easyesQuotationBO)
+    {
 
         final InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
 
@@ -179,7 +181,7 @@ public class MapperHelper {
         return insuranceQuotationModDAO;
     }
 
-    public Map<String, Object> createArgumentsQuotationModDao(final InsuranceQuotationModDAO insuranceQuotationModDao) {
+/*    public Map<String, Object> createArgumentsQuotationModDao(final InsuranceQuotationModDAO insuranceQuotationModDao) {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationModDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), insuranceQuotationModDao.getInsuranceProductId());
@@ -201,7 +203,7 @@ public class MapperHelper {
         arguments.put(RBVDProperties.FIELD_DATA_TREATMENT_IND_TYPE.getValue(), insuranceQuotationModDao.getDataTreatmentIndType());
         return arguments;
     }
-
+*/
     public void mappingOutputFields(final EasyesQuotationDTO easyesQuotation, final EasyesQuotationDAO easyesQuotationDao) {
 
         final String defaultValue = "";
