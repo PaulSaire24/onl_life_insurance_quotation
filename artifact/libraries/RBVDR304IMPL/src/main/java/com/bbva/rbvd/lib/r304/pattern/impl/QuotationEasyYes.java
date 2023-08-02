@@ -23,7 +23,7 @@ public class QuotationEasyYes extends QuotationDecorator{
         LOGGER.info("***** QuotationEasyYes - start - input : {} *****",input);
 
         PayloadConfig payloadConfig = this.getPreQuotation().getConfig(input);
-
+        return null;
     }
 }
 

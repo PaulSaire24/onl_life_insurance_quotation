@@ -36,7 +36,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        EasyesQuotationBO responseRimac =
+        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac()
 
         return null;
     }
