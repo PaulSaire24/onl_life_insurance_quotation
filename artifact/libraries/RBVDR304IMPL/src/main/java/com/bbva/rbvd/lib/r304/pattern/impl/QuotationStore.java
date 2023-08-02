@@ -1,4 +1,6 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
+import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceModalityTypeUpdateDAO;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceModalityTypeUpdateDAO;
@@ -14,12 +16,16 @@ public class QuotationStore implements PostQuotation {
         IInsuranceModalityTypeUpdateDAO insuranceModalityTypeUpdate = new InsuranceModalityTypeUpdateDAO();
 
 
-        if(BigDecimal.ONE.compareTo(payloadStore.getResultCount()) == 0) {
-           insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(payloadConfig, easyesQuotation);
-         } else {
-            insuranceModalityTypeUpdate.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
-            insuranceModalityTypeUpdate.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
-         }
+        EasyesQuotationDTO easyesQuotation = null;
+        Object rimacQuotationResponse = null;
+        if (BigDecimal.ONE.compareTo(payloadStore.getResultCount()) == 0) {
+            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(payloadStore.getResponseValidateQuotation(), easyesQuotation, rimacQuotationResponse);
+        } else {
+            EasyesQuotationDAO easyesQuotationDao = null;
+            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+            rimacQuotationResponse = null;
+            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+        }
 
         //this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
     }

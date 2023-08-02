@@ -1,4 +1,7 @@
 package com.bbva.rbvd.lib.r304.transfer;
+
+import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -17,7 +20,7 @@ public class PayloadStore {
         this.resultCount = resultCount;
     }
 
-    public Map<String, Object> getResponseValidateQuotation() {
+    public EasyesQuotationDAO getResponseValidateQuotation() {
         return responseValidateQuotation;
     }
 

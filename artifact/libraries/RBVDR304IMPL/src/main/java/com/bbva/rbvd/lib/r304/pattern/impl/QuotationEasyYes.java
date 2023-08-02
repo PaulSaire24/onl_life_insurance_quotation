@@ -5,7 +5,6 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r304.RBVDR304;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;
-import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,14 @@ public class QuotationEasyYes extends QuotationDecorator{
         LOGGER.info("***** QuotationEasyYes - start - START *****");
         LOGGER.info("***** QuotationEasyYes - start - input : {} *****",input);
 
-        PayloadConfig payloadConfig = this.getPreQuotation().getConfig(input);
+        //llamar a la configuracion previa: getConfig
+
+        //llamar al servicio de rimac
+
+        //guardar en la bd
+
+        //retornar la rspuesta
+
         return null;
     }
 }
