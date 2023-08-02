@@ -23,6 +23,7 @@ public class QuotationEasyYes extends QuotationDecorator{
 
         //llamar a la configuracion previa: getConfig
 
+
         //llamar al servicio de rimac
 
         //guardar en la bd

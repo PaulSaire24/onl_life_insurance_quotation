@@ -36,10 +36,12 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 	public EasyesQuotationBO executeEasyesQuotationRimac(final EasyesQuotationBO easyesQuotationRimacRequest, final String rimacQuotation, final String traceId) {
 		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac START *****");
 
+		//1° llamada
 		String requestBody = getRequestBodyAsJsonFormat(easyesQuotationRimacRequest);
 
 		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Request body: {}", requestBody);
 
+		//2° llamada
 		final String key = "ideCotizacion";
 
 		String uriFromConsole = this.applicationConfigurationService.
@@ -52,6 +54,7 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 		SignatureAWS signature = this.pisdR014.executeSignatureConstruction(requestBody,
 				HttpMethod.PATCH.toString(), uri, null, traceId);
 
+		//3° llamada
 		HttpHeaders headers = this.createHttpHeaders(signature);
 
 		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);

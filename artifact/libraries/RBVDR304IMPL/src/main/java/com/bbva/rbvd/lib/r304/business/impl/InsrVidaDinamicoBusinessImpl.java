@@ -1,8 +1,6 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.rbvd.lib.r303.RBVDR303;
-import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

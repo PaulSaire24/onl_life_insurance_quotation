@@ -1,32 +1,33 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
-import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
+
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
-import com.bbva.rbvd.lib.r304.service.dao.IInsuranceModalityTypeUpdateDAO;
-import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceModalityTypeUpdateDAO;
+import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePolicyDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
+
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class QuotationStore implements PostQuotation {
-    private PayloadStore payloadStore;
 
     @Override
     public void end(PayloadStore payloadStore) {
+        BigDecimal resultCount = this.resultCountNumber(payloadStore);
+        this.compareTO(payloadStore, resultCount);
+    }
 
-        IInsuranceModalityTypeUpdateDAO insuranceModalityTypeUpdate = new InsuranceModalityTypeUpdateDAO();
+    private BigDecimal resultCountNumber(PayloadStore payloadStore){
+        Map<String, Object> responseValidateQuotation = InsurancePolicyDAO.executeValidateQuotation(payloadStore.getPayloadConfig().getQuotation().getId());
+        return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
+    }
 
-
-        EasyesQuotationDTO easyesQuotation = null;
-        Object rimacQuotationResponse = null;
-        if (BigDecimal.ONE.compareTo(payloadStore.getResultCount()) == 0) {
-            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(payloadStore.getResponseValidateQuotation(), easyesQuotation, rimacQuotationResponse);
+    private void compareTO(PayloadStore payloadStore, BigDecimal resultCount){
+        if(BigDecimal.ONE.compareTo(resultCount) == 0) {
+            InsuranceModalityTypeUpdateDAO.executeUpdateQuotationModQuery(payloadStore.getPayloadConfig().getEasyesQuotationDao(), payloadStore.getPayloadConfig().getQuotation());
         } else {
-            EasyesQuotationDAO easyesQuotationDao = null;
-            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
-            rimacQuotationResponse = null;
-            insuranceModalityTypeUpdate.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+            this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
+            this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
         }
-
-        //this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
     }
 }

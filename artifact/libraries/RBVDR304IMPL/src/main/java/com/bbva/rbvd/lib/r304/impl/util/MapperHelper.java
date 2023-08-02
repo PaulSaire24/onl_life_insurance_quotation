@@ -48,7 +48,7 @@ public class MapperHelper {
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR303 rbvdR303;
 
-/*    public EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO easyesQuotationDao, final String policyQuotaInternalId) {
+    public EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO easyesQuotationDao, final String policyQuotaInternalId) {
         EasyesQuotationBO easyesQuotationBO = new EasyesQuotationBO();
 
         EasyesQuotationPayloadBO payload = new EasyesQuotationPayloadBO();
@@ -61,7 +61,7 @@ public class MapperHelper {
             easyesQuotationBO.setPayload(payload);
         return easyesQuotationBO;
     }
-*/
+
     /*public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
         return singletonMap(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), policyQuotaInternalId);
     }

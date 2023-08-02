@@ -2,11 +2,13 @@ package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 
 public class PayloadConfig {
 
     private EasyesQuotationDAO easyesQuotationDao;
     private String PolicyQuotaid;
+    private EasyesQuotationDTO Quotation;
     private PayloadProperties payloadProperties;
 
     public EasyesQuotationDAO getEasyesQuotationDao() {
@@ -25,6 +27,14 @@ public class PayloadConfig {
         PolicyQuotaid = policyQuotaid;
     }
 
+    public EasyesQuotationDTO getQuotation() {
+        return Quotation;
+    }
+
+    public void setQuotation(EasyesQuotationDTO quotation) {
+        Quotation = quotation;
+    }
+
     public PayloadProperties getPayloadProperties() {
         return payloadProperties;
     }
@@ -38,6 +48,7 @@ public class PayloadConfig {
         return "PayloadConfig{" +
                 "easyesQuotationDao=" + easyesQuotationDao +
                 ", PolicyQuotaid='" + PolicyQuotaid + '\'' +
+                ", Quotation=" + Quotation +
                 ", payloadProperties=" + payloadProperties +
                 '}';
     }

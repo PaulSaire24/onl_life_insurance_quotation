@@ -5,7 +5,6 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
-import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsurancePaymentPeriodDAO;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceProductModalityDAO;
@@ -27,14 +26,11 @@ public class QuotationParameter implements PreQuotation {
 
     private final PISDR350 pisdR350;
 
-    private final RBVDR303 rbvdR303;
-
     private final ApplicationConfigurationService applicationConfigurationService;
 
-    public QuotationParameter(PISDR350 pisdR350,RBVDR303 rbvdR303, ApplicationConfigurationService applicationConfigurationService) {
+    public QuotationParameter(PISDR350 pisdR350, ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;
         this.pisdR350 = pisdR350;
-        this.rbvdR303 = rbvdR303;
     }
 
     @Override
@@ -43,7 +39,9 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getConfig - input : {} *****",input);
 
         PayloadConfig payloadConfig = new PayloadConfig();
-        PayloadProperties properties = this.getProperties(input);
+        payloadConfig.setQuotation(input);
+
+        PayloadProperties properties = this.getProperties(payloadConfig.getQuotation());
 
         Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
         Map<String, Object> product = this.getProduct(properties.getProductType(), properties.getSelectedPlanId());
@@ -52,7 +50,7 @@ public class QuotationParameter implements PreQuotation {
         EasyesQuotationDAO quotation = this.getQuotationDao(simulation,product,paymentFrequency);
         String policyQuotaid = this.getGeneratePolicyQuotaid(quotation);
 
-        input.setId(policyQuotaid);
+        payloadConfig.getQuotation().setId(policyQuotaid);
 
         payloadConfig.setEasyesQuotationDao(quotation);
         payloadConfig.setPolicyQuotaid(policyQuotaid);
@@ -104,8 +102,8 @@ public class QuotationParameter implements PreQuotation {
 
         properties.setProductType(input.getProduct().getId());
         properties.setSelectedPlanId(selectedPlan.getId());
-        properties.setFrequencyTypeId(selectedPlan.getInstallmentPlans().get(0).getId());
-        properties.setFrequencyTypeId(this.applicationConfigurationService.getProperty(properties.getFrequencyTypeId()));
+        properties.setPeriodId(selectedPlan.getInstallmentPlans().get(0).getId());
+        properties.setFrequencyTypeId(this.applicationConfigurationService.getProperty(properties.getPeriodId()));
 
         return  properties;
     }
