@@ -23,6 +23,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 
+import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -290,7 +291,7 @@ public class MapperHelperTest {
 
         EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
-        InsuranceQuotationModDAO validation = this.mapperHelper.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
+        InsuranceQuotationModDAO validation = InsuranceQuotationModBean.createQuotationModDao(easyesQuotationDao, easyesQuotationDto, rimacResponse);
 
         assertNotNull(validation.getPolicyQuotaInternalId());
         assertNotNull(validation.getInsuranceProductId());

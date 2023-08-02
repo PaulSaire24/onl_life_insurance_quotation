@@ -31,9 +31,9 @@ public class InsuranceQuotationModBean {
         insuranceQuotationModDao.setLastChangeBranchId(easyesQuotationDTO.getBank().getBranch().getId());
         return insuranceQuotationModDao;
     }
-    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
-                                                          final EasyesQuotationDTO easyesQuotation,
-                                                          final EasyesQuotationBO easyesQuotationBO)
+    public static InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
+                                                                 final EasyesQuotationDTO easyesQuotation,
+                                                                 final EasyesQuotationBO easyesQuotationBO)
     {
 
         final InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
