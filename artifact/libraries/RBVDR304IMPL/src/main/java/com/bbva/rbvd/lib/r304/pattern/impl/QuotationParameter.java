@@ -19,7 +19,6 @@ import com.bbva.rbvd.lib.r304.transform.bean.QuotationBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 public class QuotationParameter implements PreQuotation {
@@ -50,10 +49,13 @@ public class QuotationParameter implements PreQuotation {
         Map<String, Object> product = this.getProduct(properties.getProductType(), properties.getSelectedPlanId());
         Map<String, Object> paymentFrequency = this.getPaymentFrequency(properties.getFrequencyTypeId());
 
-        EasyesQuotationDAO easYesQuotation = this.getEasYesQuotationDao(simulation,product,paymentFrequency);
+        EasyesQuotationDAO quotation = this.getQuotationDao(simulation,product,paymentFrequency);
+        String policyQuotaid = this.getGeneratePolicyQuotaid(quotation);
 
+        input.setId(policyQuotaid);
 
-        payloadConfig.setEasyesQuotationDao(easYesQuotation);
+        payloadConfig.setEasyesQuotationDao(quotation);
+        payloadConfig.setPolicyQuotaid(policyQuotaid);
         payloadConfig.setPayloadProperties(properties);
 
 
@@ -62,9 +64,9 @@ public class QuotationParameter implements PreQuotation {
         return payloadConfig;
     }
 
-    public EasyesQuotationDAO getEasYesQuotationDao(Map<String, Object> responseGetSimulationIdAndExpirationDate,
-                                                    Map<String, Object> responseGetRequiredInformation,
-                                                    Map<String, Object> responseGetPaymentFrequencyName)
+    public EasyesQuotationDAO getQuotationDao(Map<String, Object> responseGetSimulationIdAndExpirationDate,
+                                              Map<String, Object> responseGetRequiredInformation,
+                                              Map<String, Object> responseGetPaymentFrequencyName)
     {
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao START - responseGetSimulationIdAndExpirationDate: {} *****",responseGetSimulationIdAndExpirationDate);
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao START - responseGetRequiredInformation: {} *****",responseGetRequiredInformation);
@@ -78,9 +80,19 @@ public class QuotationParameter implements PreQuotation {
         return  quotation;
     }
 
-    public String generatePolicyQuotaid(EasyesQuotationDAO easyesQuotationDao){
+    public String getGeneratePolicyQuotaid(EasyesQuotationDAO easyesQuotationDao){
 
-        return this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
+        final int requiredSize = 9;
+
+        final StringBuilder policyQuotaInternalId = new StringBuilder("0814");
+        final int sizeToComplete = requiredSize - easyesQuotationDao.getInsuranceSimulationId().toString().length();
+
+        for(int i = 0; i < sizeToComplete; i++) {
+            policyQuotaInternalId.append("0");
+        }
+        policyQuotaInternalId.append(easyesQuotationDao.getInsuranceSimulationId());
+
+        return policyQuotaInternalId.toString();
     }
 
     public PayloadProperties getProperties(EasyesQuotationDTO input){
@@ -133,20 +145,4 @@ public class QuotationParameter implements PreQuotation {
 
         return paymentFrequency;
     }
-
-    private String generatePolicyQuotaInternalId(final BigDecimal insuranceSimulationId) {
-        final int requiredSize = 9;
-
-        final StringBuilder policyQuotaInternalId = new StringBuilder("0814");
-
-        final int sizeToComplete = requiredSize - insuranceSimulationId.toString().length();
-
-        for(int i = 0; i < sizeToComplete; i++) {
-            policyQuotaInternalId.append("0");
-        }
-
-        policyQuotaInternalId.append(insuranceSimulationId);
-        return policyQuotaInternalId.toString();
-    }
-
 }

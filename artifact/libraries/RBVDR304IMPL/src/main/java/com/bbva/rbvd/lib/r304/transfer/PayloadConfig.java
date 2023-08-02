@@ -2,11 +2,10 @@ package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 
-import java.util.Map;
-
 public class PayloadConfig {
 
     private EasyesQuotationDAO easyesQuotationDao;
+    private String PolicyQuotaid;
     private PayloadProperties payloadProperties;
 
     public EasyesQuotationDAO getEasyesQuotationDao() {
@@ -17,11 +16,28 @@ public class PayloadConfig {
         this.easyesQuotationDao = easyesQuotationDao;
     }
 
+    public String getPolicyQuotaid() {
+        return PolicyQuotaid;
+    }
+
+    public void setPolicyQuotaid(String policyQuotaid) {
+        PolicyQuotaid = policyQuotaid;
+    }
+
     public PayloadProperties getPayloadProperties() {
         return payloadProperties;
     }
 
     public void setPayloadProperties(PayloadProperties payloadProperties) {
         this.payloadProperties = payloadProperties;
+    }
+
+    @Override
+    public String toString() {
+        return "PayloadConfig{" +
+                "easyesQuotationDao=" + easyesQuotationDao +
+                ", PolicyQuotaid='" + PolicyQuotaid + '\'' +
+                ", payloadProperties=" + payloadProperties +
+                '}';
     }
 }
