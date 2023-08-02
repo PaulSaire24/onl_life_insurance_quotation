@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
+import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 
 public class PayloadConfig {
@@ -39,5 +40,9 @@ public class PayloadConfig {
                 ", PolicyQuotaid='" + PolicyQuotaid + '\'' +
                 ", payloadProperties=" + payloadProperties +
                 '}';
+    }
+
+    public GifoleInsuranceRequestASO getInput() {
+        return null;
     }
 }

@@ -20,7 +20,7 @@ public class InsuranceModalityTypeUpdateDAO implements IInsuranceModalityTypeUpd
     private InsuranceQuotationModBean insurancePlan;
     private InsuranceQuotationModMap quotationModifiArgument;
     @Override
-    public void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
+    public void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO, Object rimacQuotationResponse) {
         InsuranceQuotationModDAO updateInsuranceQuotationModDao = this.insurancePlan.createUpdateQuotationModDao(easyesQuotationDAO, easyesQuotationDTO);
         Map<String, Object> argumentsUpdateQuotationMod = this.quotationModifiArgument.createUpdateQuotationModArguments(updateInsuranceQuotationModDao);
         Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);

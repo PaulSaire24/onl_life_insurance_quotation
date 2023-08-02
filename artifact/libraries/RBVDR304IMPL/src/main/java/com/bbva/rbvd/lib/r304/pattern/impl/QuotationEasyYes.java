@@ -20,6 +20,15 @@ public class QuotationEasyYes extends QuotationDecorator{
     public EasyesQuotationDTO start(EasyesQuotationDTO input, RBVDR304 rbvdr304, ApplicationConfigurationService applicationConfigurationService) {
         LOGGER.info("***** QuotationEasyYes - start - START *****");
         LOGGER.info("***** QuotationEasyYes - start - input : {} *****",input);
+
+        //llamar a la configuracion previa: getConfig
+
+        //llamar al servicio de rimac
+
+        //guardar en la bd
+
+        //retornar la rspuesta
+
         return null;
     }
 }
