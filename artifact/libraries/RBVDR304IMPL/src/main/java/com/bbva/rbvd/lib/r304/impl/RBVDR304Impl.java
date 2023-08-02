@@ -46,38 +46,38 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 		final String frequencyTypeId = this.applicationConfigurationService.getProperty(periodId);
 
 		try {
-			final Map<String, Object> responseGetSimulationInformation = this.daoService.
-					executeGetSimulationInformation(easyesQuotation.getExternalSimulationId());
-			final Map<String, Object> responseGetRequiredInformation = this.daoService.executeGetRequiredInformation(productType, selectedPlanId);
-			final Map<String, Object> responsePaymentFrequencyName = this.daoService.executeGetPaymentFrequencyName(frequencyTypeId);
+			//final Map<String, Object> responseGetSimulationInformation = this.daoService.
+			//		executeGetSimulationInformation(easyesQuotation.getExternalSimulationId());
+			//final Map<String, Object> responseGetRequiredInformation = this.daoService.executeGetRequiredInformation(productType, selectedPlanId);
+			//final Map<String, Object> responsePaymentFrequencyName = this.daoService.executeGetPaymentFrequencyName(frequencyTypeId);
 
-			final EasyesQuotationDAO easyesQuotationDao = this.mapperHelper.
-					createQuotationDao(responseGetSimulationInformation, responseGetRequiredInformation, responsePaymentFrequencyName);
+			//final EasyesQuotationDAO easyesQuotationDao = this.mapperHelper.
+			//		createQuotationDao(responseGetSimulationInformation, responseGetRequiredInformation, responsePaymentFrequencyName);
 
-			final String policyQuotaInternalId = this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
+			//final String policyQuotaInternalId = this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
 
-			easyesQuotation.setId(policyQuotaInternalId);
+			//easyesQuotation.setId(policyQuotaInternalId);
 			//config
 //------------------------------------------------------------------------------------------------------------------------------------
-			final EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
+			//final EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
 
-			final EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
-					easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
+			//final EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
+			//		easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
 
-			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
+			//validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
 //----------------------------------------------post------------------------------------------------------------------------
-			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
-			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
+			//final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
+			//final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
 
-			if(BigDecimal.ONE.compareTo(resultCount) == 0) {
-				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
-			} else {
-				this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
-				this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
-			}
+			// if(BigDecimal.ONE.compareTo(resultCount) == 0) {
+			//	this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
+			//} else {
+			//	this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
+			//	this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+			//}
 
-			this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
+			//this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
 
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Response: {}", easyesQuotation);
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation END *****");
