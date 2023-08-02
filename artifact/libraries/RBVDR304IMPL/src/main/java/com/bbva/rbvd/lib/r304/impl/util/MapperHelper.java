@@ -48,7 +48,7 @@ public class MapperHelper {
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR303 rbvdR303;
 
-    public EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO easyesQuotationDao, final String policyQuotaInternalId) {
+/*    public EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO easyesQuotationDao, final String policyQuotaInternalId) {
         EasyesQuotationBO easyesQuotationBO = new EasyesQuotationBO();
 
         EasyesQuotationPayloadBO payload = new EasyesQuotationPayloadBO();
@@ -58,10 +58,10 @@ public class MapperHelper {
         payload.setPlanes(singletonList(selectedPlan));
         payload.setCodigoExterno(policyQuotaInternalId);
 
-        easyesQuotationBO.setPayload(payload);
+            easyesQuotationBO.setPayload(payload);
         return easyesQuotationBO;
     }
-
+*/
     /*public Map<String, Object> createArgumentForValidateQuotation(final String policyQuotaInternalId) {
         return singletonMap(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), policyQuotaInternalId);
     }
@@ -136,7 +136,7 @@ public class MapperHelper {
         return arguments;
     }
 */
-    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
+/*    public InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
                                                           final EasyesQuotationDTO easyesQuotation,
                                                           final EasyesQuotationBO easyesQuotationBO)
     {
@@ -180,7 +180,7 @@ public class MapperHelper {
         insuranceQuotationModDAO.setDataTreatmentIndType((easyesQuotation.getIsDataTreatment() ? "S" : "N"));
         return insuranceQuotationModDAO;
     }
-
+*/
 /*    public Map<String, Object> createArgumentsQuotationModDao(final InsuranceQuotationModDAO insuranceQuotationModDao) {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationModDao.getPolicyQuotaInternalId());

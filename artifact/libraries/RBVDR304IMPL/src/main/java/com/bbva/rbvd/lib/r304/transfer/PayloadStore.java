@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class PayloadStore {
     private Map<String, Object> responseValidateQuotation;
+    private PayloadConfig payloadConfig;
 
     private BigDecimal resultCount;
 
