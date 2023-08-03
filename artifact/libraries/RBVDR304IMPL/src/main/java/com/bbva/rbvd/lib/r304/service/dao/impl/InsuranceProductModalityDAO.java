@@ -19,9 +19,8 @@ public class InsuranceProductModalityDAO implements IInsuranceProductModalityDAO
 
     @Override
     public Map<String, Object> executeGetRequiredInformation(String productType, String planId) {
-        InsuranceSimulationMap insuranceSimulation = new InsuranceSimulationMap();
         Map<String, Object> responseGetRequiredInformation = this.pisdR350.executeGetASingleRow(
-                RBVDProperties.QUERY_GET_REQUIRED_INFORMATION_FOR_EASYES_QUOTATION.getValue(), insuranceSimulation.getRequiredInformation(productType,planId));
+                RBVDProperties.QUERY_GET_REQUIRED_INFORMATION_FOR_EASYES_QUOTATION.getValue(), InsuranceSimulationMap.getRequiredInformation(productType,planId));
         validateSelectionQueries(responseGetRequiredInformation, RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE);
         return responseGetRequiredInformation;
     }

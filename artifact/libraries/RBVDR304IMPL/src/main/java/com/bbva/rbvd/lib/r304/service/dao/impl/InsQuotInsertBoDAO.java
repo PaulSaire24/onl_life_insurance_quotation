@@ -17,12 +17,15 @@ import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateInsertionQ
 
 public class InsQuotInsertBoDAO implements IInsQuotInsertBoDAO {
     private PISDR350 pisdR350;
-    private InsuranceQuotationModBean insuranceQuotationModbean;
-    private InsuranceQuotationModMap insuranceQuotationModmap;
+
+    public InsQuotInsertBoDAO(PISDR350 pisdR350) {
+        this.pisdR350 = pisdR350;
+    }
+
     @Override
     public void executeQuotationModQuery(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO, EasyesQuotationBO easyesQuotationBO) {
-        InsuranceQuotationModDAO insuranceQuotationModDao = this.insuranceQuotationModbean.createQuotationModDao(easyesQuotationDAO, easyesQuotationDTO, easyesQuotationBO);
-        Map<String, Object> argumentsQuotationModDao = this.insuranceQuotationModmap.createArgumentsQuotationModDao(insuranceQuotationModDao);
+        InsuranceQuotationModDAO insuranceQuotationModDao = InsuranceQuotationModBean.createQuotationModDao(easyesQuotationDAO, easyesQuotationDTO, easyesQuotationBO);
+        Map<String, Object> argumentsQuotationModDao = InsuranceQuotationModMap.createArgumentsQuotationModDao(insuranceQuotationModDao);
         Integer quotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION_MOD.getValue(), argumentsQuotationModDao);
         validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }

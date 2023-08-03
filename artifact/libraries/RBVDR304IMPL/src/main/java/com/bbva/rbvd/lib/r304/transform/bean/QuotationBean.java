@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class QuotationBean {
     private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
-    public EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
+    public static EasyesQuotationDAO createQuotationDao(final Map<String, Object> responseGetSimulationIdAndExpirationDate, final Map<String, Object> responseGetRequiredInformation,
                                                  final Map<String, Object> responseGetPaymentFrequencyName) {
         EasyesQuotationDAO quotationDao = new EasyesQuotationDAO();
         quotationDao.setInsuranceSimulationId((BigDecimal) responseGetSimulationIdAndExpirationDate.get(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue()));

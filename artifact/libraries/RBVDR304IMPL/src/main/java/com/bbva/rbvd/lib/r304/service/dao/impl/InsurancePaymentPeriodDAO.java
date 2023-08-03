@@ -15,7 +15,6 @@ public class InsurancePaymentPeriodDAO implements IInsurancePaymentPeriodDAO {
     public InsurancePaymentPeriodDAO(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
     }
-
     @Override
     public Map<String, Object> executeGetPaymentFrequencyName(String frequencyTypeId) {
         return this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PAYMENT_FREQUENCY_NAME.getValue(),

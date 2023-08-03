@@ -14,12 +14,12 @@ import java.text.SimpleDateFormat;
 import static java.math.BigDecimal.valueOf;
 
 public class InsuranceQuotationModBean {
-    private ApplicationConfigurationService applicationConfigurationService;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static ApplicationConfigurationService applicationConfigurationService;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private InsuranceQuotationModBean() {}
 
-    public InsuranceQuotationModDAO createUpdateQuotationModDao(final EasyesQuotationDAO easyesQuotationDAO,
-                                                                final EasyesQuotationDTO easyesQuotationDTO)
+    public static InsuranceQuotationModDAO createUpdateQuotationModDao(EasyesQuotationDAO easyesQuotationDAO,
+                                                                 EasyesQuotationDTO easyesQuotationDTO)
     {
         final InsurancePlanDTO plan = easyesQuotationDTO.getProduct().getPlans().get(0);
 
@@ -31,9 +31,9 @@ public class InsuranceQuotationModBean {
         insuranceQuotationModDao.setLastChangeBranchId(easyesQuotationDTO.getBank().getBranch().getId());
         return insuranceQuotationModDao;
     }
-    public static InsuranceQuotationModDAO createQuotationModDao(final EasyesQuotationDAO quotationDao,
-                                                                 final EasyesQuotationDTO easyesQuotation,
-                                                                 final EasyesQuotationBO easyesQuotationBO)
+    public static InsuranceQuotationModDAO createQuotationModDao(EasyesQuotationDAO quotationDao,
+                                                          EasyesQuotationDTO easyesQuotation,
+                                                          EasyesQuotationBO easyesQuotationBO)
     {
 
         final InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
@@ -48,7 +48,7 @@ public class InsuranceQuotationModBean {
 
         insuranceQuotationModDAO.setPaymentTermNumber(valueOf(installment.getPaymentsTotalNumber()));
 
-        String paymentFrequency = this.applicationConfigurationService.getProperty(installment.getPeriod().getId());
+        String paymentFrequency = applicationConfigurationService.getProperty(installment.getPeriod().getId());
         insuranceQuotationModDAO.setPolicyPaymentFrequencyType(paymentFrequency);
 
         final String rimacFechaInicio = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
@@ -59,8 +59,8 @@ public class InsuranceQuotationModBean {
         LocalDate localDateFechaInicio = new LocalDate(rimacFechaInicio);
         LocalDate localDateFechaFin = new LocalDate(rimacFechaFin);
 
-        insuranceQuotationModDAO.setFinancingStartDate(this.dateFormat.format(localDateFechaInicio.toDateTimeAtStartOfDay().toDate()));
-        insuranceQuotationModDAO.setFinancingEndDate(this.dateFormat.format(localDateFechaFin.toDateTimeAtStartOfDay().toDate()));
+        insuranceQuotationModDAO.setFinancingStartDate(dateFormat.format(localDateFechaInicio.toDateTimeAtStartOfDay().toDate()));
+        insuranceQuotationModDAO.setFinancingEndDate(dateFormat.format(localDateFechaFin.toDateTimeAtStartOfDay().toDate()));
 
         insuranceQuotationModDAO.setPremiumAmount(installment.getPaymentAmount().getAmount());
         insuranceQuotationModDAO.setPremiumCurrencyId(installment.getPaymentAmount().getCurrency());
