@@ -1,12 +1,11 @@
 package com.bbva.rbvd.lib.r304.impl;
+
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationEasyYes;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationParameter;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationVidaDinamico;
-import com.bbva.rbvd.lib.r304.service.dao.DAOService;
-import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,18 +13,18 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR304Impl.class);
 
-	private DAOService daoService;
-	private MapperHelper mapperHelper;
+	/*private DAOService daoService;
+	private MapperHelper mapperHelper;*/
 
 	@Override
-	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO easyesQuotation) {
+	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO input) {
 
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  START *****");
-			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  ***** {}", easyesQuotation);
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  ***** {}", input);
 
 		EasyesQuotationDTO response = new EasyesQuotationDTO();
-			Quotation quotation;
-			if (easyesQuotation.getProduct().getId().equals("840")) {
+		Quotation quotation;
+			if (input.getProduct().getId().equals("840")) {
 
 				quotation = new QuotationEasyYes(
 						new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
@@ -33,9 +32,9 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 				);
 
 				LOGGER.info("***** RBVDR302Impl - QuotationEasyYes ***** {}", quotation);
-				response = quotation.start(easyesQuotation, this.rbvdR303);
+				response = quotation.start(input, this.rbvdR303);
 
-			} else if (easyesQuotation.getProduct().getId().equals("841")) {
+			} else if (input.getProduct().getId().equals("841")) {
 
 				quotation = new QuotationVidaDinamico(
 						new QuotationParameter(this.pisdR350,this.applicationConfigurationService),
@@ -43,7 +42,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 				);
 
 				LOGGER.info("***** RBVDR304Impl - QuotationVidaDinamico ***** {}", quotation);
-				response = quotation.start(easyesQuotation, this.rbvdR303);
+				response = quotation.start(input, this.rbvdR303);
 			}
 
 			//inicio
@@ -57,18 +56,18 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 /*
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation START *****");
-		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Param: {}", easyesQuotation);
+		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Param: {}", input);
 
-		InsurancePlanDTO selectedPlan = easyesQuotation.getProduct().getPlans().get(0);
+		InsurancePlanDTO selectedPlan = input.getProduct().getPlans().get(0);
 
-		final String productType = easyesQuotation.getProduct().getId();
+		final String productType = input.getProduct().getId();
 		final String selectedPlanId = selectedPlan.getId();
 		final String periodId = selectedPlan.getInstallmentPlans().get(0).getPeriod().getId();
 		final String frequencyTypeId = this.applicationConfigurationService.getProperty(periodId);
 
 		try {
 			final Map<String, Object> responseGetSimulationInformation = this.daoService.
-					executeGetSimulationInformation(easyesQuotation.getExternalSimulationId());
+					executeGetSimulationInformation(input.getExternalSimulationId());
 			final Map<String, Object> responseGetRequiredInformation = this.daoService.executeGetRequiredInformation(productType, selectedPlanId);
 			final Map<String, Object> responsePaymentFrequencyName = this.daoService.executeGetPaymentFrequencyName(frequencyTypeId);
 
@@ -77,32 +76,32 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 			final String policyQuotaInternalId = this.generatePolicyQuotaInternalId(easyesQuotationDao.getInsuranceSimulationId());
 
-			easyesQuotation.setId(policyQuotaInternalId);
+			input.setId(policyQuotaInternalId);
 			//config
 //------------------------------------------------------------------------------------------------------------------------------------
 			final EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
 			//-----------------------------un solo metodo-------------------------
 			final EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
-					easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
+					input.getExternalSimulationId(), input.getTraceId());
 
 			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 			//-----------------------------un solo metodo-------------------------
 //----------------------------------------------post------------------------------------------------------------------------
-			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
+			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(input.getId());
 			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
 			.
 			 if(BigDecimal.ONE.compareTo(resultCount) == 0) {
-				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
+				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, input);
 			} else {
-				this.daoService.executeQuotationQuery(easyesQuotationDao, easyesQuotation);
-				this.daoService.executeQuotationModQuery(easyesQuotationDao, easyesQuotation, rimacQuotationResponse);
+				this.daoService.executeQuotationQuery(easyesQuotationDao, input);
+				this.daoService.executeQuotationModQuery(easyesQuotationDao, input, rimacQuotationResponse);
 			}
 
-			this.mapperHelper.mappingOutputFields(easyesQuotation, easyesQuotationDao);
+			this.mapperHelper.mappingOutputFields(input, easyesQuotationDao);
 
-			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Response: {}", easyesQuotation);
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Response: {}", input);
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation END *****");
-			return easyesQuotation;
+			return input;
 		} catch (BusinessException exception) {
 			this.printErrorMessage(exception.getMessage());
 			this.addAdvice(exception.getAdviceCode());
@@ -126,12 +125,11 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 */
 	}
 
-	private void printErrorMessage(final String message) {
+	/*private void printErrorMessage(final String message) {
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Something went wrong -> {}", message);
 	}
-
-	public void setDaoService(DAOService daoService) {this.daoService = daoService;}
-
-	public void setMapperHelper(MapperHelper mapperHelper) {this.mapperHelper = mapperHelper;}
+*/
+//	public void setDaoService(DAOService daoService) {this.daoService = daoService;}
+//	public void setMapperHelper(MapperHelper mapperHelper) {this.mapperHelper = mapperHelper;}
 
 }

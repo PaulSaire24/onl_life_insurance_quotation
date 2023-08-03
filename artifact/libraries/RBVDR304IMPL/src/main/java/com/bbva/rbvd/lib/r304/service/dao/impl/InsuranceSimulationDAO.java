@@ -21,10 +21,7 @@ public class InsuranceSimulationDAO implements IInsuranceSimulationDAO {
     public Map<String, Object> executeGetSimulationInformation(String externalSimulationId) {
         final Map<String, Object> responseGetSimulationIdAndExpirationDate = this.pisdR350.executeGetASingleRow(
                 RBVDProperties.QUERY_GET_SIMULATION_INFORMATION_FOR_EASYES_QUOTATION.getValue(),
-                singletonMap(
-                        RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),
-                        externalSimulationId
-                )
+                singletonMap(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),externalSimulationId)
         );
 
         validateSelectionQueries(responseGetSimulationIdAndExpirationDate, RBVDErrors.INVALID_RIMAC_QUOTATION_ID);

@@ -43,6 +43,13 @@ public class QuotationParameter implements PreQuotation {
 
         PayloadProperties properties = this.getProperties(payloadConfig.getInput());
 
+/*        payloadConfig.setPayloadProperties(properties);
+
+        Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
+        Map<String, Object> product = this.getProduct(payloadConfig.getPayloadProperties().getProductType(),payloadConfig.getPayloadProperties().getPeriodId());//properties.getProductType(), properties.getSelectedPlanId());
+        Map<String, Object> paymentFrequency = this.getPaymentFrequency(payloadConfig.getPayloadProperties().getFrequencyTypeId());//properties.getFrequencyTypeId());
+*/
+
         Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
         Map<String, Object> product = this.getProduct(properties.getProductType(), properties.getSelectedPlanId());
         Map<String, Object> paymentFrequency = this.getPaymentFrequency(properties.getFrequencyTypeId());
@@ -76,19 +83,20 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao END - EasyesQuotation: {} *****",quotation);
 
         return  quotation;
-    }*/
+    }
+    */
 
-    public String getGeneratePolicyQuotaid(EasyesQuotationDAO easyesQuotationDao){
+    public String getGeneratePolicyQuotaid(EasyesQuotationDAO myQuotation){
 
-        final int requiredSize = 9;
+        int requiredSize = 9;
 
-        final StringBuilder policyQuotaInternalId = new StringBuilder("0814");
-        final int sizeToComplete = requiredSize - easyesQuotationDao.getInsuranceSimulationId().toString().length();
+        StringBuilder policyQuotaInternalId = new StringBuilder("0814");
+        int sizeToComplete = requiredSize - myQuotation.getInsuranceSimulationId().toString().length();
 
         for(int i = 0; i < sizeToComplete; i++) {
             policyQuotaInternalId.append("0");
         }
-        policyQuotaInternalId.append(easyesQuotationDao.getInsuranceSimulationId());
+        policyQuotaInternalId.append(myQuotation.getInsuranceSimulationId());
 
         return policyQuotaInternalId.toString();
     }
