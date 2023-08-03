@@ -1,30 +1,14 @@
 package com.bbva.rbvd.lib.r304.impl;
-
-import com.bbva.apx.exception.business.BusinessException;
-
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
-
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
-
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r304.pattern.Quotation;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationEasyYes;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationParameter;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationVidaDinamico;
 import com.bbva.rbvd.lib.r304.service.dao.DAOService;
-
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.BigDecimal;
-
-import java.util.Map;
-
-import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateServicesResponse;
 
 public class RBVDR304Impl extends RBVDR304Abstract {
 
@@ -35,6 +19,41 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 	@Override
 	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO easyesQuotation) {
+
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  START *****");
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  ***** {}", easyesQuotation);
+
+		EasyesQuotationDTO response = new EasyesQuotationDTO();
+			Quotation quotation;
+			if (easyesQuotation.getProduct().getId().equals("840")) {
+
+				quotation = new QuotationEasyYes(
+						new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
+						, new QuotationStore(this.pisdR350, this.rbvdR303)
+				);
+
+				LOGGER.info("***** RBVDR302Impl - QuotationEasyYes ***** {}", quotation);
+				response = quotation.start(easyesQuotation, this.rbvdR303);
+
+			} else if (easyesQuotation.getProduct().getId().equals("841")) {
+
+				quotation = new QuotationVidaDinamico(
+						new QuotationParameter(this.pisdR350,this.applicationConfigurationService),
+						new QuotationStore(this.pisdR350,this.rbvdR303)
+				);
+
+				LOGGER.info("***** RBVDR304Impl - QuotationVidaDinamico ***** {}", quotation);
+				response = quotation.start(easyesQuotation, this.rbvdR303);
+			}
+
+			//inicio
+
+
+			LOGGER.info("***** RBVDR304Impl - executeGetQuotation response  ***** {}", response);
+			LOGGER.info("***** RBVDR304Impl - executeGetQuotation END  *****");
+
+			return response;
+
 
 /*
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation START *****");
@@ -105,7 +124,6 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 		policyQuotaInternalId.append(insuranceSimulationId);
 		return policyQuotaInternalId.toString();
 */
-		return null;
 	}
 
 	private void printErrorMessage(final String message) {
