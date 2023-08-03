@@ -1,42 +1,45 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-
-import java.math.BigDecimal;
-import java.util.Map;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 public class PayloadStore {
-    private Map<String, Object> responseValidateQuotation;
-    private PayloadConfig payloadConfig;
-    private BigDecimal resultCount;
+    private EasyesQuotationDTO input;
+    private EasyesQuotationDAO myQuotation;
+    private EasyesQuotationBO rimacQuotationResponse;
+    public PayloadStore(){}
 
-    public PayloadStore(Map<String, Object> responseValidateQuotation, PayloadConfig payloadConfig, BigDecimal resultCount) {
-        this.responseValidateQuotation = responseValidateQuotation;
-        this.payloadConfig = payloadConfig;
-        this.resultCount = resultCount;
+    public EasyesQuotationDTO getInput() {
+        return input;
     }
 
-    public Map<String, Object> getResponseValidateQuotation() {
-        return responseValidateQuotation;
+    public void setInput(EasyesQuotationDTO input) {
+        this.input = input;
     }
 
-    public void setResponseValidateQuotation(Map<String, Object> responseValidateQuotation) {
-        this.responseValidateQuotation = responseValidateQuotation;
+    public EasyesQuotationDAO getMyQuotation() {
+        return myQuotation;
     }
 
-    public PayloadConfig getPayloadConfig() {
-        return payloadConfig;
+    public void setMyQuotation(EasyesQuotationDAO myQuotation) {
+        this.myQuotation = myQuotation;
     }
 
-    public void setPayloadConfig(PayloadConfig payloadConfig) {
-        this.payloadConfig = payloadConfig;
+    public EasyesQuotationBO getRimacQuotationResponse() {
+        return rimacQuotationResponse;
     }
 
-    public BigDecimal getResultCount() {
-        return resultCount;
+    public void setRimacQuotationResponse(EasyesQuotationBO rimacQuotationResponse) {
+        this.rimacQuotationResponse = rimacQuotationResponse;
     }
 
-    public void setResultCount(BigDecimal resultCount) {
-        this.resultCount = resultCount;
+    @Override
+    public String toString() {
+        return "PayloadStore{" +
+                "quotationDTO=" + input +
+                ", quotationDAO=" + myQuotation +
+                ", rimacQuotationResponse=" + rimacQuotationResponse +
+                '}';
     }
 }

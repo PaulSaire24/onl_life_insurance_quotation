@@ -21,7 +21,7 @@ public class QuotationVidaDinamico extends QuotationDecorator{
     }
 
     @Override
-    public EasyesQuotationDTO start(EasyesQuotationDTO input, RBVDR304 rbvdr304, ApplicationConfigurationService applicationConfigurationService) {
+    public EasyesQuotationDTO start(EasyesQuotationDTO input, RBVDR303 rbvdr303) {
         return null;
     }
 }

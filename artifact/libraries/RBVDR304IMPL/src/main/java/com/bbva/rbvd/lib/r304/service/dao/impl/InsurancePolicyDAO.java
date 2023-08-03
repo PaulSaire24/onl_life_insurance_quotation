@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class InsurancePolicyDAO implements IInsurancePolicy {
     private PISDR350 pisdR350;
+
+    public InsurancePolicyDAO(PISDR350 pisdR350) {
+        this.pisdR350 = pisdR350;
+    }
+
     @Override
     public Map<String, Object> executeValidateQuotation(String policyQuotaInternalId) {
         Map<String, Object> argument = PolicyQuotaInternalMap.createArgumentForValidateQuotation(policyQuotaInternalId);

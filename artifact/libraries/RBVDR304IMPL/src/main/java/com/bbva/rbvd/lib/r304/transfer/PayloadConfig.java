@@ -1,48 +1,37 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
-import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 public class PayloadConfig {
 
-    private EasyesQuotationDAO quotationDao;
-    private EasyesQuotationBO easyesQuotationBO;
-    private String PolicyQuotaid;
-    private EasyesQuotationDTO Quotation;
+    private EasyesQuotationDAO myQuotation;
+    private String policyQuotaId;
+    private EasyesQuotationDTO input;
     private PayloadProperties payloadProperties;
 
-    public EasyesQuotationDAO getQuotationDao() {
-        return quotationDao;
+    public EasyesQuotationDAO getMyQuotation() {
+        return myQuotation;
     }
 
-    public void setQuotationDao(EasyesQuotationDAO quotationDao) {
-        this.quotationDao = quotationDao;
+    public void setMyQuotation(EasyesQuotationDAO myQuotation) {
+        this.myQuotation = myQuotation;
     }
 
-    public EasyesQuotationBO getEasyesQuotationBO() {
-        return easyesQuotationBO;
+    public String getPolicyQuotaId() {
+        return policyQuotaId;
     }
 
-    public void setEasyesQuotationBO(EasyesQuotationBO easyesQuotationBO) {
-        this.easyesQuotationBO = easyesQuotationBO;
+    public void setPolicyQuotaId(String policyQuotaId) {
+        this.policyQuotaId = policyQuotaId;
     }
 
-    public String getPolicyQuotaid() {
-        return PolicyQuotaid;
+    public EasyesQuotationDTO getInput() {
+        return input;
     }
 
-    public void setPolicyQuotaid(String policyQuotaid) {
-        PolicyQuotaid = policyQuotaid;
-    }
-
-    public EasyesQuotationDTO getQuotation() {
-        return Quotation;
-    }
-
-    public void setQuotation(EasyesQuotationDTO quotation) {
-        Quotation = quotation;
+    public void setInput(EasyesQuotationDTO input) {
+        this.input = input;
     }
 
     public PayloadProperties getPayloadProperties() {
@@ -56,15 +45,12 @@ public class PayloadConfig {
     @Override
     public String toString() {
         return "PayloadConfig{" +
-                "quotationDao=" + quotationDao +
-                ", easyesQuotationBO=" + easyesQuotationBO +
-                ", PolicyQuotaid='" + PolicyQuotaid + '\'' +
-                ", Quotation=" + Quotation +
+                "myQuotation=" + myQuotation +
+                ", policyQuotaId='" + policyQuotaId + '\'' +
+                ", input=" + input +
                 ", payloadProperties=" + payloadProperties +
                 '}';
     }
 
-    public GifoleInsuranceRequestASO getInput() {
-        return null;
-    }
+//public GifoleInsuranceRequestASO getInput() {return null;}
 }

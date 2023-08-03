@@ -39,21 +39,22 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getConfig - input : {} *****",input);
 
         PayloadConfig payloadConfig = new PayloadConfig();
-        payloadConfig.setQuotation(input);
+        payloadConfig.setInput(input);
 
-        PayloadProperties properties = this.getProperties(payloadConfig.getQuotation());
+        PayloadProperties properties = this.getProperties(payloadConfig.getInput());
 
         Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
         Map<String, Object> product = this.getProduct(properties.getProductType(), properties.getSelectedPlanId());
         Map<String, Object> paymentFrequency = this.getPaymentFrequency(properties.getFrequencyTypeId());
 
-        EasyesQuotationDAO quotation = this.getQuotationDao(simulation,product,paymentFrequency);
-        String policyQuotaid = this.getGeneratePolicyQuotaid(quotation);
+        EasyesQuotationDAO myQuotation = QuotationBean.createQuotationDao(simulation, product, paymentFrequency);
 
-        payloadConfig.getQuotation().setId(policyQuotaid);
+        String policyQuotaid = this.getGeneratePolicyQuotaid(myQuotation);
 
-        payloadConfig.setQuotationDao(quotation);
-        payloadConfig.setPolicyQuotaid(policyQuotaid);
+        payloadConfig.getInput().setId(policyQuotaid);
+
+        payloadConfig.setMyQuotation(myQuotation);
+        payloadConfig.setPolicyQuotaId(policyQuotaid);
         payloadConfig.setPayloadProperties(properties);
 
 
@@ -62,7 +63,7 @@ public class QuotationParameter implements PreQuotation {
         return payloadConfig;
     }
 
-    public EasyesQuotationDAO getQuotationDao(Map<String, Object> responseGetSimulationIdAndExpirationDate,
+    /*public EasyesQuotationDAO getQuotationDao(Map<String, Object> responseGetSimulationIdAndExpirationDate,
                                               Map<String, Object> responseGetRequiredInformation,
                                               Map<String, Object> responseGetPaymentFrequencyName)
     {
@@ -70,13 +71,12 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao START - responseGetRequiredInformation: {} *****",responseGetRequiredInformation);
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao START - responseGetPaymentFrequencyName: {} *****",responseGetPaymentFrequencyName);
 
-        QuotationBean quotationBean = new QuotationBean();
-        EasyesQuotationDAO quotation = quotationBean.createQuotationDao(responseGetSimulationIdAndExpirationDate, responseGetRequiredInformation, responseGetPaymentFrequencyName);
+        EasyesQuotationDAO quotation = QuotationBean.createQuotationDao(responseGetSimulationIdAndExpirationDate, responseGetRequiredInformation, responseGetPaymentFrequencyName);
 
         LOGGER.info("***** QuotationParameter getEasYesQuotationDao END - EasyesQuotation: {} *****",quotation);
 
         return  quotation;
-    }
+    }*/
 
     public String getGeneratePolicyQuotaid(EasyesQuotationDAO easyesQuotationDao){
 

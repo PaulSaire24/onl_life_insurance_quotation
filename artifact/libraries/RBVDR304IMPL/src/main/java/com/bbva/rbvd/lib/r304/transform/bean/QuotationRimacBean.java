@@ -11,7 +11,7 @@ public class QuotationRimacBean {
     private QuotationRimacBean() {
     }
 
-    public static EasyesQuotationBO createRimacQuotationRequest(final EasyesQuotationDAO input, final String policyQuotaInternalId) {
+    public static EasyesQuotationBO createRimacQuotationRequest(EasyesQuotationDAO input, String policyQuotaInternalId) {
         EasyesQuotationBO easyesQuotationBO = new EasyesQuotationBO();
 
         EasyesQuotationPayloadBO payload = new EasyesQuotationPayloadBO();

@@ -1,9 +1,8 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
@@ -26,18 +25,24 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     public PayloadStore doEasyYes(PayloadConfig payloadConfig) {
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | argument payloadConfig: {} *****",payloadConfig);
 
-        EasyesQuotationBO responseRimar;
-        return null;
+        EasyesQuotationBO responseRimac = this.callQuotationRimacService(payloadConfig);
+
+        PayloadStore payloadStore = new PayloadStore();
+        payloadStore.setRimacQuotationResponse(responseRimac);
+        payloadStore.setMyQuotation(payloadConfig.getMyQuotation());
+        payloadStore.setInput(payloadConfig.getInput());
+
+        return payloadStore;
     }
 
-    private EasyesQuotationBO callQuotationRimacService(EasyesQuotationDTO input, String policyQuotaInternalId, PayloadStore payloadStore){
+    private EasyesQuotationBO callQuotationRimacService(PayloadConfig config){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService START *****");
-        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payloadStore.getPayloadConfig().getQuotationDao(), policyQuotaInternalId);
+        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(config.getMyQuotation(),config.getPolicyQuotaId());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac(requestRimac, input.getExternalSimulationId(),input.getTraceId());
+        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac(requestRimac,config.getInput().getExternalSimulationId(),config.getInput().getTraceId());
         if (isNull(responseRimac)){
             throw RBVDValidation.build(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
         }
