@@ -69,7 +69,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 //----------------------------------------------post------------------------------------------------------------------------
 			final Map<String, Object> responseValidateQuotation = this.daoService.executeValidateQuotation(easyesQuotation.getId());
 			final BigDecimal resultCount = (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
-
+			.
 			 if(BigDecimal.ONE.compareTo(resultCount) == 0) {
 				this.daoService.executeUpdateQuotationModQuery(easyesQuotationDao, easyesQuotation);
 			} else {
