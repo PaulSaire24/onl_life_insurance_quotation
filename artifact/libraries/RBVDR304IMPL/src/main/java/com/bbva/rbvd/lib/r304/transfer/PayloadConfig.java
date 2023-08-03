@@ -3,20 +3,30 @@ package com.bbva.rbvd.lib.r304.transfer;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 public class PayloadConfig {
 
-    private EasyesQuotationDAO easyesQuotationDao;
+    private EasyesQuotationDAO quotationDao;
+    private EasyesQuotationBO easyesQuotationBO;
     private String PolicyQuotaid;
     private EasyesQuotationDTO Quotation;
     private PayloadProperties payloadProperties;
 
-    public EasyesQuotationDAO getEasyesQuotationDao() {
-        return easyesQuotationDao;
+    public EasyesQuotationDAO getQuotationDao() {
+        return quotationDao;
     }
 
-    public void setEasyesQuotationDao(EasyesQuotationDAO easyesQuotationDao) {
-        this.easyesQuotationDao = easyesQuotationDao;
+    public void setQuotationDao(EasyesQuotationDAO quotationDao) {
+        this.quotationDao = quotationDao;
+    }
+
+    public EasyesQuotationBO getEasyesQuotationBO() {
+        return easyesQuotationBO;
+    }
+
+    public void setEasyesQuotationBO(EasyesQuotationBO easyesQuotationBO) {
+        this.easyesQuotationBO = easyesQuotationBO;
     }
 
     public String getPolicyQuotaid() {
@@ -46,7 +56,8 @@ public class PayloadConfig {
     @Override
     public String toString() {
         return "PayloadConfig{" +
-                "easyesQuotationDao=" + easyesQuotationDao +
+                "quotationDao=" + quotationDao +
+                ", easyesQuotationBO=" + easyesQuotationBO +
                 ", PolicyQuotaid='" + PolicyQuotaid + '\'' +
                 ", Quotation=" + Quotation +
                 ", payloadProperties=" + payloadProperties +

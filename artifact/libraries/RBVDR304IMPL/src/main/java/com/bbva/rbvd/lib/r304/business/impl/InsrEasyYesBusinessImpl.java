@@ -33,7 +33,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     private EasyesQuotationBO callQuotationRimacService(EasyesQuotationDTO input, String policyQuotaInternalId, PayloadStore payloadStore){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService START *****");
-        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payloadStore.getPayloadConfig().getEasyesQuotationDao(), policyQuotaInternalId);
+        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payloadStore.getPayloadConfig().getQuotationDao(), policyQuotaInternalId);
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 

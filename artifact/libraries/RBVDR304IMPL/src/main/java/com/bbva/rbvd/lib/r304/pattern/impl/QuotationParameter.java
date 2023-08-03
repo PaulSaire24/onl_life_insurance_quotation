@@ -52,7 +52,7 @@ public class QuotationParameter implements PreQuotation {
 
         payloadConfig.getQuotation().setId(policyQuotaid);
 
-        payloadConfig.setEasyesQuotationDao(quotation);
+        payloadConfig.setQuotationDao(quotation);
         payloadConfig.setPolicyQuotaid(policyQuotaid);
         payloadConfig.setPayloadProperties(properties);
 
