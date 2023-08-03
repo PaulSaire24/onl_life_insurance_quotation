@@ -35,6 +35,8 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 	@Override
 	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO easyesQuotation) {
+
+/*
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation START *****");
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation ***** Param: {}", easyesQuotation);
 
@@ -88,8 +90,8 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 			return null;
 		}
 	}
-
-	private String generatePolicyQuotaInternalId(final BigDecimal insuranceSimulationId) {
+*/
+/*	private String generatePolicyQuotaInternalId(final BigDecimal insuranceSimulationId) {
 		final int requiredSize = 9;
 
 		final StringBuilder policyQuotaInternalId = new StringBuilder("0814");
@@ -102,6 +104,8 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 		policyQuotaInternalId.append(insuranceSimulationId);
 		return policyQuotaInternalId.toString();
+*/
+		return null;
 	}
 
 	private void printErrorMessage(final String message) {
