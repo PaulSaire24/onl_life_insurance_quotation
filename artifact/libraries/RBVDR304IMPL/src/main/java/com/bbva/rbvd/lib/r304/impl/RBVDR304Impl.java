@@ -5,16 +5,12 @@ import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationEasyYes;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationParameter;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
-import com.bbva.rbvd.lib.r304.pattern.impl.QuotationVidaDinamico;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RBVDR304Impl extends RBVDR304Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR304Impl.class);
-
-	/*private DAOService daoService;
-	private MapperHelper mapperHelper;*/
 
 	@Override
 	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO input) {
@@ -28,13 +24,13 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 				quotation = new QuotationEasyYes(
 						new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
-						, new QuotationStore(this.pisdR350, this.rbvdR303)
+						, new QuotationStore(this.pisdR350)
 				);
 
 				LOGGER.info("***** RBVDR302Impl - QuotationEasyYes ***** {}", quotation);
 				response = quotation.start(input, this.rbvdR303);
 
-			} else if (input.getProduct().getId().equals("841")) {
+			} /*else if (input.getProduct().getId().equals("841")) {
 
 				quotation = new QuotationVidaDinamico(
 						new QuotationParameter(this.pisdR350,this.applicationConfigurationService),
@@ -43,7 +39,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 				LOGGER.info("***** RBVDR304Impl - QuotationVidaDinamico ***** {}", quotation);
 				response = quotation.start(input, this.rbvdR303);
-			}
+			}*/
 
 			//inicio
 

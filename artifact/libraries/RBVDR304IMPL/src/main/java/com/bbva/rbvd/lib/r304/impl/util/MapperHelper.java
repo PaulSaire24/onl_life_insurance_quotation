@@ -204,7 +204,7 @@ public class MapperHelper {
         return arguments;
     }
 */
-    public void mappingOutputFields(final EasyesQuotationDTO easyesQuotation, final EasyesQuotationDAO easyesQuotationDao) {
+    /*public void mappingOutputFields(final EasyesQuotationDTO response, final EasyesQuotationDAO easyesQuotationDao) {
 
         final String defaultValue = "";
 
@@ -226,7 +226,7 @@ public class MapperHelper {
         easyesQuotation.getProduct().getPlans().get(0).setName(easyesQuotationDao.getInsuranceModalityName());
         easyesQuotation.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
                 .setName(easyesQuotationDao.getPaymentFrequencyName());
-    }
+    }*/
 
     public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
 
