@@ -44,7 +44,7 @@ import static org.mockito.Matchers.anyString;
 
 public class MapperHelperTest {
 
-    private final MapperHelper mapperHelper = new MapperHelper();
+/*    private final MapperHelper mapperHelper = new MapperHelper();
 
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR303 rbvdR303;
@@ -418,5 +418,5 @@ public class MapperHelperTest {
         assertEquals("", easyesQuotationDto.getHolder().getFirstName());
         assertEquals("", easyesQuotationDto.getHolder().getLastName());
         assertEquals("", easyesQuotationDto.getHolder().getFullName());
-    }
+    }*/
 }

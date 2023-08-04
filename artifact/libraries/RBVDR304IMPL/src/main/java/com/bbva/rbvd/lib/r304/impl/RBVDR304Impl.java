@@ -13,7 +13,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR304Impl.class);
 
 	@Override
-	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(final EasyesQuotationDTO input) {
+	public EasyesQuotationDTO executeBusinessLogicEasyesQutation(EasyesQuotationDTO input) {
 
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  START *****");
 			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQutation  ***** {}", input);

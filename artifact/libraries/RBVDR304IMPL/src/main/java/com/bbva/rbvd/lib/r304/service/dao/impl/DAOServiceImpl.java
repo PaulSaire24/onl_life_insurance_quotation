@@ -27,7 +27,7 @@ import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateInsertionQ
 import static java.util.Collections.singletonMap;
 
 public class DAOServiceImpl implements DAOService {
-
+/*
     protected ApplicationConfigurationService applicationConfigurationService;
     protected PISDR350 pisdR350;
     protected MapperHelper mapperHelper;
@@ -92,10 +92,10 @@ public class DAOServiceImpl implements DAOService {
         validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }
 */
-    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
+//    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
 
-    public void setPisdR350(PISDR350 pisdR350) {this.pisdR350 = pisdR350;}
+//    public void setPisdR350(PISDR350 pisdR350) {this.pisdR350 = pisdR350;}
 
-    public void setMapperHelper(MapperHelper mapperHelper) {this.mapperHelper = mapperHelper;}
+//    public void setMapperHelper(MapperHelper mapperHelper) {this.mapperHelper = mapperHelper;}
 
 }

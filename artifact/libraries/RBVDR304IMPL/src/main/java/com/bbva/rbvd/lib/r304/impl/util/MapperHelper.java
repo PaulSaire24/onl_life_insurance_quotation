@@ -41,7 +41,7 @@ import static java.util.Objects.nonNull;
 
 public class MapperHelper {
 
-    private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
+/*    private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -228,9 +228,9 @@ public class MapperHelper {
                 .setName(easyesQuotationDao.getPaymentFrequencyName());
     }*/
 
-    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
+//    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {this.applicationConfigurationService = applicationConfigurationService;}
 
-    public void setRbvdR303(RBVDR303 rbvdR303) {this.rbvdR303 = rbvdR303;}
+//    public void setRbvdR303(RBVDR303 rbvdR303) {this.rbvdR303 = rbvdR303;}
 
 
 }
