@@ -20,7 +20,7 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 		EasyesQuotationDTO response = new EasyesQuotationDTO();
 		Quotation quotation;
-			if (input.getProduct().getId().equals("840")) {
+			//if (input.getProduct().getId().equals("840")) {
 
 				quotation = new QuotationEasyYes(
 						new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
@@ -30,9 +30,9 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 				LOGGER.info("***** RBVDR302Impl - QuotationEasyYes ***** {}", quotation);
 				response = quotation.start(input, this.rbvdR303);
 
-			} /*else if (input.getProduct().getId().equals("841")) {
+			//} else if (input.getProduct().getId().equals("841")) {
 
-				quotation = new QuotationVidaDinamico(
+			/*	quotation = new QuotationVidaDinamico(
 						new QuotationParameter(this.pisdR350,this.applicationConfigurationService),
 						new QuotationStore(this.pisdR350,this.rbvdR303)
 				);

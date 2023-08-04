@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class InsuranceQuotationMap {
     private InsuranceQuotationMap(){}
-    public static Map<String, Object> createArgumentsQuotationDao(final InsuranceQuotationDAO insuranceQuotationDao) {
+    public static Map<String, Object> createArgumentsQuotationDao(InsuranceQuotationDAO insuranceQuotationDao) {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), insuranceQuotationDao.getInsuranceSimulationId());

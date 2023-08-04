@@ -11,7 +11,7 @@ import java.util.Map;
 import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateSelectionQueries;
 
 public class InsuranceProductModalityDAO implements IInsuranceProductModalityDAO {
-    private PISDR350 pisdR350;
+    private final PISDR350 pisdR350;
 
     public InsuranceProductModalityDAO(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;

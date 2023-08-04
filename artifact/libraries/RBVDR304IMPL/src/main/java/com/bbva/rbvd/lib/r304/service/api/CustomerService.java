@@ -6,6 +6,9 @@ import com.bbva.rbvd.lib.r303.RBVDR303;
 public class CustomerService {
     private static RBVDR303 rbvdR303;
 
+    private CustomerService() {
+    }
+
     public static CustomerBO listCustomerService (String input){
         return rbvdR303.executeListCustomerService(input);
     }

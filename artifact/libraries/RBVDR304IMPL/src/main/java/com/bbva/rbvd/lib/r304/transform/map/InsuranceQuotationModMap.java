@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class InsuranceQuotationModMap {
     private InsuranceQuotationModMap(){}
-    public static Map<String, Object> createUpdateQuotationModArguments(final InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
+    public static Map<String, Object> createUpdateQuotationModArguments(InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), updateInsuranceQuotationModDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), updateInsuranceQuotationModDao.getInsuranceProductId());
@@ -18,7 +18,7 @@ public class InsuranceQuotationModMap {
         return arguments;
     }
 
-    public static Map<String, Object> createArgumentsQuotationModDao(final InsuranceQuotationModDAO insuranceQuotationModDao) {
+    public static Map<String, Object> createArgumentsQuotationModDao(InsuranceQuotationModDAO insuranceQuotationModDao) {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), insuranceQuotationModDao.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), insuranceQuotationModDao.getInsuranceProductId());

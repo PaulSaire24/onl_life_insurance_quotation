@@ -19,7 +19,7 @@ public final class ValidationUtil {
         }
     }
 
-    public static void validateSelectionQueries(final Map responseQuery, final RBVDErrors error) {
+    public static void validateSelectionQueries(Map responseQuery, RBVDErrors error) {
         if(isEmpty(responseQuery)) {
             throw RBVDValidation.build(error);
         }

@@ -10,7 +10,7 @@ import static java.util.Collections.singletonMap;
 
 public class InsurancePaymentPeriodDAO implements IInsurancePaymentPeriodDAO {
 
-    private PISDR350 pisdR350;
+    private final PISDR350 pisdR350;
 
     public InsurancePaymentPeriodDAO(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;

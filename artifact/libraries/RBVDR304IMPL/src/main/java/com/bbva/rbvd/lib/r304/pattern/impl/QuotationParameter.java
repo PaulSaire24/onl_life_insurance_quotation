@@ -50,8 +50,8 @@ public class QuotationParameter implements PreQuotation {
         payloadConfig.setPayloadProperties(properties);
 
         Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
-        Map<String, Object> product = this.getProduct(payloadConfig.getPayloadProperties().getProductType(),payloadConfig.getPayloadProperties().getPeriodId());//properties.getProductType(), properties.getSelectedPlanId());
-        Map<String, Object> paymentFrequency = this.getPaymentFrequency(payloadConfig.getPayloadProperties().getFrequencyTypeId());//properties.getFrequencyTypeId());
+        Map<String, Object> product = this.getProduct(payloadConfig.getPayloadProperties().getProductType(),payloadConfig.getPayloadProperties().getPeriodId());
+        Map<String, Object> paymentFrequency = this.getPaymentFrequency(payloadConfig.getPayloadProperties().getFrequencyTypeId());
 
         EasyesQuotationDAO myQuotation = QuotationBean.createQuotationDao(simulation, product, paymentFrequency);
 
