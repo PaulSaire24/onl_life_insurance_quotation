@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.math.BigDecimal.valueOf;
 import static java.util.Collections.singletonList;
@@ -175,8 +176,16 @@ public class MapperHelper {
         insuranceQuotationModDAO.setUserAudit(easyesQuotation.getUserAudit());
         insuranceQuotationModDAO.setContactEmailDesc(null);
         insuranceQuotationModDAO.setCustomerPhoneDesc(null);
-        insuranceQuotationModDAO.setDataTreatmentIndType((easyesQuotation.getIsDataTreatment() ? "S" : "N"));
+        insuranceQuotationModDAO.setDataTreatmentIndType(validateIsDataTreatment(easyesQuotation.getIsDataTreatment()));
         return insuranceQuotationModDAO;
+    }
+
+    private static String validateIsDataTreatment(Boolean isDataTreatment){
+        if(Objects.nonNull(isDataTreatment)){
+            return Boolean.TRUE.equals(isDataTreatment) ? "S" : "N";
+        }else{
+            return "N";
+        }
     }
 
     public Map<String, Object> createArgumentsQuotationModDao(final InsuranceQuotationModDAO insuranceQuotationModDao) {

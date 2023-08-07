@@ -23,12 +23,14 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
