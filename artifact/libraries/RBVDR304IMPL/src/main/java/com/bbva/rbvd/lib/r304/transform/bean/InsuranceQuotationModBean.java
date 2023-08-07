@@ -7,20 +7,19 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 import static java.math.BigDecimal.valueOf;
 
 public class InsuranceQuotationModBean {
-    private static ApplicationConfigurationService applicationConfigurationService;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
     private InsuranceQuotationModBean() {}
 
-    public static InsuranceQuotationModDAO createUpdateQuotationModDao(EasyesQuotationDAO easyesQuotationDAO,
-                                                                 EasyesQuotationDTO easyesQuotationDTO)
-    {
+    public static InsuranceQuotationModDAO createUpdateQuotationModDao(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
         final InsurancePlanDTO plan = easyesQuotationDTO.getProduct().getPlans().get(0);
 
         final InsuranceQuotationModDAO insuranceQuotationModDao = new InsuranceQuotationModDAO();
@@ -31,29 +30,32 @@ public class InsuranceQuotationModBean {
         insuranceQuotationModDao.setLastChangeBranchId(easyesQuotationDTO.getBank().getBranch().getId());
         return insuranceQuotationModDao;
     }
-    public static InsuranceQuotationModDAO createQuotationModDao(EasyesQuotationDAO quotationDao,
-                                                          EasyesQuotationDTO easyesQuotation,
-                                                          EasyesQuotationBO easyesQuotationBO)
-    {
 
-        final InsurancePlanDTO plan = easyesQuotation.getProduct().getPlans().get(0);
+    public static InsuranceQuotationModDAO createQuotationModDao(PayloadStore payloadStore) {
+
+        EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
+        EasyesQuotationDTO input = payloadStore.getInput();
+        EasyesQuotationBO rimacResponse = payloadStore.getRimacResponse();
+        String frequencyType = payloadStore.getFrequencyType();
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        final InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
 
         final com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO insuranceQuotationModDAO = new InsuranceQuotationModDAO();
-        insuranceQuotationModDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
+        insuranceQuotationModDAO.setPolicyQuotaInternalId(input.getId());
         insuranceQuotationModDAO.setInsuranceProductId(quotationDao.getInsuranceProductId());
         insuranceQuotationModDAO.setInsuranceModalityType(plan.getId());
-        insuranceQuotationModDAO.setSaleChannelId(easyesQuotation.getSaleChannelId());
+        insuranceQuotationModDAO.setSaleChannelId(input.getSaleChannelId());
 
         InstallmentsDTO installment = plan.getInstallmentPlans().get(0);
 
         insuranceQuotationModDAO.setPaymentTermNumber(valueOf(installment.getPaymentsTotalNumber()));
 
-        String paymentFrequency = applicationConfigurationService.getProperty(installment.getPeriod().getId());
-        insuranceQuotationModDAO.setPolicyPaymentFrequencyType(paymentFrequency);
+        insuranceQuotationModDAO.setPolicyPaymentFrequencyType(frequencyType);
 
-        final String rimacFechaInicio = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+        final String rimacFechaInicio = rimacResponse.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
                 getFinanciamientos().get(0).getFechaInicio();
-        final String rimacFechaFin = easyesQuotationBO.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
+        final String rimacFechaFin = rimacResponse.getPayload().getDetalleCotizacion().get(0).getPlanes().get(0).
                 getFinanciamientos().get(0).getFechaFin();
 
         LocalDate localDateFechaInicio = new LocalDate(rimacFechaInicio);
@@ -66,13 +68,22 @@ public class InsuranceQuotationModBean {
         insuranceQuotationModDAO.setPremiumCurrencyId(installment.getPaymentAmount().getCurrency());
 
         insuranceQuotationModDAO.setSaveQuotationIndType(null);
-        insuranceQuotationModDAO.setLastChangeBranchId(easyesQuotation.getBank().getBranch().getId());
-        insuranceQuotationModDAO.setSourceBranchId(easyesQuotation.getBank().getBranch().getId());
-        insuranceQuotationModDAO.setCreationUser(easyesQuotation.getCreationUser());
-        insuranceQuotationModDAO.setUserAudit(easyesQuotation.getUserAudit());
+        insuranceQuotationModDAO.setLastChangeBranchId(input.getBank().getBranch().getId());
+        insuranceQuotationModDAO.setSourceBranchId(input.getBank().getBranch().getId());
+        insuranceQuotationModDAO.setCreationUser(input.getCreationUser());
+        insuranceQuotationModDAO.setUserAudit(input.getUserAudit());
         insuranceQuotationModDAO.setContactEmailDesc(null);
         insuranceQuotationModDAO.setCustomerPhoneDesc(null);
-        insuranceQuotationModDAO.setDataTreatmentIndType((Boolean.TRUE.equals(easyesQuotation.getIsDataTreatment()) ? "S" : "N"));
+        insuranceQuotationModDAO.setDataTreatmentIndType(validateIsDataTreatment(input.getIsDataTreatment()));
         return insuranceQuotationModDAO;
     }
+
+    private static String validateIsDataTreatment(Boolean isDataTreatment){
+        if(Objects.nonNull(isDataTreatment)){
+            return Boolean.TRUE.equals(isDataTreatment) ? "S" : "N";
+        }else{
+            return "N";
+        }
+    }
+
 }

@@ -11,9 +11,9 @@ import com.bbva.rbvd.lib.r304.service.api.CustomerService;
 import com.bbva.rbvd.lib.r304.service.dao.IInsurancePaymentPeriodDAO;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceProductModalityDAO;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceSimulationDAO;
-import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePaymentPeriodDAO;
-import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceProductModalityDAO;
-import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceSimulationDAO;
+import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePaymentPeriodDAOImpl;
+import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceProductModalityDAOImpl;
+import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceSimulationDAOImpl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
 import com.bbva.rbvd.lib.r304.transform.bean.QuotationBean;
@@ -104,8 +104,8 @@ public class QuotationParameter implements PreQuotation {
 
         LOGGER.info("***** QuotationParameter getSimnulacion START - insuranceProductId: {} *****",externalSimulationId);
 
-        IInsuranceSimulationDAO simulationDAO =new InsuranceSimulationDAO(this.pisdR350);
-        Map<String, Object>simulation = simulationDAO.executeGetSimulationInformation(externalSimulationId);
+        IInsuranceSimulationDAO simulationDAO = new InsuranceSimulationDAOImpl(this.pisdR350);
+        Map<String, Object> simulation = simulationDAO.executeGetSimulationInformation(externalSimulationId);
 
         LOGGER.info("***** QuotationParameter getSimnulacion END - simulation: {} *****",simulation);
         return simulation;
@@ -116,7 +116,7 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getProduct START - productType: {} *****",productType);
         LOGGER.info("***** QuotationParameter getProduct START - planId: {} *****",planId);
 
-        IInsuranceProductModalityDAO productDAO = new InsuranceProductModalityDAO(this.pisdR350);
+        IInsuranceProductModalityDAO productDAO = new InsuranceProductModalityDAOImpl(this.pisdR350);
         Map<String, Object> product = productDAO.executeGetRequiredInformation(productType,planId);
 
         LOGGER.info("***** QuotationParameter getProduct END - product: {} *****",product);
@@ -128,7 +128,7 @@ public class QuotationParameter implements PreQuotation {
 
         LOGGER.info("***** QuotationParameter getPaymentFrequency START - frequencyTypeId: {} *****",frequencyTypeId);
 
-        IInsurancePaymentPeriodDAO paymentPeriodDAO = new InsurancePaymentPeriodDAO(this.pisdR350);
+        IInsurancePaymentPeriodDAO paymentPeriodDAO = new InsurancePaymentPeriodDAOImpl(this.pisdR350);
         Map<String, Object> paymentFrequency = paymentPeriodDAO.executeGetPaymentFrequencyName(frequencyTypeId);
 
         LOGGER.info("***** QuotationParameter getPaymentFrequency END - paymentFrequency: {} *****",paymentFrequency);

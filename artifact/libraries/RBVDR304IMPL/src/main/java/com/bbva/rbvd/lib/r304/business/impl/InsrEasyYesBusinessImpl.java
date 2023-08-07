@@ -34,6 +34,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         payloadStore.setRimacResponse(responseRimac);
         payloadStore.setMyQuotation(payloadConfig.getMyQuotation());
         payloadStore.setInput(payloadConfig.getInput());
+        payloadStore.setFrequencyType(payloadConfig.getPayloadProperties().getFrequencyTypeId());
 
         return payloadStore;
     }

@@ -10,10 +10,10 @@ import java.util.Map;
 import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateSelectionQueries;
 import static java.util.Collections.singletonMap;
 
-public class InsuranceSimulationDAO implements IInsuranceSimulationDAO {
-    PISDR350 pisdR350;
+public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
+    private final PISDR350 pisdR350;
 
-    public InsuranceSimulationDAO(PISDR350 pisdR350) {
+    public InsuranceSimulationDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
     }
 

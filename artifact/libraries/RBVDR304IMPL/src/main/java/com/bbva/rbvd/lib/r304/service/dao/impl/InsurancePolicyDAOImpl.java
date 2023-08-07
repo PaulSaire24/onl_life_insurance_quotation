@@ -7,10 +7,10 @@ import com.bbva.rbvd.lib.r304.transform.map.PolicyQuotaInternalMap;
 
 import java.util.Map;
 
-public class InsurancePolicyDAO implements IInsurancePolicy {
+public class InsurancePolicyDAOImpl implements IInsurancePolicy {
     private final PISDR350 pisdR350;
 
-    public InsurancePolicyDAO(PISDR350 pisdR350) {
+    public InsurancePolicyDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
     }
 

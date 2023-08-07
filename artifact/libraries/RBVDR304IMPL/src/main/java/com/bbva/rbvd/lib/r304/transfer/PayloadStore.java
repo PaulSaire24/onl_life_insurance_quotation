@@ -8,6 +8,9 @@ public class PayloadStore {
     private EasyesQuotationDTO input;
     private EasyesQuotationDAO myQuotation;
     private EasyesQuotationBO rimacResponse;
+
+    private String frequencyType;
+
     public PayloadStore(){}
 
     public EasyesQuotationDTO getInput() {
@@ -34,12 +37,21 @@ public class PayloadStore {
         this.rimacResponse = rimacResponse;
     }
 
+    public String getFrequencyType() {
+        return frequencyType;
+    }
+
+    public void setFrequencyType(String frequencyType) {
+        this.frequencyType = frequencyType;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PayloadStore{");
         sb.append("input=").append(input);
         sb.append(", myQuotation=").append(myQuotation);
         sb.append(", rimacResponse=").append(rimacResponse);
+        sb.append(", frequencyType='").append(frequencyType).append('\'');
         sb.append('}');
         return sb.toString();
     }

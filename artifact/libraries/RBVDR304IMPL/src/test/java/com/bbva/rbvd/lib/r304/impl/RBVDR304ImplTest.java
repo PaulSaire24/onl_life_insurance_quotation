@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,24 +55,13 @@ public class RBVDR304ImplTest {
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
         myQuotation = mock(EasyesQuotationDAO.class);
-//        applicationConfigurationService = mock(ApplicationConfigurationService.class);
-
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
 
         pisdR350 = mock(PISDR350.class);
+        rbvdr303 = mock(RBVDR303.class);
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
 
-        when(applicationConfigurationService.getProperty(anyString())).thenReturn("M");
-
-        //Map<String,Object> map = new HashMap();
-        //map.put("INSRNC_COMPANY_SIMULATION_ID",new HashMap<>());
-
-        when(this.pisdR350.executeInsertSingleRow(
-                RBVDProperties.QUERY_GET_SIMULATION_INFORMATION_FOR_EASYES_QUOTATION.getValue(),
-                singletonMap(
-                        RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),
-                        "491561561"))
-        ).thenReturn(1);
+        when(applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
         properties = new PayloadProperties();
         properties.setFrequencyTypeId("M");
@@ -84,16 +74,6 @@ public class RBVDR304ImplTest {
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId("8523654");
 
-
-        //daoService = mock(DAOService.class);
-        //rbvdr304.setDaoService(daoService);
-
-        //mapperHelper = mock(MapperHelper.class);
-        //rbvdr304.setMapperHelper(mapperHelper);
-
-        //when(QuotationBean.createQuotationDao(anyMap(), anyMap(), anyMap())).thenReturn(easyesQuotationDao);
-
-        rbvdr303 = mock(RBVDR303.class);
         rbvdr304.setRbvdR303(rbvdr303);
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
@@ -102,24 +82,42 @@ public class RBVDR304ImplTest {
 
         when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
-        //when(this.insurancePolicy.executeValidateQuotation(anyString())).
-        //        thenReturn(singletonMap(RBVDProperties.FIELD_RESULT_NUMBER.getValue(), BigDecimal.ZERO));
+        Map<String,Object> mapInformation = new HashMap();
+        mapInformation.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),new BigDecimal("1"));
+        mapInformation.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(),Timestamp.valueOf("2018-12-12 01:02:03.123456789"));
+        mapInformation.put(RBVDProperties.FIELD_INSURANCE_MODALITY_NAME.getValue(),"PLAN 1");
+        mapInformation.put(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue(),"568904");
+        mapInformation.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal("10"));
+        mapInformation.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"Seguro vida");
+        mapInformation.put("PRODUCT_SHORT_DESC","EASYYES");
+        mapInformation.put(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue(),"MENSUAL");
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+        when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
 
     }
 
     @Test
-    public void testExecuteBusinessLogicEasyesQutation_OK() {
-        //IInsuranceSimulationDAO simulationDAO =new InsuranceSimulationDAO(this.pisdR350);
-
-        //input.setExternalSimulationId("256c3b09-eca6-4430-a74b-e99ff907dff6");
-
-        //when(simulationDAO.executeGetSimulationInformation(input.getExternalSimulationId())).
-        //        thenThrow(build(RBVDErrors.INVALID_RIMAC_QUOTATION_ID));
-        //assertEquals(RBVDErrors.INVALID_RIMAC_QUOTATION_ID.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
-        //when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_OK() {
         EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
-
         assertNotNull(validation);
+    }
+
+    @Test
+    public void testExecuteBusinessLogicEasyesQuotationUpdateQuotation_OK() {
 
     }
+
+    @Test
+    public void testExecuteBusinessLogicDynamicLifeInsertQuotation_OK() {
+        input.getProduct().setId("841");
+
+    }
+
+    @Test
+    public void testExecuteBusinessLogicDynamicLifeUpdateQuotation_OK() {
+
+    }
+
 }

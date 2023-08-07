@@ -8,11 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class InsuranceQuotationBean {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private InsuranceQuotationBean() {}
 
     public static InsuranceQuotationDAO createInsuranceQuotationDAO(EasyesQuotationDAO quotationDao, EasyesQuotationDTO easyesQuotation) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         InsuranceQuotationDAO insuranceQuotationDAO = new InsuranceQuotationDAO();
         insuranceQuotationDAO.setPolicyQuotaInternalId(easyesQuotation.getId());
         insuranceQuotationDAO.setInsuranceSimulationId(quotationDao.getInsuranceSimulationId());

@@ -8,11 +8,11 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
-public class InsurancePaymentPeriodDAO implements IInsurancePaymentPeriodDAO {
+public class InsurancePaymentPeriodDAOImpl implements IInsurancePaymentPeriodDAO {
 
     private final PISDR350 pisdR350;
 
-    public InsurancePaymentPeriodDAO(PISDR350 pisdR350) {
+    public InsurancePaymentPeriodDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
     }
     @Override
