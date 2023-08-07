@@ -7,7 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 public class PayloadStore {
     private EasyesQuotationDTO input;
     private EasyesQuotationDAO myQuotation;
-    private EasyesQuotationBO rimacQuotationResponse;
+    private EasyesQuotationBO rimacResponse;
     public PayloadStore(){}
 
     public EasyesQuotationDTO getInput() {
@@ -26,20 +26,21 @@ public class PayloadStore {
         this.myQuotation = myQuotation;
     }
 
-    public EasyesQuotationBO getRimacQuotationResponse() {
-        return rimacQuotationResponse;
+    public EasyesQuotationBO getRimacResponse() {
+        return rimacResponse;
     }
 
-    public void setRimacQuotationResponse(EasyesQuotationBO rimacQuotationResponse) {
-        this.rimacQuotationResponse = rimacQuotationResponse;
+    public void setRimacResponse(EasyesQuotationBO rimacResponse) {
+        this.rimacResponse = rimacResponse;
     }
 
     @Override
     public String toString() {
-        return "PayloadStore{" +
-                "quotationDTO=" + input +
-                ", quotationDAO=" + myQuotation +
-                ", rimacQuotationResponse=" + rimacQuotationResponse +
-                '}';
+        final StringBuilder sb = new StringBuilder("PayloadStore{");
+        sb.append("input=").append(input);
+        sb.append(", myQuotation=").append(myQuotation);
+        sb.append(", rimacResponse=").append(rimacResponse);
+        sb.append('}');
+        return sb.toString();
     }
 }

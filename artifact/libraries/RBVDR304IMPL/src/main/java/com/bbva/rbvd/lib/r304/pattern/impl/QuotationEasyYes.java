@@ -36,8 +36,12 @@ public class QuotationEasyYes extends QuotationDecorator{
         //guardar en la bd
         this.getPostQuotation().end(payloadStore);
 
+        //respuesta de trx
+        EasyesQuotationDTO response = seguroEasyYes.mappingOutputFields(payloadStore);
+        LOGGER.info("***** QuotationEasyYes - response : {} *****",response);
+
         //retornar la rspuesta
-        return payloadStore.getInput();
+        return response;
     }
 }
 

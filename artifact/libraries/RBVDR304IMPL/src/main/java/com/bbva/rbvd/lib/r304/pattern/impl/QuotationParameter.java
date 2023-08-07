@@ -43,27 +43,26 @@ public class QuotationParameter implements PreQuotation {
         LOGGER.info("***** QuotationParameter getConfig - input : {} *****",input);
 
         PayloadConfig payloadConfig = new PayloadConfig();
-        payloadConfig.setInput(input);
+        //payloadConfig.setInput(input);
 
-        PayloadProperties properties = this.getProperties(payloadConfig.getInput());
+        PayloadProperties properties = this.getProperties(input);
 
         payloadConfig.setPayloadProperties(properties);
 
         Map<String, Object> simulation = this.getSimulacion(input.getExternalSimulationId());
-        Map<String, Object> product = this.getProduct(payloadConfig.getPayloadProperties().getProductType(),payloadConfig.getPayloadProperties().getPeriodId());
-        Map<String, Object> paymentFrequency = this.getPaymentFrequency(payloadConfig.getPayloadProperties().getFrequencyTypeId());
+        Map<String, Object> product = this.getProduct(input.getProduct().getId(),input.getProduct().getPlans().get(0).getId());
+        Map<String, Object> paymentFrequency = this.getPaymentFrequency(properties.getFrequencyTypeId());
 
         EasyesQuotationDAO myQuotation = QuotationBean.createQuotationDao(simulation, product, paymentFrequency);
 
         String policyQuotaid = this.getGeneratePolicyQuotaid(myQuotation);
 
-        EasyesQuotationDTO customer = this.mappingOutputFields(input,myQuotation);
-
-        payloadConfig.getInput().setId(policyQuotaid);
+        //EasyesQuotationDTO customer = this.mappingOutputFields(input,myQuotation);
+        input.setId(policyQuotaid);
 
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId(policyQuotaid);
-        payloadConfig.setInput(customer);
+        payloadConfig.setInput(input);
 
         LOGGER.info("***** QuotationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);
 
@@ -91,13 +90,14 @@ public class QuotationParameter implements PreQuotation {
 
         PayloadProperties properties = new PayloadProperties();
         InsurancePlanDTO selectedPlan = input.getProduct().getPlans().get(0);
+        String periodId = selectedPlan.getInstallmentPlans().get(0).getPeriod().getId();
 
         properties.setProductType(input.getProduct().getId());
         properties.setSelectedPlanId(selectedPlan.getId());
-        properties.setPeriodId(selectedPlan.getInstallmentPlans().get(0).getId());
-        properties.setFrequencyTypeId(this.applicationConfigurationService.getProperty(properties.getPeriodId()));
+        properties.setPeriodId(periodId);
+        properties.setFrequencyTypeId(this.applicationConfigurationService.getProperty(periodId));
 
-        return  properties;
+        return properties;
     }
 
     private Map<String, Object> getSimulacion(String externalSimulationId){

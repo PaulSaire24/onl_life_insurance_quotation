@@ -1,5 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     private static final Logger LOGGER = LoggerFactory.getLogger(InsrEasyYesBusinessImpl.class);
@@ -28,21 +31,50 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         EasyesQuotationBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
         PayloadStore payloadStore = new PayloadStore();
-        payloadStore.setRimacQuotationResponse(responseRimac);
+        payloadStore.setRimacResponse(responseRimac);
         payloadStore.setMyQuotation(payloadConfig.getMyQuotation());
         payloadStore.setInput(payloadConfig.getInput());
 
         return payloadStore;
     }
 
-    private EasyesQuotationBO callQuotationRimacService(PayloadConfig config){
+    @Override
+    public EasyesQuotationDTO mappingOutputFields(PayloadStore payloadStore) {
+        EasyesQuotationDTO response = payloadStore.getInput();
+
+        final String defaultValue = "";
+
+        CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
+
+        if(nonNull(customerInformation)) {
+            response.getHolder().setFirstName(customerInformation.getFirstName());
+            response.getHolder().setLastName(customerInformation.getLastName());
+            final String fullName = customerInformation.getFirstName().concat(" ").
+                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName());
+            response.getHolder().setFullName(fullName);
+        } else {
+            response.getHolder().setFirstName(defaultValue);
+            response.getHolder().setLastName(defaultValue);
+            response.getHolder().setFullName(defaultValue);
+        }
+
+        response.getProduct().setName(payloadStore.getMyQuotation().getInsuranceProductDescription());
+        response.getProduct().getPlans().get(0).setName(payloadStore.getMyQuotation().getInsuranceModalityName());
+        response.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
+                .setName(payloadStore.getMyQuotation().getPaymentFrequencyName());
+
+        return response;
+    }
+
+    private EasyesQuotationBO callQuotationRimacService(PayloadConfig payload){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService START *****");
-        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(config.getMyQuotation(),config.getPolicyQuotaId());
+        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payload.getMyQuotation(),payload.getPolicyQuotaId());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac(requestRimac,config.getInput().getExternalSimulationId(),config.getInput().getTraceId());
+        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac(requestRimac,payload.getInput().getExternalSimulationId(),payload.getInput().getTraceId());
+
         if (isNull(responseRimac)){
             throw RBVDValidation.build(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
         }
