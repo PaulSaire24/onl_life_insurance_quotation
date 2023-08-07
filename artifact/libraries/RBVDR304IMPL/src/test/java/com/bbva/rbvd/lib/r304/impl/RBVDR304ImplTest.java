@@ -11,16 +11,21 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
+import org.apache.commons.collections.map.HashedMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -54,8 +59,19 @@ public class RBVDR304ImplTest {
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
 
         pisdR350 = mock(PISDR350.class);
+        applicationConfigurationService = mock(ApplicationConfigurationService.class);
 
         when(applicationConfigurationService.getProperty(anyString())).thenReturn("M");
+
+        //Map<String,Object> map = new HashMap();
+        //map.put("INSRNC_COMPANY_SIMULATION_ID",new HashMap<>());
+
+        when(this.pisdR350.executeInsertSingleRow(
+                RBVDProperties.QUERY_GET_SIMULATION_INFORMATION_FOR_EASYES_QUOTATION.getValue(),
+                singletonMap(
+                        RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),
+                        "491561561"))
+        ).thenReturn(1);
 
         properties = new PayloadProperties();
         properties.setFrequencyTypeId("M");
@@ -79,6 +95,8 @@ public class RBVDR304ImplTest {
 
         rbvdr303 = mock(RBVDR303.class);
         rbvdr304.setRbvdR303(rbvdr303);
+        rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
+        rbvdr304.setPisdR350(pisdR350);
 
         rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
@@ -98,6 +116,7 @@ public class RBVDR304ImplTest {
         //when(simulationDAO.executeGetSimulationInformation(input.getExternalSimulationId())).
         //        thenThrow(build(RBVDErrors.INVALID_RIMAC_QUOTATION_ID));
         //assertEquals(RBVDErrors.INVALID_RIMAC_QUOTATION_ID.getAdviceCode(), this.rbvdr304.getAdvice().getCode());
+        //when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
         EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
 
         assertNotNull(validation);
