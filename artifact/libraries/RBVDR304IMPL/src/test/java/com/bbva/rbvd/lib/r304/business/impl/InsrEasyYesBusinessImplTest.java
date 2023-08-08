@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
@@ -97,8 +98,8 @@ public class InsrEasyYesBusinessImplTest {
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
 
     }
-    /*@Test
-    public void testDoEasyYes_IsNullResponseRimac() {
+    @Test(expected = BusinessException.class)
+    public void testDoEasyYes_IsNullResponseRimac(){
 
         when(rbvdr303.executeEasyesQuotationRimac(anyObject(),anyString(),anyString())).thenReturn(null);
 
@@ -106,7 +107,7 @@ public class InsrEasyYesBusinessImplTest {
         insrEasyYesBusiness.doEasyYes(payloadConfig);
     }
 
-    @Test
+    /*@Test
     public void testMappingOutputFields() {
     }*/
 }
