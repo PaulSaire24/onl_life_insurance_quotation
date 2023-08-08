@@ -42,7 +42,7 @@ public class RBVDR304ImplTest {
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
         EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
-        when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
+
 
         pisdR350 = mock(PISDR350.class);
         RBVDR303 rbvdr303 = mock(RBVDR303.class);

@@ -1,9 +1,8 @@
-package com.bbva.rbvd.lib.r304.business.impl;
+package com.bbva.rbvd.lib.r304.transform.bean;
 
-import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
+import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
@@ -24,11 +23,12 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class InsrEasyYesBusinessImplTest {
+public class InsuranceQuotationModBeanTest{
 
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
     private RBVDR303 rbvdr303;
@@ -41,19 +41,18 @@ public class InsrEasyYesBusinessImplTest {
     private Map<String,Object> mapInformation;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
-
+    private PayloadStore payloadStore;
     @Before
-    public void setUp() throws Exception {
-        ThreadContext.set(new Context());
+        public void setUp() throws Exception {
 
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
-        myQuotation = mock(EasyesQuotationDAO.class);
+        myQuotation = mock(EasyesQuotationDAO .class);
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
 
-        pisdR350 = mock(PISDR350.class);
-        rbvdr303 = mock(RBVDR303.class);
-        applicationConfigurationService = mock(ApplicationConfigurationService.class);
+        pisdR350 = mock(PISDR350 .class);
+        rbvdr303 = mock(RBVDR303 .class);
+        applicationConfigurationService = mock(ApplicationConfigurationService .class);
 
         when(applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
@@ -76,30 +75,17 @@ public class InsrEasyYesBusinessImplTest {
 
         when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
-        mapInformation = new HashMap();
+        payloadStore = new PayloadStore();
+        payloadStore.setInput(input);
+        payloadStore.setMyQuotation(myQuotation);
+        payloadStore.setRimacResponse(rimacResponse);
+        payloadStore.setFrequencyType("M");
+}
 
-        mapInformation.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),new BigDecimal("1"));
-        mapInformation.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(), Timestamp.valueOf("2018-12-12 01:02:03.123456789"));
-        mapInformation.put(RBVDProperties.FIELD_INSURANCE_MODALITY_NAME.getValue(),"PLAN 1");
-        mapInformation.put(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue(),"568904");
-        mapInformation.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal("10"));
-        mapInformation.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"Seguro vida");
-        mapInformation.put("PRODUCT_SHORT_DESC","EASYYES");
-        mapInformation.put(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue(),"MENSUAL");
-
-        when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
-
+    @Test
+    public void testCreateQuotationModDao() {
+        input.setIsDataTreatment(null);
+        InsuranceQuotationModDAO validation = InsuranceQuotationModBean.createQuotationModDao(payloadStore);
+        assertNotNull(validation);
     }
-    /*@Test(expected = BusinessException.class)
-    public void testDoEasyYes_IsNullResponseRimac(){
-
-        when(rbvdr303.executeEasyesQuotationRimac(anyObject(),anyString(),anyString())).thenReturn(null);
-
-        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdr303);
-        insrEasyYesBusiness.doEasyYes(payloadConfig);
-    }
-
-    /*@Test
-    public void testMappingOutputFields() {
-    }*/
 }

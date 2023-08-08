@@ -4,6 +4,8 @@ import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static org.mockito.Matchers.anyMap;
 
 
@@ -11,7 +13,7 @@ public class ValidationUtilTest{
 
     @Test(expected = BusinessException.class)
     public void testValidateSelectionQueries() {
-        ValidationUtil.validateSelectionQueries(anyMap(), RBVDErrors.INVALID_RIMAC_QUOTATION_ID);
+        ValidationUtil.validateSelectionQueries(new HashMap<>(), RBVDErrors.INVALID_PRODUCT_TYPE_AND_MODALITY_TYPE);
     }
 
     @Test(expected = BusinessException.class)
