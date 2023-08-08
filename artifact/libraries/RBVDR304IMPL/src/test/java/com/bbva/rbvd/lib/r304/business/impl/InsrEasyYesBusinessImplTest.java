@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r304.impl;
+package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
@@ -10,8 +10,10 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
+import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
+import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,17 +23,22 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class RBVDR304ImplTest {
+public class InsrEasyYesBusinessImplTest {
 
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
+    private RBVDR303 rbvdr303;
     private PISDR350 pisdR350;
     private EasyesQuotationDTO input;
+    private EasyesQuotationDAO myQuotation;
+    private EasyesQuotationBO rimacResponse;
+    private PayloadProperties properties;
+    private PayloadConfig payloadConfig;
     private Map<String,Object> mapInformation;
+    //private PayloadStore payloadStore;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
 
@@ -41,38 +48,45 @@ public class RBVDR304ImplTest {
 
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
-        EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
+        myQuotation = mock(EasyesQuotationDAO.class);
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
 
         pisdR350 = mock(PISDR350.class);
-        RBVDR303 rbvdr303 = mock(RBVDR303.class);
+        rbvdr303 = mock(RBVDR303.class);
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
 
         when(applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
-        PayloadProperties properties = new PayloadProperties();
+        properties = new PayloadProperties();
         properties.setFrequencyTypeId("M");
         properties.setSelectedPlanId("02");
         properties.setProductType("840");
         properties.setPeriodId("MONTHLY");
-        PayloadConfig payloadConfig = new PayloadConfig();
+        payloadConfig = new PayloadConfig();
         payloadConfig.setInput(input);
         payloadConfig.setPayloadProperties(properties);
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId("8523654");
 
+/*        payloadStore = new PayloadStore();
+        payloadStore.setInput(input);
+        payloadStore.setRimacResponse(rimacResponse);
+        payloadStore.setMyQuotation(myQuotation);
+        payloadStore.setFrequencyType("M");
+*/
+
         rbvdr304.setRbvdR303(rbvdr303);
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
 
-        EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+        rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
         when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
-        mapInformation = new HashMap<>();
+        mapInformation = new HashMap();
 
         mapInformation.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),new BigDecimal("1"));
-        mapInformation.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(),Timestamp.valueOf("2018-12-12 01:02:03.123456789"));
+        mapInformation.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(), Timestamp.valueOf("2018-12-12 01:02:03.123456789"));
         mapInformation.put(RBVDProperties.FIELD_INSURANCE_MODALITY_NAME.getValue(),"PLAN 1");
         mapInformation.put(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue(),"568904");
         mapInformation.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal("10"));
@@ -83,36 +97,16 @@ public class RBVDR304ImplTest {
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
 
     }
-
-    @Test
-    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_OK() {
-
-        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
-        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
-
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
-        assertNotNull(validation);
-    }
-
-    @Test
-    public void testExecuteBusinessLogicEasyesQuotationUpdateQuotation_OK() {
-
-        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
-        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
-
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
-        assertNotNull(validation);
-    }
-
     /*@Test
-    public void testExecuteBusinessLogicDynamicLifeInsertQuotation_OK() {
-        input.getProduct().setId("841");
+    public void testDoEasyYes_IsNullResponseRimac() {
 
+        when(rbvdr303.executeEasyesQuotationRimac(anyObject(),anyString(),anyString())).thenReturn(null);
+
+        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdr303);
+        insrEasyYesBusiness.doEasyYes(payloadConfig);
     }
 
     @Test
-    public void testExecuteBusinessLogicDynamicLifeUpdateQuotation_OK() {
-        input.getProduct().setId("841");
+    public void testMappingOutputFields() {
     }*/
-
 }

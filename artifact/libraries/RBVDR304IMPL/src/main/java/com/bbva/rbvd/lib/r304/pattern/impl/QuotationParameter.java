@@ -136,7 +136,7 @@ public class QuotationParameter implements PreQuotation {
         return paymentFrequency;
     }
 
-    private EasyesQuotationDTO mappingOutputFields(EasyesQuotationDTO input, EasyesQuotationDAO myQuotation) {
+    /*private EasyesQuotationDTO mappingOutputFields(EasyesQuotationDTO input, EasyesQuotationDAO myQuotation) {
 
         final String defaultValue = "";
 
@@ -158,5 +158,5 @@ public class QuotationParameter implements PreQuotation {
                 .setName(myQuotation.getPaymentFrequencyName());
 
         return input;
-    }
+    }*/
 }

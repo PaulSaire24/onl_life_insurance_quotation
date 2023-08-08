@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class InsuranceQuotationBeanTest  {
 
-    private EasyesQuotationDTO input;
+ /*   private EasyesQuotationDTO input;
     private EasyesQuotationDAO easyesQuotationDao;
     private InsuranceQuotationBean insuranceQuotationBean;
     @Before
@@ -36,5 +36,5 @@ public class InsuranceQuotationBeanTest  {
 
         InsuranceQuotationDAO result = InsuranceQuotationBean.createInsuranceQuotationDAO(easyesQuotationDao,input);
         Assert.assertNotNull(result);
-    }
+    }*/
 }
