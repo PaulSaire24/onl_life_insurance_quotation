@@ -1,46 +1,10 @@
 package com.bbva.rbvd.lib.r304.util;
 
-import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
-
-import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
-
-import com.bbva.pisd.dto.insurance.mock.MockDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-
-import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
-
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r303.RBVDR303;
-import com.bbva.rbvd.lib.r304.impl.util.MapperHelper;
-
-import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.sql.Timestamp;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static java.math.BigDecimal.valueOf;
-import static java.util.Collections.singletonMap;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyString;
 
 public class MapperHelperTest {
 

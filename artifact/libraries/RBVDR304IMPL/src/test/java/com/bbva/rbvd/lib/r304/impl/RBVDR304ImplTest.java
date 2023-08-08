@@ -107,6 +107,7 @@ public class RBVDR304ImplTest {
     @Test
     public void testExecuteBusinessLogicDynamicLifeInsertQuotation_OK() {
         input.getProduct().setId("841");
+
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 

@@ -45,14 +45,4 @@ public class PayloadStore {
         this.frequencyType = frequencyType;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("PayloadStore{");
-        sb.append("input=").append(input);
-        sb.append(", myQuotation=").append(myQuotation);
-        sb.append(", rimacResponse=").append(rimacResponse);
-        sb.append(", frequencyType='").append(frequencyType).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

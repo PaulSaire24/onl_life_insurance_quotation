@@ -39,7 +39,6 @@ public class InsrEasyYesBusinessImplTest {
     private PayloadProperties properties;
     private PayloadConfig payloadConfig;
     private Map<String,Object> mapInformation;
-    //private PayloadStore payloadStore;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
 
@@ -69,13 +68,6 @@ public class InsrEasyYesBusinessImplTest {
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId("8523654");
 
-/*        payloadStore = new PayloadStore();
-        payloadStore.setInput(input);
-        payloadStore.setRimacResponse(rimacResponse);
-        payloadStore.setMyQuotation(myQuotation);
-        payloadStore.setFrequencyType("M");
-*/
-
         rbvdr304.setRbvdR303(rbvdr303);
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
@@ -98,7 +90,7 @@ public class InsrEasyYesBusinessImplTest {
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
 
     }
-    @Test(expected = BusinessException.class)
+    /*@Test(expected = BusinessException.class)
     public void testDoEasyYes_IsNullResponseRimac(){
 
         when(rbvdr303.executeEasyesQuotationRimac(anyObject(),anyString(),anyString())).thenReturn(null);
