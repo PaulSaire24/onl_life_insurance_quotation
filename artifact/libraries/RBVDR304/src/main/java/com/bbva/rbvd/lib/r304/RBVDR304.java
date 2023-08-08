@@ -4,6 +4,6 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 
 public interface RBVDR304 {
 
-	EasyesQuotationDTO executeBusinessLogicEasyesQutation(EasyesQuotationDTO easyesQuotation);
+	EasyesQuotationDTO executeBusinessLogicQuotation(EasyesQuotationDTO easyesQuotation);
 
 }

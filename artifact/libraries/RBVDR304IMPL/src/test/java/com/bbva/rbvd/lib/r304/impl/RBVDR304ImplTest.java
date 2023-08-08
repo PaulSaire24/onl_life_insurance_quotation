@@ -90,7 +90,7 @@ public class RBVDR304ImplTest {
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
+        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
 
@@ -100,19 +100,29 @@ public class RBVDR304ImplTest {
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicEasyesQutation(input);
+        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
 
-    /*@Test
+    @Test
     public void testExecuteBusinessLogicDynamicLifeInsertQuotation_OK() {
         input.getProduct().setId("841");
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+
+        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        assertNotNull(validation);
 
     }
 
     @Test
     public void testExecuteBusinessLogicDynamicLifeUpdateQuotation_OK() {
         input.getProduct().setId("841");
-    }*/
+         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+
+        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        assertNotNull(validation);
+    }
 
 }

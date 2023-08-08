@@ -37,7 +37,7 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 		easyesQuotation.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		easyesQuotation.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 
-		EasyesQuotationDTO response = rbvdR304.executeBusinessLogicEasyesQutation(easyesQuotation);
+		EasyesQuotationDTO response = rbvdR304.executeBusinessLogicQuotation(easyesQuotation);
 
 		if(nonNull(response)) {
 			this.setId(response.getId());
