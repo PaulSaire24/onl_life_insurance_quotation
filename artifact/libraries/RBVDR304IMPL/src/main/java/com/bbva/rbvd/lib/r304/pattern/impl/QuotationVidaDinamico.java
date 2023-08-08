@@ -28,21 +28,16 @@ public class QuotationVidaDinamico extends QuotationDecorator{
         LOGGER.info("***** QuotationVidaDinamico - start - START *****");
         LOGGER.info("***** QuotationVidaDinamico - start - input : {} *****",input);
 
-        //llamar a la configuracion previa: getConfig
         PayloadConfig payloadConfig = this.getPreQuotation().getConfig(input);
         IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdr303);
 
-        //llamar al servicio de rimac
         PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
 
-        //guardar en la bd
         this.getPostQuotation().end(payloadStore);
 
-        //respuesta de trx
         EasyesQuotationDTO response = seguroVidaDinamico.mappingOutputFields(payloadStore);
         LOGGER.info("***** QuotationVidaDinamico - response : {} *****",response);
 
-        //retornar la rspuesta
         return response;
     }
 }

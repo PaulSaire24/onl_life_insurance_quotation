@@ -1,9 +1,7 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
 
-import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
-import com.bbva.rbvd.lib.r304.RBVDR304;
 import com.bbva.rbvd.lib.r304.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r304.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
@@ -26,21 +24,16 @@ public class QuotationEasyYes extends QuotationDecorator{
         LOGGER.info("***** QuotationEasyYes - start - START *****");
         LOGGER.info("***** QuotationEasyYes - start - input : {} *****",input);
 
-        //llamar a la configuracion previa: getConfig
         PayloadConfig payloadConfig = this.getPreQuotation().getConfig(input);
         IInsrEasyYesBusiness seguroEasyYes = new InsrEasyYesBusinessImpl(rbvdr303);
 
-        //llamar al servicio de rimac
         PayloadStore payloadStore = seguroEasyYes.doEasyYes(payloadConfig);
 
-        //guardar en la bd
         this.getPostQuotation().end(payloadStore);
 
-        //respuesta de trx
         EasyesQuotationDTO response = seguroEasyYes.mappingOutputFields(payloadStore);
         LOGGER.info("***** QuotationEasyYes - response : {} *****",response);
 
-        //retornar la rspuesta
         return response;
     }
 }

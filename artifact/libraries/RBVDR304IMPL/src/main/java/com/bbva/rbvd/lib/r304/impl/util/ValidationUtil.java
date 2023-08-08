@@ -12,12 +12,6 @@ public final class ValidationUtil {
     private ValidationUtil() {
     }
 
-    /*public static void validateServicesResponse(Object object, RBVDErrors error) {
-        if(isNull(object)) {
-            throw RBVDValidation.build(error);
-        }
-    }*/
-
     public static void validateSelectionQueries(Map responseQuery, RBVDErrors error) {
         if(isEmpty(responseQuery)) {
             throw RBVDValidation.build(error);

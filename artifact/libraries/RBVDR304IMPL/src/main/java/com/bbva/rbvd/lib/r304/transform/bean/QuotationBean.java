@@ -9,8 +9,12 @@ import java.util.Map;
 
 public class QuotationBean {
     private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
+
+    private QuotationBean() {
+    }
+
     public static EasyesQuotationDAO createQuotationDao(Map<String, Object> responseGetSimulationIdAndExpirationDate, Map<String, Object> responseGetRequiredInformation,
-                                                 Map<String, Object> responseGetPaymentFrequencyName) {
+                                                        Map<String, Object> responseGetPaymentFrequencyName) {
         EasyesQuotationDAO quotationDao = new EasyesQuotationDAO();
         quotationDao.setInsuranceSimulationId((BigDecimal) responseGetSimulationIdAndExpirationDate.get(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue()));
         quotationDao.setCustSimulationExpiredDate((Timestamp) responseGetSimulationIdAndExpirationDate.get(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue()));

@@ -51,6 +51,4 @@ public class PayloadConfig {
                 ", payloadProperties=" + payloadProperties +
                 '}';
     }
-
-//public GifoleInsuranceRequestASO getInput() {return null;}
 }
