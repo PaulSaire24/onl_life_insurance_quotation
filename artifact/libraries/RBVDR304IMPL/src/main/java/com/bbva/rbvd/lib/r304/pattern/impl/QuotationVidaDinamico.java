@@ -1,12 +1,8 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
 
-import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
-import com.bbva.rbvd.lib.r304.RBVDR304;
 import com.bbva.rbvd.lib.r304.business.IInsrDynamicLifeBusiness;
-import com.bbva.rbvd.lib.r304.business.IInsrEasyYesBusiness;
-import com.bbva.rbvd.lib.r304.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r304.business.impl.InsrVidaDinamicoBusinessImpl;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;

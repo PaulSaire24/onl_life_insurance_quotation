@@ -8,10 +8,7 @@ public class PayloadStore {
     private EasyesQuotationDTO input;
     private EasyesQuotationDAO myQuotation;
     private EasyesQuotationBO rimacResponse;
-
     private String frequencyType;
-
-    public PayloadStore(){}
 
     public EasyesQuotationDTO getInput() {
         return input;
