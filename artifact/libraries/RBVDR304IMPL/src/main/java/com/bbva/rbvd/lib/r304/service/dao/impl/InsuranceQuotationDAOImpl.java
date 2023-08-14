@@ -19,6 +19,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         this.pisdR350 = pisdR350;
     }
 
+
     @Override
     public void executeInsertQuotationQuery(PayloadStore payloadStore) {
         com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO insuranceQuotationDao = InsuranceQuotationBean.createInsuranceQuotationDAO(payloadStore.getMyQuotation(), payloadStore.getInput());
