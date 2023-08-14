@@ -5,6 +5,7 @@ import com.bbva.elara.domain.transaction.Severity;
 import com.bbva.elara.domain.transaction.response.HttpResponseCode;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.RBVDR304;
 
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 		easyesQuotation.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		easyesQuotation.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 
-		EasyesQuotationDTO response = rbvdR304.executeBusinessLogicQuotation(easyesQuotation);
+		QuotationLifeDTO response = rbvdR304.executeBusinessLogicQuotation(easyesQuotation);
 
 		if(nonNull(response)) {
 			this.setId(response.getId());

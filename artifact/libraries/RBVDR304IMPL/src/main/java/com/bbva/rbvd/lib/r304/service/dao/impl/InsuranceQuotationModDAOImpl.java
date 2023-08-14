@@ -29,14 +29,13 @@ public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
        InsuranceQuotationModDAO insuranceQuotationMod = InsuranceQuotationModBean.createUpdateQuotationModDao(myQuotation, input);
         Map<String, Object> argumentsUpdateQuotationMod = InsuranceQuotationModMap.createUpdateQuotationModArguments(insuranceQuotationMod);
         Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);
-
-        validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG); //T_PISD_INSRNC_QUOTATION_MOD
+        validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_UPDATE_WAS_WRONG);
     }
     @Override
-    public void executeQuotationModQuery(PayloadStore payloadStore) {
+    public void executeInsertQuotationModQuery(PayloadStore payloadStore) {
         InsuranceQuotationModDAO insuranceQuotationModDao = InsuranceQuotationModBean.createQuotationModDao(payloadStore);
         Map<String, Object> argumentsQuotationModDao = InsuranceQuotationModMap.createArgumentsQuotationModDao(insuranceQuotationModDao);
         Integer quotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION_MOD.getValue(), argumentsQuotationModDao);
-        validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);//T_PISD_INSRNC_QUOTATION_MOD
+        validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }
 }

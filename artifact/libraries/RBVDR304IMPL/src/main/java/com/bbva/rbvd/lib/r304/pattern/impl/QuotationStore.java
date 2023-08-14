@@ -38,8 +38,8 @@ public class QuotationStore implements PostQuotation {
             insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
         } else {
             InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
-            insuranceQuotation.executeQuotationQuery(payloadStore);
-            insuranceQuotationMod.executeQuotationModQuery(payloadStore);
+            insuranceQuotation.executeInsertQuotationQuery(payloadStore);
+            insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
         }
     }
 }

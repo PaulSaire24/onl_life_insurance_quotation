@@ -20,10 +20,10 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     @Override
-    public void executeQuotationQuery(PayloadStore payloadStore) {
+    public void executeInsertQuotationQuery(PayloadStore payloadStore) {
         com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO insuranceQuotationDao = InsuranceQuotationBean.createInsuranceQuotationDAO(payloadStore.getMyQuotation(), payloadStore.getInput());
         Map<String, Object> argumentsQuotationDao = InsuranceQuotationMap.createArgumentsQuotationDao(insuranceQuotationDao);
         Integer quotationResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION.getValue(), argumentsQuotationDao);
-        validateInsertionQueries(quotationResult, RBVDErrors.QUOTATION_INSERTION_WAS_WRONG); //T_PISD_INSURANCE_QUOTATION
+        validateInsertionQueries(quotationResult, RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
     }
 }
