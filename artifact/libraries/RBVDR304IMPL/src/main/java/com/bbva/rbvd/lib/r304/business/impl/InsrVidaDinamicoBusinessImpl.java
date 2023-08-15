@@ -53,7 +53,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             response.getHolder().setFirstName(customerInformation.getFirstName());
             response.getHolder().setLastName(customerInformation.getLastName());
             final String fullName = customerInformation.getFirstName().concat(" ").
-                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName());
+                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
             response.getHolder().setFullName(fullName);
         } else {
             response.getHolder().setFirstName(defaultValue);

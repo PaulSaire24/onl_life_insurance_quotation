@@ -14,6 +14,7 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
 
@@ -75,12 +76,14 @@ public class InsrVidaDinamicoBusinessImplTest extends TestCase {
         payloadStore.setRimacResponse(rimacResponse);
         payloadStore.setFrequencyType("M");
     }
+    @Test
     public void testMappingOutputFields() {
 
-        customerBO.setFirstName("Gonzales");
+        customerBO.setFirstName("Adrian");
         customerBO.setLastName("Lopes");
+        customerBO.setSecondLastName("Herrera");
 
-        when(this.rbvdr303.executeListCustomerService(anyObject())).then(customerBO);
+        when(this.rbvdr303.executeListCustomerService(anyObject())).thenReturn(customerBO);
 
         InsrVidaDinamicoBusinessImpl vidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdr303);
         EasyesQuotationDTO validation = vidaDinamico.mappingOutputFields(payloadStore);
