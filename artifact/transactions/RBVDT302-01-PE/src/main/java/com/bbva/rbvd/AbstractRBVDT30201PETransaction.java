@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.BankDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import java.util.List;
 
 /**
@@ -75,6 +76,13 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter participants
+	 */
+	protected List<ParticipantDTO> getParticipants(){
+		return (List<ParticipantDTO>)this.getParameter("participants");
+	}
+
+	/**
 	 * Set value for String output parameter id
 	 */
 	protected void setId(final String field){
@@ -135,5 +143,12 @@ public abstract class AbstractRBVDT30201PETransaction extends AbstractTransactio
 	 */
 	protected void setInsuredamount(final InsuredAmountDTO field){
 		this.addParameter("insuredAmount", field);
+	}
+
+	/**
+	 * Set value for List<ParticipantDTO> output parameter participants
+	 */
+	protected void setParticipants(final List<ParticipantDTO> field){
+		this.addParameter("participants", field);
 	}
 }
