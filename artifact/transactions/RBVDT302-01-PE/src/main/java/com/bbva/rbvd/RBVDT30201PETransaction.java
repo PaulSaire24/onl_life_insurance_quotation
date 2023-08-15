@@ -55,7 +55,5 @@ public class RBVDT30201PETransaction extends AbstractRBVDT30201PETransaction {
 		} else {
 			this.setSeverity(Severity.ENR);
 		}
-
 	}
-
 }
