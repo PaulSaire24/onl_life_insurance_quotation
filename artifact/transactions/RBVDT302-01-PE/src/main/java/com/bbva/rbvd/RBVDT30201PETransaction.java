@@ -5,7 +5,6 @@ import com.bbva.elara.domain.transaction.Severity;
 import com.bbva.elara.domain.transaction.response.HttpResponseCode;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 
-import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.RBVDR304;
 
 import org.slf4j.Logger;

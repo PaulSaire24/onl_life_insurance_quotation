@@ -12,7 +12,6 @@ import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,7 +24,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class InsrVidaDinamicoBusinessImplTest {
+public class InsrEasyYesBusinessImplTest {
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
     private RBVDR303 rbvdr303;
     private PayloadStore payloadStore;
@@ -74,17 +73,17 @@ public class InsrVidaDinamicoBusinessImplTest {
         payloadStore.setRimacResponse(rimacResponse);
         payloadStore.setFrequencyType("M");
     }
-    @Test
-    public void testMappingOutputFieldsDynamic() {
 
+    @Test
+    public void testMappingOutputFieldsEasyes() {
         customerBO.setFirstName("Adrian");
         customerBO.setLastName("Lopes");
         customerBO.setSecondLastName("Herrera");
 
         when(this.rbvdr303.executeListCustomerService(anyObject())).thenReturn(customerBO);
 
-        InsrVidaDinamicoBusinessImpl vidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdr303);
-        EasyesQuotationDTO validation = vidaDinamico.mappingOutputFieldsDynamic(payloadStore);
+        InsrEasyYesBusinessImpl easyYes = new InsrEasyYesBusinessImpl(rbvdr303);
+        EasyesQuotationDTO validation = easyYes.mappingOutputFieldsEasyes(payloadStore);
 
         assertNotNull(validation);
     }

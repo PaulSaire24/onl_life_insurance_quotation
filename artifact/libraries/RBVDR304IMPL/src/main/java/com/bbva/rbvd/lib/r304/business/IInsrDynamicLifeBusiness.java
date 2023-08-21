@@ -7,5 +7,5 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 public interface IInsrDynamicLifeBusiness {
     PayloadStore doDynamicLife(PayloadConfig payloadConfig);
 
-    EasyesQuotationDTO mappingOutputFields(PayloadStore payloadStore);
+    EasyesQuotationDTO mappingOutputFieldsDynamic(PayloadStore payloadStore);
 }

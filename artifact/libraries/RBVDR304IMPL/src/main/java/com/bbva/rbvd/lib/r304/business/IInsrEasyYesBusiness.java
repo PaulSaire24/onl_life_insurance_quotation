@@ -7,5 +7,5 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 public interface IInsrEasyYesBusiness {
 
     PayloadStore doEasyYes(PayloadConfig payloadConfig);
-    EasyesQuotationDTO mappingOutputFields(PayloadStore payloadStore);
+    EasyesQuotationDTO mappingOutputFieldsEasyes(PayloadStore payloadStore);
 }

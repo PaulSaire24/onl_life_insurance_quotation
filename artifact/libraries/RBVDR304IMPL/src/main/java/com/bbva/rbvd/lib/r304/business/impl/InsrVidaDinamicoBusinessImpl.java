@@ -33,17 +33,17 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         EasyesQuotationBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
-        PayloadStore payloadStore = new PayloadStore();
-        payloadStore.setRimacResponse(responseRimac);
-        payloadStore.setMyQuotation(payloadConfig.getMyQuotation());
-        payloadStore.setInput(payloadConfig.getInput());
-        payloadStore.setFrequencyType(payloadConfig.getPayloadProperties().getFrequencyTypeId());
+        PayloadStore payloadStoreDynamic = new PayloadStore();
+        payloadStoreDynamic.setRimacResponse(responseRimac);
+        payloadStoreDynamic.setMyQuotation(payloadConfig.getMyQuotation());
+        payloadStoreDynamic.setInput(payloadConfig.getInput());
+        payloadStoreDynamic.setFrequencyType(payloadConfig.getPayloadProperties().getFrequencyTypeId());
 
-        return payloadStore;
+        return payloadStoreDynamic;
     }
 
     @Override
-    public EasyesQuotationDTO mappingOutputFields(PayloadStore payloadStore) {
+    public EasyesQuotationDTO mappingOutputFieldsDynamic(PayloadStore payloadStore) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService START *****");
 
