@@ -87,7 +87,7 @@ public class RBVDR303Test {
 		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
 				thenReturn(new ResponseEntity(rimacResponse, HttpStatus.OK));
 
-		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
+		EasyesQuotationBO validation = this.rbvdR303.executeQuotationRimac(new EasyesQuotationBO(),
 				"rimacQuotation", "traceId");
 
 		assertNotNull(validation);
@@ -105,7 +105,7 @@ public class RBVDR303Test {
 		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
 				thenThrow(new RestClientException(errorMessage));
 
-		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
+		EasyesQuotationBO validation = this.rbvdR303.executeQuotationRimac(new EasyesQuotationBO(),
 				"rimacQuotation", "traceId");
 
 		assertNull(validation);

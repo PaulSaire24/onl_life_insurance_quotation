@@ -33,7 +33,7 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR303Impl.class);
 
 	@Override
-	public EasyesQuotationBO executeEasyesQuotationRimac(final EasyesQuotationBO easyesQuotationRimacRequest, final String rimacQuotation, final String traceId) {
+	public EasyesQuotationBO executeQuotationRimac(final EasyesQuotationBO easyesQuotationRimacRequest, final String rimacQuotation, final String traceId) {
 		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac START *****");
 
 		//1° llamada

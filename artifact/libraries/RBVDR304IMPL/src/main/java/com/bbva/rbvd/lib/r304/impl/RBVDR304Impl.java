@@ -2,10 +2,10 @@ package com.bbva.rbvd.lib.r304.impl;
 
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
-import com.bbva.rbvd.lib.r304.pattern.impl.QuotationEasyYes;
+import com.bbva.rbvd.lib.r304.pattern.Product.QuotationEasyYes;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationParameter;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
-import com.bbva.rbvd.lib.r304.pattern.impl.QuotationVidaDinamico;
+import com.bbva.rbvd.lib.r304.pattern.Product.QuotationVidaDinamico;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

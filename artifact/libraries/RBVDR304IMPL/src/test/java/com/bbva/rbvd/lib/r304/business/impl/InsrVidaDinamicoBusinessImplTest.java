@@ -16,10 +16,8 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyObject;
@@ -68,7 +66,7 @@ public class InsrVidaDinamicoBusinessImplTest extends TestCase {
 
         EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
-        when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
+        when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
         payloadStore = new PayloadStore();
         payloadStore.setInput(input);

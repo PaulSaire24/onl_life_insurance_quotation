@@ -1,14 +1,12 @@
 package com.bbva.rbvd.lib.r304.transform.bean;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.elara.domain.transaction.ThreadContext;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
@@ -19,8 +17,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
@@ -73,7 +69,7 @@ public class InsuranceQuotationModBeanTest{
 
         rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
-        when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
+        when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
         payloadStore = new PayloadStore();
         payloadStore.setInput(input);

@@ -67,7 +67,7 @@ public class RBVDR304ImplTest {
 
         EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
-        when(rbvdr303.executeEasyesQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
+        when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
         mapInformation = new HashMap<>();
 

@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.pisd.dto.insurance.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
@@ -43,45 +44,72 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public EasyesQuotationDTO mappingOutputFields(PayloadStore payloadStore) {
-        EasyesQuotationDTO response = payloadStore.getInput();
 
-        final String defaultValue = "";
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService START *****");
+
+        EasyesQuotationDTO response = payloadStore.getInput();
 
         CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
 
-        if (nonNull(customerInformation)) {
-            response.getHolder().setFirstName(customerInformation.getFirstName());
-            response.getHolder().setLastName(customerInformation.getLastName());
-            final String fullName = customerInformation.getFirstName().concat(" ").
-                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
-            response.getHolder().setFullName(fullName);
-        } else {
-            response.getHolder().setFirstName(defaultValue);
-            response.getHolder().setLastName(defaultValue);
-            response.getHolder().setFullName(defaultValue);
-        }
-
-        response.getProduct().setName(payloadStore.getMyQuotation().getInsuranceProductDescription());
-        response.getProduct().getPlans().get(0).setName(payloadStore.getMyQuotation().getInsuranceModalityName());
-        response.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
-                .setName(payloadStore.getMyQuotation().getPaymentFrequencyName());
+        this.fillHolderData(customerInformation);
+        this.fillDataProduct(response, payloadStore);
 
         return response;
     }
 
     private EasyesQuotationBO callQuotationRimacService(PayloadConfig payload) {
 
-        LOGGER.info("***** InsrVidaDinamicoImpl - callQuotationRimacService START *****");
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService START *****");
         EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payload.getMyQuotation(), payload.getPolicyQuotaId());
 
-        LOGGER.info("***** InsrVidaDinamicoImpl - callQuotationRimacService | requestRimac: {} *****", requestRimac);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | requestRimac: {} *****", requestRimac);
 
-        EasyesQuotationBO responseRimac = this.rbvdR303.executeEasyesQuotationRimac(requestRimac, payload.getInput().getExternalSimulationId(), payload.getInput().getTraceId());
+        EasyesQuotationBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac, payload.getInput().getExternalSimulationId(), payload.getInput().getTraceId());
 
         if (isNull(responseRimac)) {
+
+            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | responseRimac: {} *****", responseRimac);
             throw RBVDValidation.build(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
         }
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | responseRimac: {} *****", responseRimac);
 
         return responseRimac;
+    }
+
+    private void fillHolderData (CustomerBO customerInformation){
+
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
+
+        final String defaultValue = "";
+        HolderDTO holderDTO = new HolderDTO();
+
+        if (nonNull(customerInformation)) {
+            holderDTO.setFirstName(customerInformation.getFirstName());
+            holderDTO.setLastName(customerInformation.getLastName());
+            final String fullName = customerInformation.getFirstName().concat(" ").
+                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
+            holderDTO.setFullName(fullName);
+
+            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+
+        } else {
+            holderDTO.setFirstName(defaultValue);
+            holderDTO.setLastName(defaultValue);
+            holderDTO.setFullName(defaultValue);
+
+            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+        }
+    }
+
+    private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
+
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
+
+        response.getProduct().setName(payloadStore.getMyQuotation().getInsuranceProductDescription());
+        response.getProduct().getPlans().get(0).setName(payloadStore.getMyQuotation().getInsuranceModalityName());
+        response.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
+                .setName(payloadStore.getMyQuotation().getPaymentFrequencyName());
+
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | response: {} *****", response);
     }
 }

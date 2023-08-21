@@ -91,6 +91,8 @@ public class QuotationParameter implements PreQuotation {
         properties.setPeriodId(periodId);
         properties.setFrequencyTypeId(this.applicationConfigurationService.getProperty(periodId));
 
+        LOGGER.info("***** QuotationParameter getProperties - END  properties: {} *****",properties);
+
         return properties;
     }
 

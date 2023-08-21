@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r304.pattern.impl;
+package com.bbva.rbvd.lib.r304.pattern.Product;
 
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
@@ -6,12 +6,13 @@ import com.bbva.rbvd.lib.r304.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r304.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationDecorator;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QuotationEasyYes extends QuotationDecorator{
+public class QuotationEasyYes extends QuotationDecorator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationEasyYes.class);
 
