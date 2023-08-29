@@ -80,6 +80,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
 
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | argument customerInformation: {} *****", customerInformation);
         final String defaultValue = "";
         HolderDTO holderDTO = new HolderDTO();
 
