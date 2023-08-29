@@ -70,7 +70,9 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
     private void fillHolderData (CustomerBO customerInformation){
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
+        LOGGER.info("***** InsrEasyYesBusinessImpl - fillHolderData START *****");
+
+        LOGGER.info("***** InsrEasyYesBusinessImpl - fillHolderData | argument customerInformation: {} *****", customerInformation);
 
         final String defaultValue = "";
         HolderDTO holderDTO = new HolderDTO();
@@ -96,6 +98,9 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
+
+        LOGGER.info("***** InsrEasyYesBusinessImpl - fillDataProduct | argument response: {} *****", response);
+        LOGGER.info("***** InsrEasyYesBusinessImpl - fillDataProduct | argument payloadStore: {} *****", payloadStore);
 
         response.getProduct().setName(payloadStore.getMyQuotation().getInsuranceProductDescription());
         response.getProduct().getPlans().get(0).setName(payloadStore.getMyQuotation().getInsuranceModalityName());

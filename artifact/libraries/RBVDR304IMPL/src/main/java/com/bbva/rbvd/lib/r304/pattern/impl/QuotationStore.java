@@ -31,6 +31,7 @@ public class QuotationStore implements PostQuotation {
     private BigDecimal getQuotationIdFromDB(PayloadStore payloadStore){
 
         LOGGER.info("***** QuotationStore - getQuotationIdFromDB START *****");
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDB START, parameter payloadStore: {} *****", payloadStore);
 
         InsurancePolicyDAOImpl insurancePolicy = new InsurancePolicyDAOImpl(this.pisdR350);
         Map<String, Object> responseValidateQuotation = insurancePolicy.executeValidateQuotation(payloadStore.getInput().getId());
