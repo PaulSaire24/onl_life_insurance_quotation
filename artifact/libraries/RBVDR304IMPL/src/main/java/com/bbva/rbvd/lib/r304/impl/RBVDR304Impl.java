@@ -77,18 +77,8 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 			easyesQuotation.setId(policyQuotaInternalId);
 
 			EasyesQuotationBO rimacQuotationRequest = this.mapperHelper.createRimacQuotationRequest(easyesQuotationDao, policyQuotaInternalId);
-			EasyesQuotationBO rimacQuotationResponse = null;
-			if(easyesQuotation.getProduct().getId().equals("841")){
-				if(this.applicationConfigurationService.getProperty("MOCK_SELECT_PLAN_DYNAMIC_LIFE").equals("S")){
-					rimacQuotationResponse = new MockResponse().getMockResponseRimacService();
-				}else{
-					rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
-							easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
-				}
-			}else{
-				rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
+			EasyesQuotationBO rimacQuotationResponse = this.rbvdR303.executeEasyesQuotationRimac(rimacQuotationRequest,
 						easyesQuotation.getExternalSimulationId(), easyesQuotation.getTraceId());
-			}
 
 			validateServicesResponse(rimacQuotationResponse, RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
 
