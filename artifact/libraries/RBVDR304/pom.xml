@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_life_insurance_quotation</artifactId>
-		<version>0.7.2</version>
+		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR304</artifactId>
 	<name>RBVDR304</name>
-	<version>0.7.2</version>
+	<version>0.8.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<description>Lib to execute easy-yes insurance quotation's business logic</description>
 	<properties>
