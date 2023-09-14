@@ -1,7 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.pisd.dto.insurance.commons.HolderDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
@@ -46,7 +46,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
         CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
 
-        this.fillHolderData(customerInformation);
+        this.fillHolderData(customerInformation,response);
         this.fillDataProduct(response, payloadStore);
 
         return response;
@@ -68,31 +68,27 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         return responseRimac;
     }
 
-    private void fillHolderData (CustomerBO customerInformation){
+    private void fillHolderData (CustomerBO customerInformation,EasyesQuotationDTO response){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - fillHolderData START *****");
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - fillHolderData | argument customerInformation: {} *****", customerInformation);
 
         final String defaultValue = "";
-        HolderDTO holderDTO = new HolderDTO();
 
         if (nonNull(customerInformation)) {
-            holderDTO.setFirstName(customerInformation.getFirstName());
-            holderDTO.setLastName(customerInformation.getLastName());
+            response.getHolder().setFirstName(customerInformation.getFirstName());
+            response.getHolder().setLastName(customerInformation.getLastName());
             final String fullName = customerInformation.getFirstName().concat(" ").
                     concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
-            holderDTO.setFullName(fullName);
-
-            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+            response.getHolder().setFullName(fullName);
 
         } else {
-            holderDTO.setFirstName(defaultValue);
-            holderDTO.setLastName(defaultValue);
-            holderDTO.setFullName(defaultValue);
-
-            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+            response.getHolder().setFirstName(defaultValue);
+            response.getHolder().setLastName(defaultValue);
+            response.getHolder().setFullName(defaultValue);
         }
+
     }
 
     private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
