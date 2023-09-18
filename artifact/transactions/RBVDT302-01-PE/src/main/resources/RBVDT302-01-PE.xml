@@ -102,6 +102,7 @@
 				</dto>
 			</dto>
 		</list>
+		<parameter order="10" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsIn>
 	<paramsOut>
 		<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
@@ -239,6 +240,7 @@
 				</dto>
 			</dto>
 		</list>
+		<parameter order="11" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsOut>
 	<description>Trx to create an easy-yes insurance quotation</description>
 </transaction>

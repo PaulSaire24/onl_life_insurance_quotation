@@ -51,7 +51,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
 
-        this.fillHolderData(customerInformation);
+        this.fillHolderData(customerInformation,response);
         this.fillDataProduct(response, payloadStore);
 
         return response;
@@ -76,43 +76,36 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return responseRimac;
     }
 
-    private void fillHolderData (CustomerBO customerInformation){
+    private void fillHolderData (CustomerBO customerInformation,EasyesQuotationDTO response){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | argument customerInformation: {} *****", customerInformation);
         final String defaultValue = "";
-        HolderDTO holderDTO = new HolderDTO();
 
         if (nonNull(customerInformation)) {
-            holderDTO.setFirstName(customerInformation.getFirstName());
-            holderDTO.setLastName(customerInformation.getLastName());
+            response.getHolder().setFirstName(customerInformation.getFirstName());
+            response.getHolder().setLastName(customerInformation.getLastName());
             final String fullName = customerInformation.getFirstName().concat(" ").
                     concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
-            holderDTO.setFullName(fullName);
-
-            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+            response.getHolder().setFullName(fullName);
 
         } else {
-            holderDTO.setFirstName(defaultValue);
-            holderDTO.setLastName(defaultValue);
-            holderDTO.setFullName(defaultValue);
-
-            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | holderDTO: {} *****", holderDTO);
+            response.getHolder().setFirstName(defaultValue);
+            response.getHolder().setLastName(defaultValue);
+            response.getHolder().setFullName(defaultValue);
         }
+
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | response.holder: {} *****", response.getHolder());
     }
 
     private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillDataProduct | argument response: {} *****", response);
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillDataProduct | argument payloadStore: {} *****", payloadStore);
-
         response.getProduct().setName(payloadStore.getMyQuotation().getInsuranceProductDescription());
         response.getProduct().getPlans().get(0).setName(payloadStore.getMyQuotation().getInsuranceModalityName());
         response.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod()
                 .setName(payloadStore.getMyQuotation().getPaymentFrequencyName());
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | response: {} *****", response);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | response.product: {} *****", response.getProduct());
     }
 }
