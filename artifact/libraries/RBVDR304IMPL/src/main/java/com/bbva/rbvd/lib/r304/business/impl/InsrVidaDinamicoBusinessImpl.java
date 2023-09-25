@@ -1,8 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.pisd.dto.insurance.commons.HolderDTO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
@@ -43,11 +42,11 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     @Override
-    public EasyesQuotationDTO mappingOutputFieldsDynamic(PayloadStore payloadStore) {
+    public QuotationLifeDTO mappingOutputFieldsDynamic(PayloadStore payloadStore) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService START *****");
 
-        EasyesQuotationDTO response = payloadStore.getInput();
+        QuotationLifeDTO response = payloadStore.getInput();
 
         CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
 
@@ -76,7 +75,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return responseRimac;
     }
 
-    private void fillHolderData (CustomerBO customerInformation,EasyesQuotationDTO response){
+    private void fillHolderData (CustomerBO customerInformation,QuotationLifeDTO response){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
         final String defaultValue = "";
@@ -97,7 +96,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData | response.holder: {} *****", response.getHolder());
     }
 
-    private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
+    private void fillDataProduct(QuotationLifeDTO response, PayloadStore payloadStore){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
 

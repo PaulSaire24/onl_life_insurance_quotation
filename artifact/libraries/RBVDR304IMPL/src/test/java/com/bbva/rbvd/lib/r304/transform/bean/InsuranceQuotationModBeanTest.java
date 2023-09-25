@@ -6,6 +6,7 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
@@ -27,14 +28,8 @@ import static org.mockito.Mockito.when;
 public class InsuranceQuotationModBeanTest{
 
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
-    private RBVDR303 rbvdr303;
-    private PISDR350 pisdR350;
-    private EasyesQuotationDTO input;
-    private EasyesQuotationDAO myQuotation;
-    private EasyesQuotationBO rimacResponse;
-    private PayloadProperties properties;
-    private PayloadConfig payloadConfig;
-    private Map<String,Object> mapInformation;
+    private QuotationLifeDTO input;
+
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
     private PayloadStore payloadStore;
@@ -43,21 +38,22 @@ public class InsuranceQuotationModBeanTest{
 
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
-        myQuotation = mock(EasyesQuotationDAO .class);
+        EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
 
-        pisdR350 = mock(PISDR350 .class);
-        rbvdr303 = mock(RBVDR303 .class);
+        PISDR350 pisdR350 = mock(PISDR350.class);
+        RBVDR303 rbvdr303 = mock(RBVDR303.class);
         applicationConfigurationService = mock(ApplicationConfigurationService .class);
 
         when(applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
-        properties = new PayloadProperties();
+        PayloadProperties properties = new PayloadProperties();
         properties.setFrequencyTypeId("M");
         properties.setSelectedPlanId("02");
         properties.setProductType("840");
         properties.setPeriodId("MONTHLY");
-        payloadConfig = new PayloadConfig();
+
+        PayloadConfig payloadConfig = new PayloadConfig();
         payloadConfig.setInput(input);
         payloadConfig.setPayloadProperties(properties);
         payloadConfig.setMyQuotation(myQuotation);
@@ -67,7 +63,7 @@ public class InsuranceQuotationModBeanTest{
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
 
-        rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+        EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
         when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 

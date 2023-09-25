@@ -2,19 +2,20 @@ package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
 public class PayloadStore {
-    private EasyesQuotationDTO input;
+    private QuotationLifeDTO input;
     private EasyesQuotationDAO myQuotation;
     private EasyesQuotationBO rimacResponse;
     private String frequencyType;
 
-    public EasyesQuotationDTO getInput() {
+    public QuotationLifeDTO getInput() {
         return input;
     }
 
-    public void setInput(EasyesQuotationDTO input) {
+    public void setInput(QuotationLifeDTO input) {
         this.input = input;
     }
 

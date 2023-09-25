@@ -4,8 +4,9 @@ import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.lib.r304.impl.util.ValidationUtil;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.joda.time.LocalDate;
 
@@ -18,7 +19,7 @@ public class InsuranceQuotationModBean {
 
     private InsuranceQuotationModBean() {}
 
-    public static InsuranceQuotationModDAO createUpdateQuotationModDao(EasyesQuotationDAO easyesQuotationDAO, EasyesQuotationDTO easyesQuotationDTO) {
+    public static InsuranceQuotationModDAO createUpdateQuotationModDao(EasyesQuotationDAO easyesQuotationDAO, QuotationLifeDTO easyesQuotationDTO) {
         final InsurancePlanDTO plan = easyesQuotationDTO.getProduct().getPlans().get(0);
 
         final InsuranceQuotationModDAO insuranceQuotationModDao = new InsuranceQuotationModDAO();
@@ -33,7 +34,7 @@ public class InsuranceQuotationModBean {
     public static InsuranceQuotationModDAO createQuotationModDao(PayloadStore payloadStore) {
 
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
-        EasyesQuotationDTO input = payloadStore.getInput();
+        QuotationLifeDTO input = payloadStore.getInput();
         EasyesQuotationBO rimacResponse = payloadStore.getRimacResponse();
         String frequencyType = payloadStore.getFrequencyType();
 
@@ -73,16 +74,8 @@ public class InsuranceQuotationModBean {
         insuranceQuotationModDAO.setUserAudit(input.getUserAudit());
         insuranceQuotationModDAO.setContactEmailDesc(null);
         insuranceQuotationModDAO.setCustomerPhoneDesc(null);
-        insuranceQuotationModDAO.setDataTreatmentIndType(validateIsDataTreatment(input.getIsDataTreatment()));
+        insuranceQuotationModDAO.setDataTreatmentIndType(ValidationUtil.validateIsDataTreatment(input.getIsDataTreatment()));
         return insuranceQuotationModDAO;
-    }
-
-    private static String validateIsDataTreatment(Boolean isDataTreatment){
-        if(Objects.nonNull(isDataTreatment)){
-            return Boolean.TRUE.equals(isDataTreatment) ? "S" : "N";
-        }else{
-            return "N";
-        }
     }
 
 }

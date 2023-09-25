@@ -7,6 +7,7 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
@@ -90,7 +91,7 @@ public class RBVDR304ImplTest {
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
 
@@ -100,7 +101,7 @@ public class RBVDR304ImplTest {
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
 
@@ -111,7 +112,7 @@ public class RBVDR304ImplTest {
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
 
     }
@@ -122,7 +123,7 @@ public class RBVDR304ImplTest {
          mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
-        EasyesQuotationDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
 

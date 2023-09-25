@@ -1,8 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
@@ -41,8 +40,8 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     }
 
     @Override
-    public EasyesQuotationDTO mappingOutputFieldsEasyes(PayloadStore payloadStore) {
-        EasyesQuotationDTO response = payloadStore.getInput();
+    public QuotationLifeDTO mappingOutputFieldsEasyes(PayloadStore payloadStore) {
+        QuotationLifeDTO response = payloadStore.getInput();
 
         CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
 
@@ -68,7 +67,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         return responseRimac;
     }
 
-    private void fillHolderData (CustomerBO customerInformation,EasyesQuotationDTO response){
+    private void fillHolderData (CustomerBO customerInformation,QuotationLifeDTO response){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - fillHolderData START *****");
 
@@ -91,7 +90,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
     }
 
-    private void fillDataProduct(EasyesQuotationDTO response, PayloadStore payloadStore){
+    private void fillDataProduct(QuotationLifeDTO response, PayloadStore payloadStore){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
 

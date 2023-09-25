@@ -4,7 +4,7 @@ package com.bbva.rbvd.lib.r304.service.dao.impl;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
@@ -25,7 +25,7 @@ public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
     }
 
     @Override
-    public void executeUpdateQuotationModQuery(EasyesQuotationDAO myQuotation, EasyesQuotationDTO input) {
+    public void executeUpdateQuotationModQuery(EasyesQuotationDAO myQuotation, QuotationLifeDTO input) {
        InsuranceQuotationModDAO insuranceQuotationMod = InsuranceQuotationModBean.createUpdateQuotationModDao(myQuotation, input);
         Map<String, Object> argumentsUpdateQuotationMod = InsuranceQuotationModMap.createUpdateQuotationModArguments(insuranceQuotationMod);
         Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);

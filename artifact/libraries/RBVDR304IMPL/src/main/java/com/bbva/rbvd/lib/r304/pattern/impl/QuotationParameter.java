@@ -4,7 +4,7 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsurancePaymentPeriodDAO;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceProductModalityDAO;
@@ -34,7 +34,7 @@ public class QuotationParameter implements PreQuotation {
     }
 
     @Override
-    public PayloadConfig getConfig(EasyesQuotationDTO input) {
+    public PayloadConfig getConfig(QuotationLifeDTO input) {
         LOGGER.info("***** QuotationParameter getConfig START *****");
         LOGGER.info("***** QuotationParameter getConfig - input : {} *****",input);
 
@@ -78,7 +78,7 @@ public class QuotationParameter implements PreQuotation {
         return policyQuotaInternalId.toString();
     }
 
-    public PayloadProperties getProperties(EasyesQuotationDTO input){
+    public PayloadProperties getProperties(QuotationLifeDTO input){
 
         LOGGER.info("***** QuotationParameter getProperties START *****");
 

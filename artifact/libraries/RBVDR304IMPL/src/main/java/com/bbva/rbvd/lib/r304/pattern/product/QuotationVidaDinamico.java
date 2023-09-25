@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.pattern.product;
 
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r304.business.impl.InsrVidaDinamicoBusinessImpl;
@@ -21,7 +22,7 @@ public class QuotationVidaDinamico extends QuotationDecorator {
     }
 
     @Override
-    public EasyesQuotationDTO start(EasyesQuotationDTO input, RBVDR303 rbvdr303) {
+    public QuotationLifeDTO start(QuotationLifeDTO input, RBVDR303 rbvdr303) {
         LOGGER.info("***** QuotationVidaDinamico - start - START *****");
         LOGGER.info("***** QuotationVidaDinamico - start - input : {} *****",input);
 
@@ -32,7 +33,7 @@ public class QuotationVidaDinamico extends QuotationDecorator {
 
         this.getPostQuotation().end(payloadStore);
 
-        EasyesQuotationDTO response = seguroVidaDinamico.mappingOutputFieldsDynamic(payloadStore);
+        QuotationLifeDTO response = seguroVidaDinamico.mappingOutputFieldsDynamic(payloadStore);
         LOGGER.info("***** QuotationVidaDinamico - response : {} *****",response);
 
         return response;

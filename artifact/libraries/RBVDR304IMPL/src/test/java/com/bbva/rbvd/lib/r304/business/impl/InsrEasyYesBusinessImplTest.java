@@ -6,6 +6,7 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
@@ -83,7 +84,7 @@ public class InsrEasyYesBusinessImplTest {
         when(this.rbvdr303.executeListCustomerService(anyObject())).thenReturn(customerBO);
 
         InsrEasyYesBusinessImpl easyYes = new InsrEasyYesBusinessImpl(rbvdr303);
-        EasyesQuotationDTO validation = easyYes.mappingOutputFieldsEasyes(payloadStore);
+        QuotationLifeDTO validation = easyYes.mappingOutputFieldsEasyes(payloadStore);
 
         assertNotNull(validation);
     }
