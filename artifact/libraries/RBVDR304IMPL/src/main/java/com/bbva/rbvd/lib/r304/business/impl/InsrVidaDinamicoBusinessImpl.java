@@ -2,7 +2,7 @@ package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r303.RBVDR303;
@@ -30,7 +30,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife | argument payloadConfig: {} *****", payloadConfig);
 
-        EasyesQuotationBO responseRimac = this.callQuotationRimacService(payloadConfig);
+        QuotationLifeBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
         PayloadStore payloadStoreDynamic = new PayloadStore();
         payloadStoreDynamic.setRimacResponse(responseRimac);
@@ -56,14 +56,14 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return response;
     }
 
-    private EasyesQuotationBO callQuotationRimacService(PayloadConfig payload) {
+    private QuotationLifeBO callQuotationRimacService(PayloadConfig payload) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService START *****");
-        EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payload.getMyQuotation(), payload.getPolicyQuotaId());
+        QuotationLifeBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payload.getMyQuotation(), payload.getPolicyQuotaId());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | requestRimac: {} *****", requestRimac);
 
-        EasyesQuotationBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac, payload.getInput().getExternalSimulationId(), payload.getInput().getTraceId());
+        QuotationLifeBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac, payload.getInput().getExternalSimulationId(), payload.getInput().getTraceId());
 
         if (isNull(responseRimac)) {
 

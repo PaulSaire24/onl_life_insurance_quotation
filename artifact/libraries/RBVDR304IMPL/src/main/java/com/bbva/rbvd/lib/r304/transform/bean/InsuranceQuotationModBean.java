@@ -5,13 +5,12 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.lib.r304.impl.util.ValidationUtil;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 import static java.math.BigDecimal.valueOf;
 
@@ -35,7 +34,7 @@ public class InsuranceQuotationModBean {
 
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
-        EasyesQuotationBO rimacResponse = payloadStore.getRimacResponse();
+        QuotationLifeBO rimacResponse = payloadStore.getRimacResponse();
         String frequencyType = payloadStore.getFrequencyType();
 
         final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

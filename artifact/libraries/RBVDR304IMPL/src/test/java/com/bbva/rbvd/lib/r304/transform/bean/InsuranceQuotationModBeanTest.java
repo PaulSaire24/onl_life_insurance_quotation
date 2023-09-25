@@ -5,9 +5,8 @@ import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
@@ -63,7 +62,7 @@ public class InsuranceQuotationModBeanTest{
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
 
-        EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+        QuotationLifeBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
         when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 

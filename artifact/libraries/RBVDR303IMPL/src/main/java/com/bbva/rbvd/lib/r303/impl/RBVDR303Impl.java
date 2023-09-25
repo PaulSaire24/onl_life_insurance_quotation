@@ -7,8 +7,7 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
-
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r303.impl.util.JsonHelper;
@@ -33,7 +32,7 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR303Impl.class);
 
 	@Override
-	public EasyesQuotationBO executeQuotationRimac(final EasyesQuotationBO easyesQuotationRimacRequest, final String rimacQuotation, final String traceId) {
+	public QuotationLifeBO executeQuotationRimac(final QuotationLifeBO easyesQuotationRimacRequest, final String rimacQuotation, final String traceId) {
 		LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac START *****");
 
 		//1° llamada
@@ -60,9 +59,9 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
 		try {
-			ResponseEntity<EasyesQuotationBO> responseEntity = this.externalApiConnector.exchange(
-					RBVDProperties.QUOTATION_EASYES_RIMAC.getValue(), HttpMethod.PATCH, entity, EasyesQuotationBO.class, singletonMap(key, rimacQuotation));
-			EasyesQuotationBO easyQuotationRimacResponse = responseEntity.getBody();
+			ResponseEntity<QuotationLifeBO> responseEntity = this.externalApiConnector.exchange(
+					RBVDProperties.QUOTATION_EASYES_RIMAC.getValue(), HttpMethod.PATCH, entity, QuotationLifeBO.class, singletonMap(key, rimacQuotation));
+			QuotationLifeBO easyQuotationRimacResponse = responseEntity.getBody();
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Response body: {}", getRequestBodyAsJsonFormat(easyQuotationRimacResponse));
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac END *****");
 			return easyQuotationRimacResponse;

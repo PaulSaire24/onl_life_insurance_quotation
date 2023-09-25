@@ -3,6 +3,7 @@ package com.bbva.rbvd.lib.r304.business.impl;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r303.RBVDR303;
@@ -28,7 +29,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     public PayloadStore doEasyYes(PayloadConfig payloadConfig) {
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | argument payloadConfig: {} *****",payloadConfig);
 
-        EasyesQuotationBO responseRimac = this.callQuotationRimacService(payloadConfig);
+        QuotationLifeBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
         PayloadStore payloadStoreEasyes = new PayloadStore();
         payloadStoreEasyes.setRimacResponse(responseRimac);
@@ -51,14 +52,14 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         return response;
     }
 
-    private EasyesQuotationBO callQuotationRimacService(PayloadConfig payload){
+    private QuotationLifeBO callQuotationRimacService(PayloadConfig payload){
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService START *****");
         EasyesQuotationBO requestRimac = QuotationRimacBean.createRimacQuotationRequest(payload.getMyQuotation(),payload.getPolicyQuotaId());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        EasyesQuotationBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac,payload.getInput().getExternalSimulationId(),payload.getInput().getTraceId());
+        QuotationLifeBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac,payload.getInput().getExternalSimulationId(),payload.getInput().getTraceId());
 
         if (isNull(responseRimac)){
             throw RBVDValidation.build(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);

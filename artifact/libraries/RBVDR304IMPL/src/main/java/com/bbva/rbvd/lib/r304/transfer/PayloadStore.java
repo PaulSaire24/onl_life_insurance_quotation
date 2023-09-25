@@ -1,14 +1,13 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 
 public class PayloadStore {
     private QuotationLifeDTO input;
     private EasyesQuotationDAO myQuotation;
-    private EasyesQuotationBO rimacResponse;
+    private QuotationLifeBO rimacResponse;
     private String frequencyType;
 
     public QuotationLifeDTO getInput() {
@@ -27,11 +26,11 @@ public class PayloadStore {
         this.myQuotation = myQuotation;
     }
 
-    public EasyesQuotationBO getRimacResponse() {
+    public QuotationLifeBO getRimacResponse() {
         return rimacResponse;
     }
 
-    public void setRimacResponse(EasyesQuotationBO rimacResponse) {
+    public void setRimacResponse(QuotationLifeBO rimacResponse) {
         this.rimacResponse = rimacResponse;
     }
 

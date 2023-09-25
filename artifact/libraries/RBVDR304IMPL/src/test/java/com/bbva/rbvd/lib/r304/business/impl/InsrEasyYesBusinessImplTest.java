@@ -5,9 +5,8 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.RBVDR304Impl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
@@ -36,7 +35,7 @@ public class InsrEasyYesBusinessImplTest {
     @Before
     public void setUp() throws Exception {
 
-        EasyesQuotationDTO input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
+        QuotationLifeDTO input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
         EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
         when(myQuotation.getInsuranceSimulationId()).thenReturn(BigDecimal.ONE);
@@ -64,7 +63,7 @@ public class InsrEasyYesBusinessImplTest {
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
 
-        EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+        QuotationLifeBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
         when(rbvdr303.executeQuotationRimac(anyObject(), anyString(), anyString())).thenReturn(rimacResponse);
 
