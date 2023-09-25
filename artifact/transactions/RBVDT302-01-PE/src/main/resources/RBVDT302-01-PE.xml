@@ -89,8 +89,8 @@
 					<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO" artifactId="RBVDC301">
 						<dto order="1" name="contact" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO" artifactId="RBVDC301">
 							<parameter order="1" name="contactDetailType" mandatory="1" type="String" size="10"/>
-							<parameter order="2" name="number" mandatory="1" type="String" size="40"/>
-							<parameter order="3" name="address" mandatory="1" type="String" size="100"/>
+							<parameter order="2" name="number" mandatory="0" type="String" size="40"/>
+							<parameter order="3" name="address" mandatory="0" type="String" size="100"/>
 						</dto>
 					</dto>
 				</list>
@@ -100,8 +100,10 @@
 					</dto>
 					<parameter order="2" name="documentNumber" mandatory="1" type="String" size="30"/>
 				</dto>
+				<parameter order="9" name="birthDate" mandatory="0" type="Date (YYYY-MM-DD)" size="0"/>
 			</dto>
 		</list>
+		<parameter order="10" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsIn>
 	<paramsOut>
 		<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
@@ -226,8 +228,8 @@
 					<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO" artifactId="RBVDC301">
 						<dto order="1" name="contact" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO" artifactId="RBVDC301">
 							<parameter order="1" name="contactDetailType" mandatory="1" type="String" size="10"/>
-							<parameter order="2" name="number" mandatory="1" type="String" size="40"/>
-							<parameter order="3" name="address" mandatory="1" type="String" size="100"/>
+							<parameter order="2" name="number" mandatory="0" type="String" size="40"/>
+							<parameter order="3" name="address" mandatory="0" type="String" size="100"/>
 						</dto>
 					</dto>
 				</list>
@@ -237,8 +239,10 @@
 					</dto>
 					<parameter order="2" name="documentNumber" mandatory="1" type="String" size="30"/>
 				</dto>
+				<parameter order="9" name="birthDate" mandatory="0" type="Date (YYYY-MM-DD)" size="0"/>
 			</dto>
 		</list>
+		<parameter order="11" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsOut>
 	<description>Trx to create an easy-yes insurance quotation</description>
 </transaction>

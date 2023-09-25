@@ -74,7 +74,7 @@ public class RBVDT30201PETransactionTest {
 
 	@Test
 	public void testNotNull() {
-		when(rbvdr304.executeBusinessLogicEasyesQutation(anyObject())).thenReturn(new EasyesQuotationDTO());
+		when(rbvdr304.executeBusinessLogicQuotation(anyObject())).thenReturn(new EasyesQuotationDTO());
 
 		this.transaction.execute();
 

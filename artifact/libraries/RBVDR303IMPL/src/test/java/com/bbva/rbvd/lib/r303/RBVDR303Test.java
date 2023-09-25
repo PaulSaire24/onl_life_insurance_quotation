@@ -13,8 +13,8 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r014.PISDR014;
 
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.impl.RBVDR303Impl;
 
@@ -82,12 +82,12 @@ public class RBVDR303Test {
 	
 	@Test
 	public void executeEasyesQuotationRimacOK() throws IOException {
-		EasyesQuotationBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
+		QuotationLifeBO rimacResponse = MockData.getInstance().getInsuranceRimacQuotationResponse();
 
-		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<QuotationLifeBO>) any(), anyMap())).
 				thenReturn(new ResponseEntity(rimacResponse, HttpStatus.OK));
 
-		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
+		QuotationLifeBO validation = this.rbvdR303.executeQuotationRimac(new QuotationLifeBO(),
 				"rimacQuotation", "traceId");
 
 		assertNotNull(validation);
@@ -102,10 +102,10 @@ public class RBVDR303Test {
 
 	@Test
 	public void executeEasyesQuotationRimacWithRestClientException() {
-		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<EasyesQuotationBO>) any(), anyMap())).
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(), (Class<QuotationLifeBO>) any(), anyMap())).
 				thenThrow(new RestClientException(errorMessage));
 
-		EasyesQuotationBO validation = this.rbvdR303.executeEasyesQuotationRimac(new EasyesQuotationBO(),
+		QuotationLifeBO validation = this.rbvdR303.executeQuotationRimac(new QuotationLifeBO(),
 				"rimacQuotation", "traceId");
 
 		assertNull(validation);

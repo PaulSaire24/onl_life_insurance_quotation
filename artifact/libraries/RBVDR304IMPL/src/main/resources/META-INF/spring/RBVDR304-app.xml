@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
-	<bean id="mapperHelper" class="com.bbva.rbvd.lib.r304.impl.util.MapperHelper">
-		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
-		<property name="rbvdR303" ref="rbvdR303"/>
-	</bean>
-	<bean id="daoService" class="com.bbva.rbvd.lib.r304.impl.dao.impl.DAOServiceImpl">
-		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
-		<property name="pisdR350" ref="pisdR350"/>
-		<property name="mapperHelper" ref="mapperHelper"/>
-	</bean>
 	<bean id="rbvdR304" class="com.bbva.rbvd.lib.r304.impl.RBVDR304Impl" parent="rbvdR304Abstract">
-		<property name="daoService" ref="daoService" />
-		<property name="mapperHelper" ref="mapperHelper"/>
 		<property name="pisdR350" ref="pisdR350"/>
 		<property name="rbvdR303" ref="rbvdR303"/>
 	</bean>

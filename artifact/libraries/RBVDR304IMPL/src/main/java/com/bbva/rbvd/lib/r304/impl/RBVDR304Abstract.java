@@ -6,9 +6,6 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.RBVDR304;
 
-/**
- * This class automatically defines the libraries and utilities that it will use.
- */
 public abstract class RBVDR304Abstract extends AbstractLibrary implements RBVDR304 {
 
 	protected ApplicationConfigurationService applicationConfigurationService;

@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.impl.util;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,8 +18,8 @@ public class MockResponse {
                 .create();
     }
 
-    public EasyesQuotationBO getMockResponseRimacService(){
-        return this.gson.fromJson(MOCK_RESPONSE_PLAN_SELECT,EasyesQuotationBO.class);
+    public QuotationLifeBO getMockResponseRimacService(){
+        return this.gson.fromJson(MOCK_RESPONSE_PLAN_SELECT, QuotationLifeBO.class);
     }
 
 }
