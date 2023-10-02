@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
@@ -48,7 +49,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         QuotationLifeDTO response = payloadStore.getInput();
 
-        CustomerBO customerInformation = this.rbvdR303.executeListCustomerService(payloadStore.getInput().getHolder().getId());
+        CustomerListASO customerInformation = this.rbvdR303.executeGetCustomerHost(payloadStore.getInput().getHolder().getId());
 
         this.fillHolderData(customerInformation,response);
         this.fillDataProduct(response, payloadStore);
@@ -75,16 +76,16 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return responseRimac;
     }
 
-    private void fillHolderData (CustomerBO customerInformation,QuotationLifeDTO response){
+    private void fillHolderData (CustomerListASO customerInformation,QuotationLifeDTO response){
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - fillHolderData START *****");
         final String defaultValue = "";
 
         if (nonNull(customerInformation)) {
-            response.getHolder().setFirstName(customerInformation.getFirstName());
-            response.getHolder().setLastName(customerInformation.getLastName());
-            final String fullName = customerInformation.getFirstName().concat(" ").
-                    concat(customerInformation.getLastName()).concat(" ").concat(customerInformation.getSecondLastName() != null? customerInformation.getSecondLastName() : "");
+            response.getHolder().setFirstName(customerInformation.getData().get(0).getFirstName());
+            response.getHolder().setLastName(customerInformation.getData().get(0).getLastName());
+            final String fullName = customerInformation.getData().get(0).getFirstName().concat(" ").
+                    concat(customerInformation.getData().get(0).getLastName()).concat(" ").concat(customerInformation.getData().get(0).getSecondLastName()!= null? customerInformation.getData().get(0).getSecondLastName() : "");
             response.getHolder().setFullName(fullName);
 
         } else {
