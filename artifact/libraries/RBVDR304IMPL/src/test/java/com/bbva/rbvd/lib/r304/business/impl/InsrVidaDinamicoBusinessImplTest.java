@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
@@ -18,6 +19,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyObject;
@@ -30,6 +33,7 @@ public class InsrVidaDinamicoBusinessImplTest {
     private RBVDR303 rbvdr303;
     private PayloadStore payloadStore;
     private CustomerBO customerBO;
+    private CustomerListASO customerBO1;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
 
@@ -48,7 +52,7 @@ public class InsrVidaDinamicoBusinessImplTest {
         when(applicationConfigurationService.getProperty("MONTHLY")).thenReturn("M");
 
         customerBO = new CustomerBO();
-
+        customerBO1 = new CustomerListASO();
         PayloadProperties properties = new PayloadProperties();
         properties.setFrequencyTypeId("M");
         properties.setSelectedPlanId("02");
@@ -80,8 +84,10 @@ public class InsrVidaDinamicoBusinessImplTest {
         customerBO.setFirstName("Adrian");
         customerBO.setLastName("Lopes");
         customerBO.setSecondLastName("Herrera");
-
-        when(this.rbvdr303.executeListCustomerService(anyObject())).thenReturn(customerBO);
+        List<CustomerBO> customerBOS= new ArrayList<>();
+        customerBOS.add(customerBO);
+        customerBO1.setData(customerBOS);
+        when(this.rbvdr303.executeGetCustomerHost(anyObject())).thenReturn(customerBO1);
 
         InsrVidaDinamicoBusinessImpl vidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdr303);
         QuotationLifeDTO validation = vidaDinamico.mappingOutputFieldsDynamic(payloadStore);

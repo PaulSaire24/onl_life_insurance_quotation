@@ -6,6 +6,10 @@ import com.bbva.elara.domain.transaction.ThreadContext;
 
 import com.bbva.elara.utility.api.connector.APIConnector;
 
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALW5;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALWU;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
+import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
@@ -16,8 +20,10 @@ import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r303.factory.ApiConnectorFactoryMock;
 import com.bbva.rbvd.lib.r303.impl.RBVDR303Impl;
 
+import com.bbva.rbvd.mock.MockBundleContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,30 +58,43 @@ public class RBVDR303Test {
 	private APIConnector externalApiConnector;
 	private APIConnector internalApiConnector;
 	private PISDR014 pisdr014;
-
+	private PBTQR002 pbtqr002;
+	private CustomerListASO customerList;
+	private static final String MESSAGE_EXCEPTION = "CONNECTION ERROR";
 	private String errorMessage;
-
+	private MockDTO mockDTO;
 	@Before
 	public void setUp() {
 		ThreadContext.set(new Context());
 
 		applicationConfigurationService = mock(ApplicationConfigurationService.class);
 		rbvdR303.setApplicationConfigurationService(applicationConfigurationService);
-
 		when(this.applicationConfigurationService.getProperty(RBVDProperties.QUOTATION_EASYES_RIMAC_URI.getValue()))
 				.thenReturn("/api-vida/V1/cotizaciones/ideCotizacion/seleccionar");
+
+		internalApiConnector =mock(APIConnector.class);
+		rbvdR303.setInternalApiConnector(internalApiConnector);
 
 		externalApiConnector = mock(APIConnector.class);
 		rbvdR303.setExternalApiConnector(externalApiConnector);
 
-		internalApiConnector = mock(APIConnector.class);
-		rbvdR303.setInternalApiConnector(internalApiConnector);
-
-		pisdr014 = mock(PISDR014.class);
+		PISDR014 pisdr014 = mock(PISDR014.class);
 		rbvdR303.setPisdR014(pisdr014);
 
-		when(this.pisdr014.executeSignatureConstruction(anyString(), anyString(), anyString(), anyString(), anyString())).
-				thenReturn(new SignatureAWS());
+		pbtqr002 = mock(PBTQR002.class);
+		rbvdR303.setPbtqR002(pbtqr002);
+
+		mockDTO = MockDTO.getInstance();
+
+
+
+		when(pisdr014.executeSignatureConstruction(anyString(), anyString(), anyString(), anyString(), anyString()))
+				.thenReturn(new SignatureAWS("", "", "", ""));
+
+
+
+
+
 
 		errorMessage = "Something went wrong!!";
 	}
@@ -125,7 +144,27 @@ public class RBVDR303Test {
 		assertNotNull(validation.getLastName());
 		assertNotNull(validation.getSecondLastName());
 	}
+	@Test
+	public void executeGetCustomerHostOk() {
 
+		PEWUResponse responseHost = new PEWUResponse();
+
+		PEMSALWU data = new PEMSALWU();
+		data.setTdoi("L");
+		data.setSexo("M");
+		data.setContact("123123123");
+		data.setContac2("123123123");
+		data.setContac3("123123123");
+		responseHost.setPemsalwu(data);
+		responseHost.setPemsalw5(new PEMSALW5());
+		responseHost.setHostAdviceCode(null);
+		when(pbtqr002.executeSearchInHostByCustomerId("00000000"))
+				.thenReturn(responseHost);
+
+		CustomerListASO validation = rbvdR303.executeGetCustomerHost("00000000");
+
+		assertNotNull(validation);
+	}
 	@Test
 	public void executeListCustomerServiceWithRestClientException() {
 		when(this.internalApiConnector.getForObject(anyString(), (Class<CustomerListASO>) any(), anyMap())).
