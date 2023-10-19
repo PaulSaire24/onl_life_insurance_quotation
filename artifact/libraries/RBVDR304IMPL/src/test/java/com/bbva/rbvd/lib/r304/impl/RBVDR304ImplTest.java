@@ -89,7 +89,6 @@ public class RBVDR304ImplTest {
 
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
-
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }

@@ -1,5 +1,8 @@
 package com.bbva.rbvd.lib.r304.impl;
 
+
+
+import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.product.QuotationEasyYes;
@@ -19,20 +22,21 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  START *****");
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  ***** {}", input);
 
+
 		QuotationLifeDTO response = new QuotationLifeDTO();
 		Quotation quotation = null;
 
 		if (input.getProduct().getId().equals("840")) {
 			quotation = new QuotationEasyYes(
 					new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
-					, new QuotationStore(this.pisdR350)
+					, new QuotationStore(this.pisdR350,this.rbvdR303)
 			);
 			response = quotation.start(input, this.rbvdR303);
 
 		} else if (input.getProduct().getId().equals("841")) {
 			quotation = new QuotationVidaDinamico(
 					new QuotationParameter(this.pisdR350, this.applicationConfigurationService),
-					new QuotationStore(this.pisdR350)
+					new QuotationStore(this.pisdR350,this.rbvdR303)
 			);
 			response = quotation.start(input, this.rbvdR303);
 		}

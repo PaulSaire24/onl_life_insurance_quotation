@@ -30,7 +30,10 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
                 singletonMap(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),externalSimulationId)
         );
 
+
+
         LOGGER.info("***** InsuranceSimulationDAOImpl - executeGetSimulationInformation | responseGetSimulationIdAndExpirationDate: {} *****",responseGetSimulationIdAndExpirationDate);
+
 
         validateSelectionQueries(responseGetSimulationIdAndExpirationDate, RBVDErrors.INVALID_RIMAC_QUOTATION_ID);
 

@@ -1,12 +1,18 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
+import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePolicyDAOImpl;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceQuotationDAOImpl;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceQuotationModDAOImpl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
+import com.bbva.rbvd.lib.r304.transform.map.QuotationParticipantMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +22,19 @@ import java.util.Map;
 public class QuotationStore implements PostQuotation {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationStore.class);
     private final PISDR350 pisdR350;
-
-    public QuotationStore(PISDR350 pisdR350) {
+     private final RBVDR303 rbvdr303;
+    public QuotationStore(PISDR350 pisdR350, RBVDR303 rbvdR303) {
         this.pisdR350 = pisdR350;
+        this.rbvdr303= rbvdR303;
     }
 
     @Override
     public void end(PayloadStore payloadStore) {
         BigDecimal resultCount = this.getQuotationIdFromDB(payloadStore);
+        CustomerListASO customerInformation = this.rbvdr303.executeGetCustomerHost(payloadStore.getInput().getHolder().getId());
+
         this.save(payloadStore, resultCount);
+        this.saveParticipant(payloadStore,resultCount,customerInformation);
     }
 
 
@@ -60,5 +70,16 @@ public class QuotationStore implements PostQuotation {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****",payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
         }
+    }
+    public void saveParticipant(PayloadStore payloadStore,BigDecimal resultCount,CustomerListASO customerInformation){
+        LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
+
+        InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
+        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore,customerInformation);
+        LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",quotationParticipant);
+        Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant,customerInformation);
+        LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
+        IInsuranceQuotationDAO insuranceSimulationDao= new InsuranceQuotationDAOImpl(pisdR350);
+        insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
     }
 }
