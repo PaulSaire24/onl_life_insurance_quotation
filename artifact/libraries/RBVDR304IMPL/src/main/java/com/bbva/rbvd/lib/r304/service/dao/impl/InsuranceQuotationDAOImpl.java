@@ -105,7 +105,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                 !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
                 input.getInsuredAmount().getAmount()
                         .multiply(input.getRefunds().get(0).getUnit().getPercentage())
-                        .multiply(new BigDecimal(0.01)) : BigDecimal.ZERO;
+                        .multiply(BigDecimal.valueOf(0.01)) : BigDecimal.ZERO;
     }
 
     private InsurancePlanDTO safeGetPlan(QuotationLifeDTO input) {
@@ -196,7 +196,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
-
+        if (Objects.nonNull(customerData) && !customerData.getFirstName().equals(null)) {
+            quotationParticipant.setInsuredCustomerName(customerData.getFirstName());
+        }
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(lastName);
         quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
