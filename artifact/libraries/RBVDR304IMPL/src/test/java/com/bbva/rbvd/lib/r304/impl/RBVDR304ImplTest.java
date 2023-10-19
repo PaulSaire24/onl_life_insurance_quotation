@@ -3,8 +3,11 @@ package com.bbva.rbvd.lib.r304.impl;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
@@ -66,7 +69,6 @@ public class RBVDR304ImplTest {
         payloadConfig.setPayloadProperties(properties);
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId("8523654");
-
         rbvdr304.setRbvdR303(rbvdr303);
         rbvdr304.setApplicationConfigurationService(applicationConfigurationService);
         rbvdr304.setPisdR350(pisdR350);
@@ -86,6 +88,7 @@ public class RBVDR304ImplTest {
         mapInformation.put("PRODUCT_SHORT_DESC","EASYYES");
         mapInformation.put(RBVDProperties.FIELD_PAYMENT_FREQUENCY_NAME.getValue(),"MENSUAL");
 
+
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
 
     }
@@ -99,6 +102,9 @@ public class RBVDR304ImplTest {
         IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
         identityDocumentDTO.setDocumentNumber("14457841");
         identityDocumentDTO.setDocumentType(documentTypeDTO);
+        HolderDTO holderDTO = new HolderDTO();
+        holderDTO.setFirstName("Alec");
+        holderDTO.setLastName("Alec taboada");
         ParticipantDTO participantDTO = new ParticipantDTO();
         participantDTO.setId("10225879");
         participantDTO.setBirthDate( new Date());
@@ -108,7 +114,8 @@ public class RBVDR304ImplTest {
         participantDTO.getParticipantType().setId("455");
         ContractDetailsDTO contractDetail = new ContractDetailsDTO();
         contractDetail.setContact(new ContactDTO());
-
+        contractDetail.getContact().setContactDetailType("MOBILE_NUMBER");
+        contractDetail.getContact().setNumber("999999999");
         ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
         contractDetail2.setContact(new ContactDTO());
         contractDetail2.getContact().setContactDetailType("EMAIL");
@@ -117,11 +124,20 @@ public class RBVDR304ImplTest {
         contractDetailsList.add(contractDetail);
         contractDetailsList.add(contractDetail2);
         participantDTO.setContactDetails(contractDetailsList);
+        this.input.setHolder(holderDTO);
         this.input.setTerm(new TermDTO());
         this.input.getTerm().setNumber(45);
-
         this.input.setParticipants(Collections.singletonList(participantDTO));
+        CustomerListASO customerListASO= new CustomerListASO();
+        CustomerBO customerBO =new CustomerBO();
+        customerBO.setFirstName("Alec");
+        customerBO.setSecondLastName("Taboada");
+        customerBO.setLastName("Taboada");
+        List<CustomerBO> customerBOS = new ArrayList<>();
+        customerBOS.add(customerBO);
+        customerListASO.setData(customerBOS);
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        when(rbvdr304.rbvdR303.executeGetCustomerHost(anyString())).thenReturn(customerListASO);
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
