@@ -65,8 +65,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setRefundPer(safeGetRefundPercentage(input));
         quotationParticipant.setTotalReturnAmount(totalReturnAmount);
         quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setPersonalDocumentId("");
-        quotationParticipant.setCustomerEntryDate(safeGetEntryDate());
+        quotationParticipant.setCustomerEntryDate(Date.valueOf(LocalDate.now()));
 
         ParticipantDTO participant = safeGetParticipant(input);
         if (Objects.nonNull(participant)) {
@@ -137,15 +136,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
                 input.getRefunds().get(0).getUnit().getPercentage() : null;
     }
-
     private String safeGetInsuredId(QuotationLifeDTO input) {
         return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getId() : null;
     }
-
-    private Date safeGetEntryDate() {
-        return (Objects.nonNull(LocalDate.now())) ? Date.valueOf(LocalDate.now()) : null;
-    }
-
     private ParticipantDTO safeGetParticipant(QuotationLifeDTO input) {
         return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
     }

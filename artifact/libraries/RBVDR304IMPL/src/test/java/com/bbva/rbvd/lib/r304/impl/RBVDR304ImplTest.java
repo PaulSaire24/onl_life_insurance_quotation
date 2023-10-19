@@ -4,10 +4,17 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
@@ -18,8 +25,7 @@ import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.*;
@@ -86,7 +92,35 @@ public class RBVDR304ImplTest {
 
     @Test
     public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_OK() {
+        this.input.getProduct().setId("840");
 
+        DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
+        documentTypeDTO.setId("DNI");
+        IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
+        identityDocumentDTO.setDocumentNumber("14457841");
+        identityDocumentDTO.setDocumentType(documentTypeDTO);
+        ParticipantDTO participantDTO = new ParticipantDTO();
+        participantDTO.setId("10225879");
+        participantDTO.setBirthDate( new Date());
+        participantDTO.setIdentityDocument(identityDocumentDTO);
+
+        participantDTO.setParticipantType(new ParticipantTypeDTO());
+        participantDTO.getParticipantType().setId("455");
+        ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+        contractDetail.setContact(new ContactDTO());
+
+        ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+        contractDetail2.setContact(new ContactDTO());
+        contractDetail2.getContact().setContactDetailType("EMAIL");
+        contractDetail2.getContact().setAddress("@gmail.com");
+        List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+        contractDetailsList.add(contractDetail);
+        contractDetailsList.add(contractDetail2);
+        participantDTO.setContactDetails(contractDetailsList);
+        this.input.setTerm(new TermDTO());
+        this.input.getTerm().setNumber(45);
+
+        this.input.setParticipants(Collections.singletonList(participantDTO));
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
