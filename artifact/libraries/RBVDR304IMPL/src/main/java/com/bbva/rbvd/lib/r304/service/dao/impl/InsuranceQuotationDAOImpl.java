@@ -196,9 +196,10 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
-        if (Objects.nonNull(customerData) && !customerData.getFirstName().equals(null)) {
-            quotationParticipant.setInsuredCustomerName(customerData.getFirstName());
-        }
+
+        quotationParticipant.setInsuredCustomerName(Objects.nonNull(customerData) && (customerData.getFirstName())!=null?
+                customerData.getFirstName() : null);
+
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(lastName);
         quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
