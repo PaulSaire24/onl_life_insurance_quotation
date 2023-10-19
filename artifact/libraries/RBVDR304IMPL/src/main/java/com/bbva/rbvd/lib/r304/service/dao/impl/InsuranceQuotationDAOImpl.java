@@ -180,6 +180,27 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData) {
+
+        quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
+                customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
+                customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
+
+        quotationParticipant.setInsuredCustomerName(Objects.nonNull(customerData) && (customerData.getFirstName())!=null?
+                customerData.getFirstName() : null);
+
+        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        quotationParticipant.setClientLastName(getLastName(customerData));
+        quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
+                customerData.getContactDetails().get(1) != null) ? customerData.getContactDetails().get(1).getContact() : null);
+        quotationParticipant.setUserEmailPersonalDesc((Objects.nonNull(customerData)&&(!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 2 &&
+                customerData.getContactDetails().get(2) != null) ? customerData.getContactDetails().get(2).getContact() : null));
+        quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
+        quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
+        quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId() : null));
+
+    }
+    private String getLastName(CustomerBO customerData){
+
         String lastName = "";
 
         if (customerData != null) {
@@ -192,24 +213,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             if (customerData.getSecondLastName() != null) {
                 lastName += customerData.getSecondLastName();
             }
-        }
-        quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
-                customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
-                customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
 
-        quotationParticipant.setInsuredCustomerName(Objects.nonNull(customerData) && (customerData.getFirstName())!=null?
-                customerData.getFirstName() : null);
-
-        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
-        quotationParticipant.setClientLastName(lastName);
-        quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
-                customerData.getContactDetails().get(1) != null) ? customerData.getContactDetails().get(1).getContact() : null);
-        quotationParticipant.setUserEmailPersonalDesc((Objects.nonNull(customerData)&&(!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 2 &&
-                customerData.getContactDetails().get(2) != null) ? customerData.getContactDetails().get(2).getContact() : null));
-        quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
-        quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
-        quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId() : null));
-
+    }
+        return lastName;
     }
     @Override
     public void insertSimulationParticipant(Map<String, Object> argumentForSaveParticipant) {
