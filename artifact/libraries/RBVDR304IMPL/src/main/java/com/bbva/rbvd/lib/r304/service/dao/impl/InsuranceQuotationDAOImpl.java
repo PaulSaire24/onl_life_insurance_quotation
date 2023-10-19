@@ -4,7 +4,9 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
@@ -29,6 +31,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.EMAIL;
 import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.MOBILE_NUMBER;
@@ -40,92 +43,170 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     public InsuranceQuotationDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
     }
+    @Override
     public CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore, CustomerListASO customerInformation) {
         CommonsLifeDAO quotationParticipant = new CommonsLifeDAO();
 
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
 
-        BigDecimal periodNumber = (Objects.nonNull(input) && Objects.nonNull(input.getTerm()) && Objects.nonNull(input.getTerm().getNumber())) ?
-                new BigDecimal(input.getTerm().getNumber()) : BigDecimal.ZERO;
+        BigDecimal periodNumber = safeBigDecimal(input, QuotationLifeDTO::getTerm, TermDTO::getNumber, BigDecimal.ZERO);
+        BigDecimal totalReturnAmount = calculateTotalReturnAmount(input);
 
-        BigDecimal totalReturnAmount = BigDecimal.ZERO;
-        if (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount()) && Objects.nonNull(input.getInsuredAmount().getAmount()) &&
-                !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) {
-            totalReturnAmount = input.getInsuredAmount().getAmount()
-                    .multiply(input.getRefunds().get(0).getUnit().getPercentage())
-                    .multiply(new BigDecimal(0.01));
-        }
+        InsurancePlanDTO plan = safeGetPlan(input);
 
-        InsurancePlanDTO plan = (Objects.nonNull(input) && Objects.nonNull(input.getProduct()) && !input.getProduct().getPlans().isEmpty()) ?
-                input.getProduct().getPlans().get(0) : null;
-
-        quotationParticipant.setPolicyQuotaInternalId((Objects.nonNull(input)) ? input.getId() : null);
-        quotationParticipant.setInsuranceProductId((Objects.nonNull(quotationDao)) ? quotationDao.getInsuranceProductId() : null);
-        quotationParticipant.setInsuranceModalityType((Objects.nonNull(plan)) ? plan.getId() : null);
-        quotationParticipant.setInsuredAmount((Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null);
-        quotationParticipant.setCurrencyId((Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null);
+        quotationParticipant.setPolicyQuotaInternalId(safeGetId(input));
+        quotationParticipant.setInsuranceProductId(safeGetInsuranceProductId(quotationDao));
+        quotationParticipant.setInsuranceModalityType(safeGetPlanId(plan));
+        quotationParticipant.setInsuredAmount(safeGetInsuredAmount(input));
+        quotationParticipant.setCurrencyId(safeGetInsuredCurrency(input));
         quotationParticipant.setPeriodType("A");
         quotationParticipant.setPeriodNumber(periodNumber);
-
-        if (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) {
-            quotationParticipant.setRefundPer(input.getRefunds().get(0).getUnit().getPercentage());
-        }
+        quotationParticipant.setRefundPer(safeGetRefundPercentage(input));
         quotationParticipant.setTotalReturnAmount(totalReturnAmount);
-        quotationParticipant.setInsuredId((Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getId() : null);
-        quotationParticipant.setCustomerEntryDate(Date.valueOf(LocalDate.now()));
+        quotationParticipant.setInsuredId(safeGetInsuredId(input));
+        quotationParticipant.setPersonalDocumentId("");
+        quotationParticipant.setCustomerEntryDate(safeGetEntryDate());
 
-        if (!CollectionUtils.isEmpty(input.getParticipants())) {
-            ParticipantDTO participant = input.getParticipants().get(0);
-
-            List<ContractDetailsDTO> tipoContratoEmail = getGroupedByTypeContactDetail(participant.getContactDetails(), EMAIL);
-            List<ContractDetailsDTO> tipoContratoMov = getGroupedByTypeContactDetail(participant.getContactDetails(), MOBILE_NUMBER);
-
-            String lastName = (Objects.nonNull(participant.getLastName()) ? participant.getLastName() : "") +
-                    "-" + (Objects.nonNull(participant.getSecondLastName()) ? participant.getSecondLastName() : "");
-
-            quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
-            quotationParticipant.setInsuredCustomerName(participant.getName());
-            quotationParticipant.setCustomerDocumentType((Objects.nonNull(participant.getIdentityDocument()) &&
-                    Objects.nonNull(participant.getIdentityDocument().getDocumentType())) ?
-                    participant.getIdentityDocument().getDocumentType().getId() : null);
-            quotationParticipant.setClientLastName(lastName);
-            quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) &&
-                    Objects.nonNull(tipoContratoEmail.get(0).getContact())) ?
-                    tipoContratoEmail.get(0).getContact().getAddress() : null);
-            quotationParticipant.setPhoneDesc((!CollectionUtils.isEmpty(tipoContratoMov) &&
-                    Objects.nonNull(tipoContratoMov.get(0).getContact())) ?
-                    tipoContratoMov.get(0).getContact().getNumber() : null);
-            quotationParticipant.setCustomerBirthDate(participant.getBirthDate());
-            quotationParticipant.setCreationUser(participant.getCreationUser());
-            quotationParticipant.setUserAudit(participant.getUserAudit());
-            quotationParticipant.setGenderId((Objects.nonNull(participant.getGender())) ? participant.getGender().getId() : null);
-        } else if (Objects.nonNull(customerInformation) && !CollectionUtils.isEmpty(customerInformation.getData())) {
-            CustomerBO customerData = customerInformation.getData().get(0);
-            String lastName = (Objects.nonNull(customerData.getLastName()) ? customerData.getLastName() : "") +
-                    "-" + (Objects.nonNull(customerData.getSecondLastName()) ? customerData.getSecondLastName() : "");
-
-            quotationParticipant.setCustomerDocumentType((!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
-                    Objects.nonNull(customerData.getIdentityDocuments().get(0)) &&
-                    Objects.nonNull(customerData.getIdentityDocuments().get(0).getDocumentType())) ?
-                    customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
-            quotationParticipant.setInsuredCustomerName(customerData.getFirstName());
-            quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
-            quotationParticipant.setClientLastName(lastName);
-            quotationParticipant.setPhoneDesc((!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
-                    Objects.nonNull(customerData.getContactDetails().get(1))) ?
-                    customerData.getContactDetails().get(1).getContact() : null);
-            quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 2 &&
-                    Objects.nonNull(customerData.getContactDetails().get(2))) ?
-                    customerData.getContactDetails().get(2).getContact() : null);
-            quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
-            quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
-            quotationParticipant.setGenderId((Objects.nonNull(customerData.getGender())) ? customerData.getGender().getId() : null);
+        ParticipantDTO participant = safeGetParticipant(input);
+        if (Objects.nonNull(participant)) {
+            setParticipantProperties(quotationParticipant, participant);
+        } else {
+            CustomerBO customerData = safeGetCustomerData(customerInformation, input);
+            setCustomerDataProperties(quotationParticipant, input, customerData);
         }
 
         quotationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.IS_INSURED));
 
         return quotationParticipant;
+    }
+
+    private BigDecimal safeBigDecimal(QuotationLifeDTO input, Function<QuotationLifeDTO, TermDTO> getTerm,
+                                      Function<TermDTO, Integer> getNumber, BigDecimal defaultValue) {
+        if (Objects.isNull(input)) {
+            return defaultValue;
+        }
+
+        TermDTO term = getTerm.apply(input);
+        if (Objects.isNull(term)) {
+            return defaultValue;
+        }
+
+        Integer number = getNumber.apply(term);
+        if (Objects.isNull(number)) {
+            return defaultValue;
+        }
+
+        return new BigDecimal(number);
+    }
+
+    private BigDecimal calculateTotalReturnAmount(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount()) && Objects.nonNull(input.getInsuredAmount().getAmount()) &&
+                !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
+                input.getInsuredAmount().getAmount()
+                        .multiply(input.getRefunds().get(0).getUnit().getPercentage())
+                        .multiply(new BigDecimal(0.01)) : BigDecimal.ZERO;
+    }
+
+    private InsurancePlanDTO safeGetPlan(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && Objects.nonNull(input.getProduct()) && !CollectionUtils.isEmpty(input.getProduct().getPlans())) ?
+                input.getProduct().getPlans().get(0) : null;
+    }
+
+    private String safeGetId(QuotationLifeDTO input) {
+        return (Objects.nonNull(input)) ? input.getId() : null;
+    }
+
+    private BigDecimal safeGetInsuranceProductId(EasyesQuotationDAO quotationDao) {
+        return (Objects.nonNull(quotationDao)) ? quotationDao.getInsuranceProductId() : null;
+    }
+
+    private String safeGetPlanId(InsurancePlanDTO plan) {
+        return (Objects.nonNull(plan)) ? plan.getId() : null;
+    }
+
+    private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
+    }
+
+    private String safeGetInsuredCurrency(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null;
+    }
+
+    private BigDecimal safeGetRefundPercentage(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
+                input.getRefunds().get(0).getUnit().getPercentage() : null;
+    }
+
+    private String safeGetInsuredId(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getId() : null;
+    }
+
+    private Date safeGetEntryDate() {
+        return (Objects.nonNull(LocalDate.now())) ? Date.valueOf(LocalDate.now()) : null;
+    }
+
+    private ParticipantDTO safeGetParticipant(QuotationLifeDTO input) {
+        return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
+    }
+
+    private CustomerBO safeGetCustomerData(CustomerListASO customerInformation, QuotationLifeDTO input) {
+        if (Objects.nonNull(customerInformation) && !CollectionUtils.isEmpty(customerInformation.getData())) {
+            return customerInformation.getData().get(0);
+        }
+        return null;
+    }
+
+    private void setParticipantProperties(CommonsLifeDAO quotationParticipant, ParticipantDTO participant) {
+        List<ContractDetailsDTO> tipoContratoEmail = getGroupedByTypeContactDetail(participant.getContactDetails(), EMAIL);
+        List<ContractDetailsDTO> tipoContratoMov = getGroupedByTypeContactDetail(participant.getContactDetails(), MOBILE_NUMBER);
+        String lastName = (participant.getLastName() != null ? participant.getLastName() : "") +
+                "-" + (participant.getSecondLastName() != null ? participant.getSecondLastName() : "");
+
+        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        quotationParticipant.setInsuredCustomerName(participant.getName());
+        quotationParticipant.setCustomerDocumentType((participant.getIdentityDocument() != null && participant.getIdentityDocument().getDocumentType() != null) ?
+                participant.getIdentityDocument().getDocumentType().getId() : null);
+        quotationParticipant.setClientLastName(lastName);
+        quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ?
+                tipoContratoEmail.get(0).getContact().getAddress() : null);
+        quotationParticipant.setPhoneDesc((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
+                tipoContratoMov.get(0).getContact().getNumber() : null);
+        quotationParticipant.setCustomerBirthDate(participant.getBirthDate());
+        quotationParticipant.setCreationUser(participant.getCreationUser());
+        quotationParticipant.setUserAudit(participant.getUserAudit());
+        quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId() : null);
+
+    }
+
+    private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData) {
+        String lastName = "";
+
+        if (customerData != null) {
+            if (customerData.getLastName() != null) {
+                lastName += customerData.getLastName();
+            }
+
+            lastName += "-";
+
+            if (customerData.getSecondLastName() != null) {
+                lastName += customerData.getSecondLastName();
+            }
+        }
+        quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
+                customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
+                customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
+
+        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        quotationParticipant.setClientLastName(lastName);
+        quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
+                customerData.getContactDetails().get(1) != null) ? customerData.getContactDetails().get(1).getContact() : null);
+        quotationParticipant.setUserEmailPersonalDesc((Objects.nonNull(customerData)&&(!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 2 &&
+                customerData.getContactDetails().get(2) != null) ? customerData.getContactDetails().get(2).getContact() : null));
+        quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
+        quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
+        quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId() : null));
+
     }
     @Override
     public void insertSimulationParticipant(Map<String, Object> argumentForSaveParticipant) {
