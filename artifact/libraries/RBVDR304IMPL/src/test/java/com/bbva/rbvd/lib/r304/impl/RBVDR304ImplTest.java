@@ -6,12 +6,10 @@ import com.bbva.elara.domain.transaction.ThreadContext;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO;
@@ -22,6 +20,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
+import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -40,6 +39,7 @@ public class RBVDR304ImplTest {
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
     private PISDR350 pisdR350;
     private QuotationLifeDTO input;
+    private PayloadStore payloadStore;
     private Map<String,Object> mapInformation;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
@@ -49,7 +49,15 @@ public class RBVDR304ImplTest {
         ThreadContext.set(new Context());
 
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
+        List<RefundsDTO> refunds = new ArrayList<>();
+        RefundsDTO refund = new RefundsDTO();
+        UnitDTO unit =new UnitDTO();
+        unit.setUnitType("PERCENTAGE");
 
+        unit.setPercentage(BigDecimal.ZERO);
+        refund.setUnit(unit);
+        refunds.add(refund);
+        input.setRefunds(refunds);
         EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
 
 
@@ -96,7 +104,6 @@ public class RBVDR304ImplTest {
     @Test
     public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_OK() {
         this.input.getProduct().setId("840");
-
         DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
         documentTypeDTO.setId("DNI");
         IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
@@ -144,6 +151,16 @@ public class RBVDR304ImplTest {
     }
     @Test
     public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_NullParticipant() {
+        input.setInsuredAmount(null);
+        PayloadProperties properties = new PayloadProperties();
+        properties.setFrequencyTypeId("M");
+        properties.setSelectedPlanId("02");
+        properties.setProductType("840");
+        properties.setPeriodId("MONTHLY");
+        PayloadConfig payloadConfig = new PayloadConfig();
+        payloadConfig.setInput(input);
+        payloadConfig.setPayloadProperties(properties);
+        payloadConfig.setPolicyQuotaId("8523654");
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);

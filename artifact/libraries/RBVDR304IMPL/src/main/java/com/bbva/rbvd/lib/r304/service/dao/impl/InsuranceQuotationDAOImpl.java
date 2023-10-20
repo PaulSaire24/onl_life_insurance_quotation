@@ -55,16 +55,16 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         BigDecimal periodNumber = safeBigDecimal(input, QuotationLifeDTO::getTerm, TermDTO::getNumber, BigDecimal.ZERO);
         BigDecimal totalReturnAmount = calculateTotalReturnAmount(input);
 
-        InsurancePlanDTO plan = safeGetPlan(input);
+        InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
 
-        quotationParticipant.setPolicyQuotaInternalId(safeGetId(input));
-        quotationParticipant.setInsuranceProductId(safeGetInsuranceProductId(quotationDao));
-        quotationParticipant.setInsuranceModalityType(safeGetPlanId(plan));
+        quotationParticipant.setPolicyQuotaInternalId(input.getId());
+        quotationParticipant.setInsuranceProductId(quotationDao.getInsuranceProductId());
+        quotationParticipant.setInsuranceModalityType(plan.getId());
         quotationParticipant.setInsuredAmount(safeGetInsuredAmount(input));
         quotationParticipant.setCurrencyId(safeGetInsuredCurrency(input));
         quotationParticipant.setPeriodType("A");
         quotationParticipant.setPeriodNumber(periodNumber);
-        quotationParticipant.setRefundPer(safeGetRefundPercentage(input));
+        quotationParticipant.setRefundPer(input.getRefunds().get(0).getUnit().getPercentage());
         quotationParticipant.setTotalReturnAmount(totalReturnAmount);
         quotationParticipant.setInsuredId(safeGetInsuredId(input));
         quotationParticipant.setCustomerEntryDate(LocalDate.now());
@@ -110,40 +110,22 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                         .multiply(BigDecimal.valueOf(0.01)) : BigDecimal.ZERO;
     }
 
-    private InsurancePlanDTO safeGetPlan(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && Objects.nonNull(input.getProduct()) && !CollectionUtils.isEmpty(input.getProduct().getPlans())) ?
-                input.getProduct().getPlans().get(0) : null;
-    }
 
-    private String safeGetId(QuotationLifeDTO input) {
-        return (Objects.nonNull(input)) ? input.getId() : null;
-    }
-
-    private BigDecimal safeGetInsuranceProductId(EasyesQuotationDAO quotationDao) {
-        return (Objects.nonNull(quotationDao)) ? quotationDao.getInsuranceProductId() : null;
-    }
-
-    private String safeGetPlanId(InsurancePlanDTO plan) {
-        return (Objects.nonNull(plan)) ? plan.getId() : null;
-    }
 
     private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
+        return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
     }
 
     private String safeGetInsuredCurrency(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null;
+        return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null;
     }
 
-    private BigDecimal safeGetRefundPercentage(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
-                input.getRefunds().get(0).getUnit().getPercentage() : null;
-    }
+
     private String safeGetInsuredId(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getId() : null;
+        return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getId() : null;
     }
     private ParticipantDTO safeGetParticipant(QuotationLifeDTO input) {
-        return (Objects.nonNull(input) && !CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
+        return (!CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
     }
 
     private CustomerBO safeGetCustomerData(CustomerListASO customerInformation, QuotationLifeDTO input) {
