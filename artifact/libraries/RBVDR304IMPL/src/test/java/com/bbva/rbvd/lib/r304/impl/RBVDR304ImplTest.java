@@ -150,6 +150,80 @@ public class RBVDR304ImplTest {
         assertNotNull(validation);
     }
     @Test
+    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_Holder() {
+        this.input.getProduct().setId("840");
+        DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
+        documentTypeDTO.setId("DNI");
+        IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
+        identityDocumentDTO.setDocumentNumber("14457841");
+        identityDocumentDTO.setDocumentType(documentTypeDTO);
+        HolderDTO holderDTO = new HolderDTO();
+        holderDTO.setFirstName("Alec");
+        holderDTO.setLastName("Alec taboada");
+        ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+        contractDetail.setContact(new ContactDTO());
+        contractDetail.getContact().setContactDetailType("MOBILE_NUMBER");
+        contractDetail.getContact().setNumber("999999999");
+        ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+        contractDetail2.setContact(new ContactDTO());
+        contractDetail2.getContact().setContactDetailType("EMAIL");
+        contractDetail2.getContact().setAddress("@gmail.com");
+        List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+        contractDetailsList.add(contractDetail);
+        contractDetailsList.add(contractDetail2);
+
+        this.input.setHolder(holderDTO);
+        this.input.setTerm(new TermDTO());
+        this.input.getTerm().setNumber(45);
+        CustomerListASO customerListASO= new CustomerListASO();
+        CustomerBO customerBO =new CustomerBO();
+        customerBO.setFirstName("Alec");
+        customerBO.setSecondLastName("Taboada");
+        customerBO.setLastName("Taboada");
+        List<CustomerBO> customerBOS = new ArrayList<>();
+        customerBOS.add(customerBO);
+        customerListASO.setData(customerBOS);
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        when(rbvdr304.rbvdR303.executeGetCustomerHost(anyString())).thenReturn(customerListASO);
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        assertNotNull(validation);
+    }
+    @Test
+    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_LastNameNull() {
+        this.input.getProduct().setId("840");
+        DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
+        documentTypeDTO.setId("DNI");
+        IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
+        identityDocumentDTO.setDocumentNumber("14457841");
+        identityDocumentDTO.setDocumentType(documentTypeDTO);
+        HolderDTO holderDTO = new HolderDTO();
+        holderDTO.setFirstName("Alec");
+        holderDTO.setLastName("Alec taboada");
+        ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+        contractDetail.setContact(new ContactDTO());
+        contractDetail.getContact().setContactDetailType("MOBILE_NUMBER");
+        contractDetail.getContact().setNumber("999999999");
+        ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+        contractDetail2.setContact(new ContactDTO());
+        contractDetail2.getContact().setContactDetailType("EMAIL");
+        contractDetail2.getContact().setAddress("@gmail.com");
+        List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+        contractDetailsList.add(contractDetail);
+        contractDetailsList.add(contractDetail2);
+
+        this.input.setHolder(holderDTO);
+        this.input.setTerm(new TermDTO());
+        this.input.getTerm().setNumber(45);
+
+
+
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        assertNotNull(validation);
+    }
+    @Test
     public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_NullParticipant() {
         input.setInsuredAmount(null);
         PayloadProperties properties = new PayloadProperties();
