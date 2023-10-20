@@ -27,7 +27,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,9 +46,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         this.pisdR350 = pisdR350;
     }
     @Override
-    public CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore, CustomerListASO customerInformation) {
+    public CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore) {
         CommonsLifeDAO quotationParticipant = new CommonsLifeDAO();
-
+        CustomerListASO customerInformation=payloadStore.getCustomerInformation();
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
 
@@ -65,7 +67,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setRefundPer(safeGetRefundPercentage(input));
         quotationParticipant.setTotalReturnAmount(totalReturnAmount);
         quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setCustomerEntryDate(Date.valueOf(LocalDate.now()));
+        quotationParticipant.setCustomerEntryDate(LocalDate.now());
 
         ParticipantDTO participant = safeGetParticipant(input);
         if (Objects.nonNull(participant)) {
@@ -100,6 +102,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private BigDecimal calculateTotalReturnAmount(QuotationLifeDTO input) {
+
         return (Objects.nonNull(input) && Objects.nonNull(input.getInsuredAmount()) && Objects.nonNull(input.getInsuredAmount().getAmount()) &&
                 !CollectionUtils.isEmpty(input.getRefunds()) && Objects.nonNull(input.getRefunds().get(0).getUnit())) ?
                 input.getInsuredAmount().getAmount()
@@ -156,6 +159,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         String lastName = (participant.getLastName() != null ? participant.getLastName() : "") +
                 "-" + (participant.getSecondLastName() != null ? participant.getSecondLastName() : "");
 
+        Instant instant = participant.getBirthDate().toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setInsuredCustomerName(participant.getName());
         quotationParticipant.setCustomerDocumentType((participant.getIdentityDocument() != null && participant.getIdentityDocument().getDocumentType() != null) ?
@@ -163,9 +169,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setClientLastName(lastName);
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ?
                 tipoContratoEmail.get(0).getContact().getAddress() : null);
-        quotationParticipant.setPhoneDesc((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
+        quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
                 tipoContratoMov.get(0).getContact().getNumber() : null);
-        quotationParticipant.setCustomerBirthDate(participant.getBirthDate());
+        quotationParticipant.setCustomerBirthDate(localDate);
         quotationParticipant.setCreationUser(participant.getCreationUser());
         quotationParticipant.setUserAudit(participant.getUserAudit());
         quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId() : null);
@@ -217,6 +223,14 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }
     }
+    @Override
+    public void updateSimulationParticipant(Map<String, Object> argumentForSaveParticipant) {
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_INSURANCE_QUOTATION.getValue(),argumentForSaveParticipant);
+        if(idNewSimulation != 1){
+            throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
+        }
+    }
+
 
     @Override
     public void executeInsertQuotationQuery(PayloadStore payloadStore) {

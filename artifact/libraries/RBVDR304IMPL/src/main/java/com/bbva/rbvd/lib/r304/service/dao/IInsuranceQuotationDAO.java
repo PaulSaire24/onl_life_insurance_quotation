@@ -7,7 +7,8 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import java.util.Map;
 
 public interface IInsuranceQuotationDAO {
+    void updateSimulationParticipant(Map<String, Object> argumentForSaveParticipant);
     void insertSimulationParticipant(Map<String, Object> argumentForSaveParticipant);
-    CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore, CustomerListASO customerInformation);
+    CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore);
     void executeInsertQuotationQuery(PayloadStore payloadStore);
 }

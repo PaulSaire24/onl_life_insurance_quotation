@@ -17,7 +17,7 @@ import java.util.Objects;
 public class QuotationParticipantMap {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationParticipantMap.class);
     private QuotationParticipantMap() {super();}
-    public static Map<String, Object> createArgumentsForSaveParticipant(CommonsLifeDAO quotationParticipant, CustomerListASO customer){
+    public static Map<String, Object> createArgumentsForSaveParticipant(CommonsLifeDAO quotationParticipant){
 
 
         LOGGER.info("QuotationParticipantMap start - createArgumentsForSaveParticipant");
@@ -35,6 +35,7 @@ public class QuotationParticipantMap {
         arguments.put(RBVDProperties.FIELD_CUSTOMER_DOCUMENT_TYPE.getValue(),quotationParticipant.getCustomerDocumentType());
         arguments.put(RBVDProperties.FIELD_PERSONAL_DOCUMENT_ID.getValue(),quotationParticipant.getPersonalDocumentId());
         arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),quotationParticipant.getIsBbvaCustomerType());
+        arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),quotationParticipant.getIsBbvaCustomerType());
         arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),quotationParticipant.getCustomerDocumentType());
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),quotationParticipant.getParticipantRoleId());
         arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(),quotationParticipant.getInsuredCustomerName());

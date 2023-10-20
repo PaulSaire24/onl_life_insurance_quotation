@@ -28,14 +28,14 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 		if (input.getProduct().getId().equals("840")) {
 			quotation = new QuotationEasyYes(
-					new QuotationParameter(this.pisdR350, this.applicationConfigurationService)
+					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303)
 					, new QuotationStore(this.pisdR350,this.rbvdR303)
 			);
 			response = quotation.start(input, this.rbvdR303);
 
 		} else if (input.getProduct().getId().equals("841")) {
 			quotation = new QuotationVidaDinamico(
-					new QuotationParameter(this.pisdR350, this.applicationConfigurationService),
+					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303),
 					new QuotationStore(this.pisdR350,this.rbvdR303)
 			);
 			response = quotation.start(input, this.rbvdR303);

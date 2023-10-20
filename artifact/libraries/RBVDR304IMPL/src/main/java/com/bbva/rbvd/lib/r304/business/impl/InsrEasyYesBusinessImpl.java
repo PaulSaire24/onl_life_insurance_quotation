@@ -33,6 +33,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         QuotationLifeBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
         PayloadStore payloadStoreEasyes = new PayloadStore();
+        payloadStoreEasyes.setCustomerInformation(payloadConfig.getCustomerInformation());
         payloadStoreEasyes.setRimacResponse(responseRimac);
         payloadStoreEasyes.setMyQuotation(payloadConfig.getMyQuotation());
         payloadStoreEasyes.setInput(payloadConfig.getInput());

@@ -31,10 +31,9 @@ public class QuotationStore implements PostQuotation {
     @Override
     public void end(PayloadStore payloadStore) {
         BigDecimal resultCount = this.getQuotationIdFromDB(payloadStore);
-        CustomerListASO customerInformation = this.rbvdr303.executeGetCustomerHost(payloadStore.getInput().getHolder().getId());
+
 
         this.save(payloadStore, resultCount);
-        this.saveParticipant(payloadStore,resultCount,customerInformation);
     }
 
 
@@ -58,28 +57,27 @@ public class QuotationStore implements PostQuotation {
         InsuranceQuotationModDAOImpl insuranceQuotationMod = new InsuranceQuotationModDAOImpl(pisdR350);
 
         LOGGER.info("***** QuotationStore - SaveQuotation - insuranceQuotationMod {} *****",insuranceQuotationMod);
+        LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
+
+        InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
+        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore);
+        LOGGER.info("***** SimulationStore - saveParticipantInformation - QuotationParticipantDAO {} *****",quotationParticipant);
+        Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant);
+        LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
+        IInsuranceQuotationDAO insuranceSimulationDao= new InsuranceQuotationDAOImpl(pisdR350);
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",payloadStore.getMyQuotation());
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 2 {} *****",payloadStore.getInput());
             insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
-        } else {
-            InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
+            insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
+         } else {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation {} *****",payloadStore);
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****",payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
+            insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
         }
     }
-    public void saveParticipant(PayloadStore payloadStore,BigDecimal resultCount,CustomerListASO customerInformation){
-        LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
 
-        InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
-        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore,customerInformation);
-        LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",quotationParticipant);
-        Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant,customerInformation);
-        LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
-        IInsuranceQuotationDAO insuranceSimulationDao= new InsuranceQuotationDAOImpl(pisdR350);
-        insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
-    }
 }
