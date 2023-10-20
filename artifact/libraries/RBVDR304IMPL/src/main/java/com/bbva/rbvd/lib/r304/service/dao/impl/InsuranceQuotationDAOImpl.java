@@ -31,9 +31,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.EMAIL;
@@ -163,9 +161,16 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData) {
-        List<ContactDetailsBO> tipoContratoEmail = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), EMAIL);
-        List<ContactDetailsBO> tipoContratoMov = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), MOBILE_NUMBER);
-
+        List<ContactDetailsBO> tipoContratoEmail = new ArrayList<>();
+        List<ContactDetailsBO> tipoContratoMov = new ArrayList<>();
+        if(Objects.nonNull(customerData)&&customerData.getContactDetails()!=null) {
+             tipoContratoEmail = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), EMAIL);
+             tipoContratoMov = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), MOBILE_NUMBER);
+        }
+        else{
+            tipoContratoEmail = null;
+             tipoContratoMov =null;
+        }
         quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null);
@@ -175,7 +180,13 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
 
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(getLastName(customerData));
-        quotationParticipant.setPersonalId(customerData.getIdentityDocuments().get(0).getDocumentNumber());
+        quotationParticipant.setPersonalId(
+                Optional.ofNullable(customerData)
+                        .map(CustomerBO::getIdentityDocuments)
+                        .filter(documents -> !documents.isEmpty())
+                        .map(documents -> documents.get(0).getDocumentNumber())
+                        .orElse(null)
+        );
         quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
         quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
