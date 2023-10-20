@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.service.dao.impl;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
@@ -146,6 +147,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
 
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setInsuredCustomerName(participant.getName());
+        quotationParticipant.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
         quotationParticipant.setCustomerDocumentType((participant.getIdentityDocument() != null && participant.getIdentityDocument().getDocumentType() != null) ?
                 participant.getIdentityDocument().getDocumentType().getId() : null);
         quotationParticipant.setClientLastName(lastName);
@@ -161,6 +163,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData) {
+        List<ContactDetailsBO> tipoContratoEmail = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), EMAIL);
+        List<ContactDetailsBO> tipoContratoMov = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), MOBILE_NUMBER);
 
         quotationParticipant.setCustomerDocumentType((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
@@ -171,10 +175,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
 
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(getLastName(customerData));
-        quotationParticipant.setPhoneDesc((Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 1 &&
-                customerData.getContactDetails().get(1) != null) ? customerData.getContactDetails().get(1).getContact() : null);
-        quotationParticipant.setUserEmailPersonalDesc((Objects.nonNull(customerData)&&(!CollectionUtils.isEmpty(customerData.getContactDetails()) && customerData.getContactDetails().size() > 2 &&
-                customerData.getContactDetails().get(2) != null) ? customerData.getContactDetails().get(2).getContact() : null));
+        quotationParticipant.setPersonalId(customerData.getIdentityDocuments().get(0).getDocumentNumber());
+        quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
+        quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
         quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
         quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
         quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId() : null));

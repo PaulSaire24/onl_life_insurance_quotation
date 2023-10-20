@@ -56,5 +56,15 @@ public final class ValidationUtil {
                 .collect(Collectors.toList());
         return filteredContacts;
     }
+    public static List<ContactDetailsBO> getGroupedByTypeContactDetailBO(List<ContactDetailsBO> customer, String tipoContacto) {
+        List<ContactDetailsBO> filteredContacts = customer.stream()
+                .filter(contactInfo ->
+                        contactInfo != null &&
+                                contactInfo.getContact() != null &&
+                                tipoContacto.equals(contactInfo.getContactType().getId())
+                )
+                .collect(Collectors.toList());
+        return filteredContacts;
+    }
 
 }

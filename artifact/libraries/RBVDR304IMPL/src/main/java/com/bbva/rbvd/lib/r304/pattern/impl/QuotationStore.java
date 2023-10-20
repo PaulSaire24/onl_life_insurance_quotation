@@ -70,13 +70,14 @@ public class QuotationStore implements PostQuotation {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",payloadStore.getMyQuotation());
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 2 {} *****",payloadStore.getInput());
             insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
-            insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
+            insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
+            ;
          } else {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation {} *****",payloadStore);
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****",payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
-            insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
+            insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
         }
     }
 
