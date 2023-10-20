@@ -144,7 +144,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setInsuredCustomerName(participant.getName());
         quotationParticipant.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
         quotationParticipant.setCustomerDocumentType((participant.getIdentityDocument() != null && participant.getIdentityDocument().getDocumentType() != null) ?
-                participant.getIdentityDocument().getDocumentType().getId().substring(3) : null);
+                participant.getIdentityDocument().getDocumentType().getId().substring(0, 3) : null);
         quotationParticipant.setClientLastName(lastName);
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ?
                 tipoContratoEmail.get(0).getContact().getAddress() : null);
