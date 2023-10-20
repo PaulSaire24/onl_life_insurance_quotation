@@ -61,9 +61,9 @@ public class QuotationStore implements PostQuotation {
 
         InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
         CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore);
-        LOGGER.info("***** SimulationStore - saveParticipantInformation - QuotationParticipantDAO {} *****",quotationParticipant);
+        LOGGER.info("***** QuotationStore - saveParticipantInformation - QuotationParticipantDAO {} *****",quotationParticipant);
         Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant);
-        LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
+        LOGGER.info("***** QuotationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
         IInsuranceQuotationDAO insuranceSimulationDao= new InsuranceQuotationDAOImpl(pisdR350);
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
@@ -73,10 +73,11 @@ public class QuotationStore implements PostQuotation {
             insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
             ;
          } else {
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation {} *****",payloadStore);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation {} *****", payloadStore);
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****",payloadStore);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****", payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentForSaveParticipant {} *****",payloadStore);
             insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
         }
     }
