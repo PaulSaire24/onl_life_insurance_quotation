@@ -83,9 +83,6 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
 
     private BigDecimal safeBigDecimal(QuotationLifeDTO input, Function<QuotationLifeDTO, TermDTO> getTerm,
                                       Function<TermDTO, Integer> getNumber, BigDecimal defaultValue) {
-        if (Objects.isNull(input)) {
-            return defaultValue;
-        }
 
         TermDTO term = getTerm.apply(input);
         if (Objects.isNull(term)) {
