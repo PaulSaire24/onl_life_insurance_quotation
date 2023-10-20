@@ -33,8 +33,8 @@ public class QuotationParticipantMap {
         arguments.put(RBVDProperties.FIELD_TOTAL_RETURN_AMOUNT.getValue(),quotationParticipant.getTotalReturnAmount());
         arguments.put(RBVDProperties.FIELD_INSURED_ID.getValue(),quotationParticipant.getInsuranceModalityType());
         arguments.put(RBVDProperties.FIELD_CUSTOMER_DOCUMENT_TYPE.getValue(),quotationParticipant.getCustomerDocumentType());
-        arguments.put(RBVDProperties.FIELD_PERSONAL_DOCUMENT_ID.getValue(),quotationParticipant.getPersonalDocumentId());
         arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),quotationParticipant.getIsBbvaCustomerType());
+        arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(),quotationParticipant.getPersonalId());
         arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),quotationParticipant.getIsBbvaCustomerType());
         arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),quotationParticipant.getCustomerDocumentType());
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),quotationParticipant.getParticipantRoleId());
