@@ -34,6 +34,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
         PayloadStore payloadStoreEasyes = new PayloadStore();
         payloadStoreEasyes.setCustomerInformation(payloadConfig.getCustomerInformation());
+        LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | argument Customer: {} *****",payloadStoreEasyes.getCustomerInformation());
         payloadStoreEasyes.setRimacResponse(responseRimac);
         payloadStoreEasyes.setMyQuotation(payloadConfig.getMyQuotation());
         payloadStoreEasyes.setInput(payloadConfig.getInput());

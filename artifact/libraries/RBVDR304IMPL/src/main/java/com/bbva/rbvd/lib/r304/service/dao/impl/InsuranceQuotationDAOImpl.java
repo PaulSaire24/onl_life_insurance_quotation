@@ -19,11 +19,14 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationBean;
 import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationMap;
 import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -41,6 +44,7 @@ import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.*;
 import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.*;
 
 public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationDAOImpl.class);
     private final PISDR350 pisdR350;
 
     public InsuranceQuotationDAOImpl(PISDR350 pisdR350) {
@@ -50,6 +54,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     public CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore, ApplicationConfigurationService applicationConfigurationService) {
         CommonsLifeDAO quotationParticipant = new CommonsLifeDAO();
         CustomerListASO customerInformation=payloadStore.getCustomerInformation();
+        LOGGER.info("***** InsuranceQuotationDAOImpl | argument customerInformation: {} *****",customerInformation);
+
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
 

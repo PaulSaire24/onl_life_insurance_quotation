@@ -60,7 +60,7 @@ public class QuotationParameter implements PreQuotation {
         String policyQuotaid = this.getGeneratePolicyQuotaid(myQuotation);
 
         input.setId(policyQuotaid);
-        payloadConfig.setCustomerInformation(getCustomer(input.getHolder().getId()));
+        payloadConfig.setCustomerInformation(customerResponse);
         payloadConfig.setMyQuotation(myQuotation);
         payloadConfig.setPolicyQuotaId(policyQuotaid);
         payloadConfig.setInput(input);
