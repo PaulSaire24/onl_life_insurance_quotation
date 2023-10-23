@@ -7,7 +7,9 @@ public class ConstantUtils {
     public static final int CLIENT_BANK_LENGHT =8;
     public static final String REGEX_CONTAIN_ONLY_LETTERS=".*[a-zA-Z].*";
     public static final String REGEX_CONTAIN_ONLY_NUMBERS=".*[0-9].*";
-    public static final String MOBILE_NUMBER="MOBILE_NUMBER";
+    public static final String MOBILE_NUMBER="MOBILE";
     public static final String EMAIL="EMAIL";
+    public static final String PERCENTAGE="PERCENTAGE";
+    public static final String AMOUNT="AMOUNT";
 
 }

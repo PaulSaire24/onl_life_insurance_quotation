@@ -21,24 +21,26 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  START *****");
 		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  ***** {}", input);
+		LOGGER.info("***** RBVDR304Impl - userAudit  ***** {}", input.getUserAudit());
 
-
+		LOGGER.info("***** RBVDR304Impl - user  ***** {}", input.getCreationUser());
 		QuotationLifeDTO response = new QuotationLifeDTO();
 		Quotation quotation = null;
 
 		if (input.getProduct().getId().equals("840")) {
 			quotation = new QuotationEasyYes(
 					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303)
-					, new QuotationStore(this.pisdR350,this.rbvdR303)
+					, new QuotationStore(this.pisdR350,this.rbvdR303,this.applicationConfigurationService)
 			);
-			response = quotation.start(input, this.rbvdR303);
+			response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
+
 
 		} else if (input.getProduct().getId().equals("841")) {
 			quotation = new QuotationVidaDinamico(
 					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303),
-					new QuotationStore(this.pisdR350,this.rbvdR303)
+					new QuotationStore(this.pisdR350,this.rbvdR303,this.applicationConfigurationService)
 			);
-			response = quotation.start(input, this.rbvdR303);
+			response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
 		}
 
 		return response;

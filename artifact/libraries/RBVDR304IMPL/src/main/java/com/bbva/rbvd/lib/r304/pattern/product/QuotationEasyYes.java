@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.pattern.product;
 
 
+import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.business.IInsrEasyYesBusiness;
@@ -22,7 +23,7 @@ public class QuotationEasyYes extends QuotationDecorator {
     }
 
     @Override
-    public QuotationLifeDTO start(QuotationLifeDTO input, RBVDR303 rbvdr303) {
+    public QuotationLifeDTO start(QuotationLifeDTO input, RBVDR303 rbvdr303, ApplicationConfigurationService applicationConfigurationService) {
         LOGGER.info("***** QuotationEasyYes - start - START *****");
         LOGGER.info("***** QuotationEasyYes - start - input : {} *****",input);
 
@@ -31,7 +32,7 @@ public class QuotationEasyYes extends QuotationDecorator {
 
         PayloadStore payloadStore = seguroEasyYes.doEasyYes(payloadConfig);
 
-        this.getPostQuotation().end(payloadStore);
+        this.getPostQuotation().end(payloadStore,applicationConfigurationService);
 
         QuotationLifeDTO response = seguroEasyYes.mappingOutputFieldsEasyes(payloadStore);
         LOGGER.info("***** QuotationEasyYes - response : {} *****",response);

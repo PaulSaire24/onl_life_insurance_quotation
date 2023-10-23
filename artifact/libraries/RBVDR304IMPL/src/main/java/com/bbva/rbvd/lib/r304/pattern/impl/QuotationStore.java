@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
 
+import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
@@ -23,17 +24,18 @@ public class QuotationStore implements PostQuotation {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationStore.class);
     private final PISDR350 pisdR350;
      private final RBVDR303 rbvdr303;
-    public QuotationStore(PISDR350 pisdR350, RBVDR303 rbvdR303) {
+    private final ApplicationConfigurationService applicationConfigurationService;
+    public QuotationStore(PISDR350 pisdR350, RBVDR303 rbvdR303,ApplicationConfigurationService applicationConfigurationService) {
         this.pisdR350 = pisdR350;
         this.rbvdr303= rbvdR303;
+        this.applicationConfigurationService= applicationConfigurationService;
     }
 
     @Override
-    public void end(PayloadStore payloadStore) {
+    public void end(PayloadStore payloadStore,ApplicationConfigurationService applicationConfigurationService) {
         BigDecimal resultCount = this.getQuotationIdFromDB(payloadStore);
 
-
-        this.save(payloadStore, resultCount);
+        this.save(payloadStore, resultCount,applicationConfigurationService);
     }
 
 
@@ -50,7 +52,7 @@ public class QuotationStore implements PostQuotation {
         return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
     }
 
-    private void save(PayloadStore payloadStore, BigDecimal resultCount){
+    private void save(PayloadStore payloadStore, BigDecimal resultCount,ApplicationConfigurationService applicationConfigurationService){
 
         LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
 
@@ -60,7 +62,7 @@ public class QuotationStore implements PostQuotation {
         LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
 
         InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
-        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore);
+        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore,applicationConfigurationService);
         LOGGER.info("***** QuotationStore - saveParticipantInformation - QuotationParticipantDAO {} *****",quotationParticipant);
         Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant);
         LOGGER.info("***** QuotationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
