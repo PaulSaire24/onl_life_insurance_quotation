@@ -151,8 +151,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
                 tipoContratoMov.get(0).getContact().getNumber() : null);
         quotationParticipant.setCustomerBirthDate(localDate);
-        quotationParticipant.setCreationUser(participant.getCreationUser());
-        quotationParticipant.setUserAudit(participant.getUserAudit());
+        quotationParticipant.setCreationUser(participant.getId());
+        quotationParticipant.setUserAudit(participant.getId());
         quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId() : null);
 
     }
@@ -186,8 +186,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         );
         quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
-        quotationParticipant.setCreationUser(input.getHolder().getCreationUser());
-        quotationParticipant.setUserAudit(input.getHolder().getUserAudit());
+        quotationParticipant.setCreationUser(input.getHolder().getId());
+        quotationParticipant.setUserAudit(input.getHolder().getId());
         quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId() : null));
 
     }
