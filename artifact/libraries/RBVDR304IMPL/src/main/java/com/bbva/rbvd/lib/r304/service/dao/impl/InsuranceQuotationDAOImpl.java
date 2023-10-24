@@ -192,8 +192,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null;
         quotationParticipant.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
 
-        quotationParticipant.setInsuredCustomerName(Objects.nonNull(customerData) && (customerData.getFirstName())!=null?
-                customerData.getFirstName() : null);
+
 
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(getLastName(customerData));
@@ -211,6 +210,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId().substring(0, 1) : null));
         if(Objects.nonNull(customerData) ) {
             quotationParticipant.setCustomerBirthDate(ParseFecha(customerData));
+            quotationParticipant.setInsuredCustomerName(getSafeFirstName(customerData));
         }
     }
     public static LocalDate ParseFecha(CustomerBO customerData) {
@@ -221,6 +221,10 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             birthday = Date.from(lc.atStartOfDay(localZone).toInstant());
         }
         return (Objects.nonNull(birthday))?birthday.toInstant().atZone(ZONE_ID).toLocalDate():null;
+    }
+    private String getSafeFirstName(CustomerBO customerData){
+        return Objects.nonNull(customerData) && (customerData.getFirstName())!=null?
+                customerData.getFirstName() : null;
     }
     private String getLastName(CustomerBO customerData){
 
