@@ -129,15 +129,13 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
     }
-    private LocalDate getCustomerEntryDate(QuotationLifeDTO input){
-        if(CollectionUtils.isEmpty(input.getParticipants()) &&
-                input.getHolder() != null && Objects.nonNull(input.getHolder().getId())){
-            return LocalDate.now();
-        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())){
-            return LocalDate.now();
-        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.isNull(input.getParticipants().get(0).getId())|| !CollectionUtils.isEmpty(input.getParticipants()) && BLANK.equals(input.getParticipants().get(0).getId()) ){
+    private LocalDate getCustomerEntryDate(QuotationLifeDTO input) {
+        if (CollectionUtils.isEmpty(input.getParticipants()) ||
+                (Objects.isNull(input.getParticipants().get(0)) ||
+                        Objects.isNull(input.getParticipants().get(0).getId()) ||
+                        BLANK.equals(input.getParticipants().get(0).getId()))) {
             return null;
-        }else {
+        } else {
             return LocalDate.now();
         }
     }
@@ -146,7 +144,13 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private String safeGetInsuredId(QuotationLifeDTO input) {
-        return (Objects.nonNull(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())) ? input.getParticipants().get(0).getId() : input.getHolder().getId();
+        if (!CollectionUtils.isEmpty(input.getParticipants()) &&
+                Objects.nonNull(input.getParticipants().get(0)) &&
+                Objects.nonNull(input.getParticipants().get(0).getId())) {
+            return input.getParticipants().get(0).getId();
+        } else {
+            return input.getHolder().getId();
+        }
     }
     private ParticipantDTO safeGetParticipant(QuotationLifeDTO input) {
         return (!CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
