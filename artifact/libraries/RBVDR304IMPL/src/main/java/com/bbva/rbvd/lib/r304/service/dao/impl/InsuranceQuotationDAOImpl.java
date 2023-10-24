@@ -135,7 +135,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             return LocalDate.now();
         }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())){
             return LocalDate.now();
-        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == null|| !CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == "" ){
+        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.isNull(input.getParticipants().get(0).getId())|| !CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == "" ){
             return null;
         }else {
             return LocalDate.now();
@@ -144,7 +144,6 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     private String safeGetInsuredCurrency(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null;
     }
-
 
     private String safeGetInsuredId(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())) ? input.getParticipants().get(0).getId() : input.getHolder().getId();
@@ -240,31 +239,27 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     private String getLastName(CustomerBO customerData){
 
         String lastName = "";
-
         if (customerData != null) {
             if (customerData.getLastName() != null) {
                 lastName += customerData.getLastName();
             }
-
             lastName += SLASH;
-
             if (customerData.getSecondLastName() != null) {
                 lastName += customerData.getSecondLastName();
             }
-
     }
         return lastName;
     }
     @Override
     public void insertSimulationParticipant(Map<String, Object> argumentForSaveParticipant) {
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_PARTICIPANT_QOUTATION.getValue(),argumentForSaveParticipant);
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURED_QUOTATION.getValue(),argumentForSaveParticipant);
         if(idNewSimulation != 1){
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }
     }
     @Override
     public void updateSimulationParticipant(Map<String, Object> argumentForSaveParticipant) {
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_INSURANCE_QUOTATION.getValue(),argumentForSaveParticipant);
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_INSURED_QUOTATION.getValue(),argumentForSaveParticipant);
         if(idNewSimulation != 1){
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }

@@ -22,6 +22,21 @@ public class QuotationParticipantMap {
 
         LOGGER.info("QuotationParticipantMap start - createArgumentsForSaveParticipant");
         Map<String, Object> arguments = new HashMap<>();
+        arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),quotationParticipant.getCreationUser());
+        LOGGER.info("QuotationParticipantMap FIELD_CREATION_USER_ID - FIELD_CREATION_USER_ID");
+        commonMapper(quotationParticipant,arguments);
+        return arguments;
+    }
+    public static Map<String, Object> createArgumentsForUpdateParticipant(CommonsLifeDAO quotationParticipant){
+
+
+        LOGGER.info("QuotationParticipantMap start - createArgumentsForUpdateParticipant");
+        Map<String, Object> arguments = new HashMap<>();
+        commonMapper(quotationParticipant,arguments);
+        return arguments;
+    }
+    public static Map<String, Object> commonMapper(CommonsLifeDAO quotationParticipant,Map<String, Object> arguments){
+
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(),quotationParticipant.getPolicyQuotaInternalId());
         LOGGER.info("FIELD_POLICY_QUOTA_INTERNAL_ID : {}",quotationParticipant.getPolicyQuotaInternalId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),quotationParticipant.getInsuranceProductId());
@@ -62,8 +77,6 @@ public class QuotationParticipantMap {
         LOGGER.info("QuotationParticipantMap FIELD_USER_EMAIL_PERSONAL_DESC - FIELD_USER_EMAIL_PERSONAL_DESC");
         arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),quotationParticipant.getCustomerBirthDate());
         LOGGER.info("QuotationParticipantMap FIELD_CUSTOMER_BIRTH_DATE - FIELD_CUSTOMER_BIRTH_DATE");
-        arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),quotationParticipant.getCreationUser());
-        LOGGER.info("QuotationParticipantMap FIELD_CREATION_USER_ID - FIELD_CREATION_USER_ID");
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),quotationParticipant.getUserAudit());
         LOGGER.info("QuotationParticipantMap FIELD_USER_AUDIT_ID - FIELD_USER_AUDIT_ID");
         arguments.put(RBVDProperties.FIELD_GENDER_ID.getValue(),quotationParticipant.getGenderId());
@@ -71,5 +84,4 @@ public class QuotationParticipantMap {
         LOGGER.info("QuotationParticipantMap end");
         return arguments;
     }
-
 }
