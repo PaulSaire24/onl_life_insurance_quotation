@@ -144,13 +144,13 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     private String safeGetInsuredId(QuotationLifeDTO input) {
-        if (!CollectionUtils.isEmpty(input.getParticipants()) &&
-                Objects.nonNull(input.getParticipants().get(0)) &&
-                Objects.nonNull(input.getParticipants().get(0).getId())) {
-            return input.getParticipants().get(0).getId();
-        } else {
-            return input.getHolder().getId();
+        if (!CollectionUtils.isEmpty(input.getParticipants())) {
+            ParticipantDTO firstParticipant = input.getParticipants().get(0);
+            if (Objects.nonNull(firstParticipant) && Objects.nonNull(firstParticipant.getId())) {
+                return firstParticipant.getId();
+            }
         }
+        return input.getHolder().getId();
     }
     private ParticipantDTO safeGetParticipant(QuotationLifeDTO input) {
         return (!CollectionUtils.isEmpty(input.getParticipants())) ? input.getParticipants().get(0) : null;
