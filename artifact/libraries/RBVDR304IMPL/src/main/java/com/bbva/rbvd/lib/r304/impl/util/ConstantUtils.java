@@ -16,5 +16,6 @@ public class ConstantUtils {
     public static final String AMOUNT="AMOUNT";
     public static final ZoneId ZONE_ID = ZoneId.of("GMT");
     public static final String SLASH="|";
-
+    public static final String ANNUAL="A";
+    public static final String BLANK ="";
 }

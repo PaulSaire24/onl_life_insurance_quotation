@@ -70,7 +70,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setInsuranceModalityType(plan.getId());
         quotationParticipant.setInsuredAmount(safeGetInsuredAmount(input));
         quotationParticipant.setCurrencyId(safeGetInsuredCurrency(input));
-        quotationParticipant.setPeriodType("A");
+        quotationParticipant.setPeriodType(ANNUAL);
         if(Objects.isNull(input.getTerm())){
             quotationParticipant.setPeriodType(null);
         }
@@ -135,7 +135,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             return LocalDate.now();
         }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())){
             return LocalDate.now();
-        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.isNull(input.getParticipants().get(0).getId())|| !CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == "" ){
+        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.isNull(input.getParticipants().get(0).getId())|| !CollectionUtils.isEmpty(input.getParticipants()) && BLANK.equals(input.getParticipants().get(0).getId()) ){
             return null;
         }else {
             return LocalDate.now();
@@ -162,8 +162,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     private void setParticipantProperties(CommonsLifeDAO quotationParticipant, ParticipantDTO participant,ApplicationConfigurationService applicationConfigurationService,QuotationLifeDTO input) {
         List<ContractDetailsDTO> tipoContratoEmail = getGroupedByTypeContactDetail(participant.getContactDetails(), EMAIL);
         List<ContractDetailsDTO> tipoContratoMov = getGroupedByTypeContactDetail(participant.getContactDetails(), MOBILE_NUMBER);
-        String lastName = (participant.getLastName() != null ? participant.getLastName() : "") +
-                SLASH + (participant.getSecondLastName() != null ? participant.getSecondLastName() : "");
+        String lastName = (participant.getLastName() != null ? participant.getLastName() : BLANK) +
+                SLASH + (participant.getSecondLastName() != null ? participant.getSecondLastName() : BLANK);
 
         Instant instant = participant.getBirthDate().toInstant();
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
@@ -238,7 +238,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
     private String getLastName(CustomerBO customerData){
 
-        String lastName = "";
+        String lastName = BLANK;
         if (customerData != null) {
             if (customerData.getLastName() != null) {
                 lastName += customerData.getLastName();
