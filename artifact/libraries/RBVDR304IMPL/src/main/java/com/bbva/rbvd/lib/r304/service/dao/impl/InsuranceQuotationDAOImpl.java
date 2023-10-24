@@ -184,7 +184,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                 tipoContratoMov.get(0).getContact().getNumber() : null);
         quotationParticipant.setCustomerBirthDate(localDate);
         quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId() : null);
+        quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId().substring(0,1) : null);
 
     }
 
