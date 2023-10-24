@@ -76,7 +76,7 @@ public class QuotationStore implements PostQuotation {
             insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
             ;
          } else {
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation {} *****", payloadStore);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", payloadStore);
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotationMod {} *****", payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
