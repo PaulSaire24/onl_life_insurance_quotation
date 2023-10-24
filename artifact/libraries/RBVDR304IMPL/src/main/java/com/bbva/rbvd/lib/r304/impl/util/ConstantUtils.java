@@ -15,5 +15,6 @@ public class ConstantUtils {
     public static final String PERCENTAGE="PERCENTAGE";
     public static final String AMOUNT="AMOUNT";
     public static final ZoneId ZONE_ID = ZoneId.of("GMT");
+    public static final String SLASH="|";
 
 }

@@ -61,8 +61,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         QuotationLifeDTO input = payloadStore.getInput();
 
         BigDecimal periodNumber = safeBigDecimal(input, QuotationLifeDTO::getTerm, TermDTO::getNumber, BigDecimal.ZERO);
-        List<RefundsDTO> refundPercentaje =calculateTotalReturnAmountOrRefundPercentaje(input.getRefunds(),PERCENTAGE); ;
-        List<RefundsDTO> totalAmount =calculateTotalReturnAmountOrRefundPercentaje(input.getRefunds(),AMOUNT); ;
+        RefundsDTO refundPercentaje =calculateTotalReturnAmountOrRefundPercentaje(input,PERCENTAGE); ;
+        RefundsDTO totalAmount =calculateTotalReturnAmountOrRefundPercentaje(input,AMOUNT); ;
         InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
 
         quotationParticipant.setPolicyQuotaInternalId(input.getId());
@@ -75,11 +75,11 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             quotationParticipant.setPeriodType(null);
         }
         quotationParticipant.setPeriodNumber(periodNumber);
-        quotationParticipant.setRefundPer((!CollectionUtils.isEmpty(refundPercentaje) && refundPercentaje.get(0).getUnit().getPercentage() != null) ?
-                refundPercentaje.get(0).getUnit().getPercentage(): null);
-        quotationParticipant.setTotalReturnAmount((!CollectionUtils.isEmpty(totalAmount) && totalAmount.get(0).getUnit().getAmount() != null) ?
-                totalAmount.get(0).getUnit().getAmount(): null);
-        quotationParticipant.setCustomerEntryDate(LocalDate.now());
+        quotationParticipant.setRefundPer((Objects.nonNull(refundPercentaje) && refundPercentaje.getUnit().getPercentage() != null) ?
+                refundPercentaje.getUnit().getPercentage(): null);
+        quotationParticipant.setTotalReturnAmount((Objects.nonNull(totalAmount) && totalAmount.getUnit().getAmount() != null) ?
+                totalAmount.getUnit().getAmount(): null);
+        quotationParticipant.setCustomerEntryDate(getCustomerEntryDate(input));
         quotationParticipant.setCreationUser(input.getCreationUser());
         quotationParticipant.setUserAudit(input.getUserAudit());
 
@@ -112,24 +112,35 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         return new BigDecimal(number);
     }
 
-    private List<RefundsDTO> calculateTotalReturnAmountOrRefundPercentaje(List<RefundsDTO> input,String tipo) {
-        List<RefundsDTO> filteredRefunds = input.stream()
-                .filter(refundInfo ->
-                        refundInfo != null &&
-                                refundInfo.getUnit() != null &&
-                                tipo.equals(refundInfo.getUnit().getUnitType())
-                )
-                .collect(Collectors.toList());
-        return filteredRefunds;
-
+    private RefundsDTO calculateTotalReturnAmountOrRefundPercentaje(QuotationLifeDTO input,String tipo) {
+        if (CollectionUtils.isEmpty(input.getRefunds())) {
+            return null;
+        } else {
+            return input.getRefunds().stream()
+                    .filter(refundsDTO -> refundsDTO.getUnit() != null)
+                    .filter(refundsDTO -> tipo.equals(refundsDTO.getUnit().getUnitType()))
+                    .findFirst()
+                    .orElse(null);
+        }
     }
 
 
 
-    private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
+        private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
     }
-
+    private LocalDate getCustomerEntryDate(QuotationLifeDTO input){
+        if(CollectionUtils.isEmpty(input.getParticipants()) &&
+                input.getHolder() != null && Objects.nonNull(input.getHolder().getId())){
+            return LocalDate.now();
+        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && Objects.nonNull(input.getParticipants().get(0).getId())){
+            return LocalDate.now();
+        }else if(!CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == null|| !CollectionUtils.isEmpty(input.getParticipants()) && input.getParticipants().get(0).getId() == "" ){
+            return null;
+        }else {
+            return LocalDate.now();
+        }
+    }
     private String safeGetInsuredCurrency(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getCurrency() : null;
     }
@@ -153,7 +164,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         List<ContractDetailsDTO> tipoContratoEmail = getGroupedByTypeContactDetail(participant.getContactDetails(), EMAIL);
         List<ContractDetailsDTO> tipoContratoMov = getGroupedByTypeContactDetail(participant.getContactDetails(), MOBILE_NUMBER);
         String lastName = (participant.getLastName() != null ? participant.getLastName() : "") +
-                "|" + (participant.getSecondLastName() != null ? participant.getSecondLastName() : "");
+                SLASH + (participant.getSecondLastName() != null ? participant.getSecondLastName() : "");
 
         Instant instant = participant.getBirthDate().toInstant();
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
@@ -235,7 +246,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                 lastName += customerData.getLastName();
             }
 
-            lastName += "|";
+            lastName += SLASH;
 
             if (customerData.getSecondLastName() != null) {
                 lastName += customerData.getSecondLastName();
