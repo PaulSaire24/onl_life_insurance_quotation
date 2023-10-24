@@ -70,8 +70,9 @@ public class QuotationStore implements PostQuotation {
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",payloadStore.getMyQuotation());
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 2 {} *****",payloadStore.getInput());
+
             insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentForSaveParticipant  {} *****",argumentForSaveParticipant);
             insuranceQuotation.updateSimulationParticipant(argumentForSaveParticipant);
             ;
          } else {

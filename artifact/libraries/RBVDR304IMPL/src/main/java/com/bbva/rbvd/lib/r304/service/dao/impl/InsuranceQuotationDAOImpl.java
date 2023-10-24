@@ -30,18 +30,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.*;
 import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.*;
+
 
 public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationDAOImpl.class);
@@ -176,14 +177,16 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData,ApplicationConfigurationService applicationConfigurationService) {
         List<ContactDetailsBO> tipoContratoEmail = new ArrayList<>();
         List<ContactDetailsBO> tipoContratoMov = new ArrayList<>();
+
         if(Objects.nonNull(customerData)&&customerData.getContactDetails()!=null) {
              tipoContratoEmail = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), EMAIL);
-             tipoContratoMov = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), MOBILE_NUMBER);
+             tipoContratoMov = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), NUMBER);
         }
         else{
             tipoContratoEmail = null;
              tipoContratoMov =null;
         }
+
         String documentType =(Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null;
@@ -206,7 +209,18 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
         quotationParticipant.setInsuredId(input.getHolder().getId());
         quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId().substring(0, 1) : null));
-
+        if(Objects.nonNull(customerData) ) {
+            quotationParticipant.setCustomerBirthDate(ParseFecha(customerData));
+        }
+    }
+    public static LocalDate ParseFecha(CustomerBO customerData) {
+        Date birthday=null;
+        if(customerData.getBirthData()!=null && customerData.getBirthData().getBirthDate()!=null) {
+            LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            ZoneId localZone = ZoneId.of("America/Lima");
+            birthday = Date.from(lc.atStartOfDay(localZone).toInstant());
+        }
+        return (Objects.nonNull(birthday))?birthday.toInstant().atZone(ZONE_ID).toLocalDate():null;
     }
     private String getLastName(CustomerBO customerData){
 
