@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd.dto.lifeinsrc</groupId>
 			<artifactId>RBVDC301</artifactId>
-			<version>0.7.14</version>
+			<version>0.7.13</version>
 		</dependency>
 	</dependencies>
 	<build>
