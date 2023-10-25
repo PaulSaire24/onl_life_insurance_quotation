@@ -6,20 +6,17 @@ import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationDAO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
-import com.bbva.rbvd.lib.r304.pattern.impl.QuotationStore;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationBean;
@@ -30,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -64,16 +60,14 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         RefundsDTO refundPercentaje =calculateTotalReturnAmountOrRefundPercentaje(input,PERCENTAGE); ;
         RefundsDTO totalAmount =calculateTotalReturnAmountOrRefundPercentaje(input,AMOUNT); ;
         InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
-
         quotationParticipant.setPolicyQuotaInternalId(input.getId());
         quotationParticipant.setInsuranceProductId(quotationDao.getInsuranceProductId());
         quotationParticipant.setInsuranceModalityType(plan.getId());
         quotationParticipant.setInsuredAmount(safeGetInsuredAmount(input));
         quotationParticipant.setCurrencyId(safeGetInsuredCurrency(input));
         quotationParticipant.setPeriodType(ANNUAL);
-        if(Objects.isNull(input.getTerm())){
-            quotationParticipant.setPeriodType(null);
-        }
+        quotationParticipant.setInsuredId(safeGetInsuredId(input));
+        quotationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.IS_INSURED));
         quotationParticipant.setPeriodNumber(periodNumber);
         quotationParticipant.setRefundPer((Objects.nonNull(refundPercentaje) && refundPercentaje.getUnit().getPercentage() != null) ?
                 refundPercentaje.getUnit().getPercentage(): null);
@@ -83,6 +77,14 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         quotationParticipant.setCreationUser(input.getCreationUser());
         quotationParticipant.setUserAudit(input.getUserAudit());
 
+        /** en caso que el term sea nulo period type nulo**/
+
+        if(Objects.isNull(input.getTerm())){
+            quotationParticipant.setPeriodType(null);
+        }
+
+        /** verificar si participante existe**/
+
         ParticipantDTO participant = safeGetParticipant(input);
         if (Objects.nonNull(participant)) {
             setParticipantProperties(quotationParticipant, participant,applicationConfigurationService,input);
@@ -90,9 +92,6 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
             CustomerBO customerData = safeGetCustomerData(customerInformation, input);
             setCustomerDataProperties(quotationParticipant, input, customerData,applicationConfigurationService);
         }
-        quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.IS_INSURED));
-
         return quotationParticipant;
     }
 
@@ -124,9 +123,28 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         }
     }
 
+    public static List<ContractDetailsDTO> getGroupedByTypeContactDetail(List<ContractDetailsDTO> customer, String tipoContacto) {
+        List<ContractDetailsDTO> filteredContacts = customer.stream()
+                .filter(contactInfo ->
+                        contactInfo != null &&
+                                contactInfo.getContact() != null &&
+                                tipoContacto.equals(contactInfo.getContact().getContactDetailType())
+                )
+                .collect(Collectors.toList());
+        return filteredContacts;
+    }
+    public static List<ContactDetailsBO> getGroupedByTypeContactDetailBO(List<ContactDetailsBO> customer, String tipoContacto) {
+        List<ContactDetailsBO> filteredContacts = customer.stream()
+                .filter(contactInfo ->
+                        contactInfo != null &&
+                                contactInfo.getContact() != null &&
+                                tipoContacto.equals(contactInfo.getContactType().getId())
+                )
+                .collect(Collectors.toList());
+        return filteredContacts;
+    }
 
-
-        private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
+    private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
         return (Objects.nonNull(input.getInsuredAmount())) ? input.getInsuredAmount().getAmount() : null;
     }
     private LocalDate getCustomerEntryDate(QuotationLifeDTO input) {
@@ -173,6 +191,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
         String documentType =(participant.getIdentityDocument() != null && participant.getIdentityDocument().getDocumentType() != null) ?
                 participant.getIdentityDocument().getDocumentType().getId(): null;
+
+        /** Rellenar datos que trae host de holder **/
+
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setInsuredCustomerName(participant.getFirstName());
         quotationParticipant.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
@@ -204,10 +225,10 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         String documentType =(Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
                 customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null;
+
+        /** Rellenar datos de participant **/
+
         quotationParticipant.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
-
-
-
         quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         quotationParticipant.setClientLastName(getLastName(customerData));
         quotationParticipant.setPersonalId(
@@ -215,9 +236,7 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                         .map(CustomerBO::getIdentityDocuments)
                         .filter(documents -> !documents.isEmpty())
                         .map(documents -> documents.get(0).getDocumentNumber())
-                        .orElse(null)
-        );
-
+                        .orElse(null));
         quotationParticipant.setPhoneId((Objects.nonNull(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
         quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
         quotationParticipant.setInsuredId(input.getHolder().getId());

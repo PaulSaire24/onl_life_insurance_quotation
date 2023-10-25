@@ -46,25 +46,6 @@ public final class ValidationUtil {
     public static boolean isBBVAClient(String clientId){
         return StringUtils.isNotEmpty(clientId) && !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) && clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
     }
-    public static List<ContractDetailsDTO> getGroupedByTypeContactDetail(List<ContractDetailsDTO> customer, String tipoContacto) {
-        List<ContractDetailsDTO> filteredContacts = customer.stream()
-                .filter(contactInfo ->
-                        contactInfo != null &&
-                                contactInfo.getContact() != null &&
-                                tipoContacto.equals(contactInfo.getContact().getContactDetailType())
-                )
-                .collect(Collectors.toList());
-        return filteredContacts;
-    }
-    public static List<ContactDetailsBO> getGroupedByTypeContactDetailBO(List<ContactDetailsBO> customer, String tipoContacto) {
-        List<ContactDetailsBO> filteredContacts = customer.stream()
-                .filter(contactInfo ->
-                        contactInfo != null &&
-                                contactInfo.getContact() != null &&
-                                tipoContacto.equals(contactInfo.getContactType().getId())
-                )
-                .collect(Collectors.toList());
-        return filteredContacts;
-    }
+
 
 }
