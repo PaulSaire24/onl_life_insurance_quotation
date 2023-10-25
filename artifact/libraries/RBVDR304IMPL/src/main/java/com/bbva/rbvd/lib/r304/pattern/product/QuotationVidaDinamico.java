@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r304.pattern.product;
 
 
+import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.business.IInsrDynamicLifeBusiness;
@@ -22,7 +23,7 @@ public class QuotationVidaDinamico extends QuotationDecorator {
     }
 
     @Override
-    public QuotationLifeDTO start(QuotationLifeDTO input, RBVDR303 rbvdr303) {
+    public QuotationLifeDTO start(QuotationLifeDTO input, RBVDR303 rbvdr303, ApplicationConfigurationService  applicationConfigurationService) {
         LOGGER.info("***** QuotationVidaDinamico - start - START *****");
         LOGGER.info("***** QuotationVidaDinamico - start - input : {} *****",input);
 
@@ -31,7 +32,7 @@ public class QuotationVidaDinamico extends QuotationDecorator {
 
         PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
 
-        this.getPostQuotation().end(payloadStore);
+        this.getPostQuotation().end(payloadStore,applicationConfigurationService);
 
         QuotationLifeDTO response = seguroVidaDinamico.mappingOutputFieldsDynamic(payloadStore);
         LOGGER.info("***** QuotationVidaDinamico - response : {} *****",response);

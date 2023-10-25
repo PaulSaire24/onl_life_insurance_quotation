@@ -1,14 +1,25 @@
 package com.bbva.rbvd.lib.r304.transfer;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 
 public class PayloadStore {
+    private CustomerListASO customerInformation;
     private QuotationLifeDTO input;
     private EasyesQuotationDAO myQuotation;
     private QuotationLifeBO rimacResponse;
     private String frequencyType;
+
+    public CustomerListASO getCustomerInformation() {
+        return customerInformation;
+    }
+
+    public void setCustomerInformation(CustomerListASO customerInformation) {
+        this.customerInformation = customerInformation;
+    }
 
     public QuotationLifeDTO getInput() {
         return input;

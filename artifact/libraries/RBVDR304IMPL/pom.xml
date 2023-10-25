@@ -80,11 +80,6 @@
 		</dependency>
 		<!-- End test dependencies -->
 		<dependency>
-			<groupId>com.bbva.pisd</groupId>
-			<artifactId>PISDR350</artifactId>
-			<version>0.2.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.bbva.rbvd</groupId>
 			<artifactId>RBVDR303</artifactId>
 			<version>0.8.1</version>
@@ -93,6 +88,11 @@
 			<groupId>com.bbva.pisd.dto.insurance</groupId>
 			<artifactId>PISDC011</artifactId>
 			<version>0.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bbva.pisd</groupId>
+			<artifactId>PISDR350</artifactId>
+			<version>0.2.8</version>
 		</dependency>
 	</dependencies>
 	<build>

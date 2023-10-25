@@ -34,6 +34,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         QuotationLifeBO responseRimac = this.callQuotationRimacService(payloadConfig);
 
         PayloadStore payloadStoreDynamic = new PayloadStore();
+        payloadStoreDynamic.setCustomerInformation(payloadConfig.getCustomerInformation());
         payloadStoreDynamic.setRimacResponse(responseRimac);
         payloadStoreDynamic.setMyQuotation(payloadConfig.getMyQuotation());
         payloadStoreDynamic.setInput(payloadConfig.getInput());
