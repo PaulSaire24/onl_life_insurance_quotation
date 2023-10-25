@@ -24,10 +24,9 @@ import java.util.Map;
 public class QuotationStore implements PostQuotation {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationStore.class);
     private final PISDR350 pisdR350;
-    private final ApplicationConfigurationService applicationConfigurationService;
-    public QuotationStore(PISDR350 pisdR350,ApplicationConfigurationService applicationConfigurationService) {
+
+    public QuotationStore(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
-        this.applicationConfigurationService= applicationConfigurationService;
     }
 
     @Override
