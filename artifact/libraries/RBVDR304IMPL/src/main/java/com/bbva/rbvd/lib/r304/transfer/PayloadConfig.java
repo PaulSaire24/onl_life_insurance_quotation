@@ -2,7 +2,6 @@ package com.bbva.rbvd.lib.r304.transfer;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 
 public class PayloadConfig {

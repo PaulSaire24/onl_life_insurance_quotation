@@ -9,7 +9,9 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.ContactDetailsDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.InsuredLifeDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.ParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
@@ -32,7 +34,11 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,51 +54,75 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         this.pisdR350 = pisdR350;
     }
     @Override
-    public CommonsLifeDAO createQuotationParticipant(PayloadStore payloadStore, ApplicationConfigurationService applicationConfigurationService) {
-        CommonsLifeDAO quotationParticipant = new CommonsLifeDAO();
-        CustomerListASO customerInformation=payloadStore.getCustomerInformation();
-        LOGGER.info("***** InsuranceQuotationDAOImpl | argument customerInformation: {} *****",customerInformation);
+    public InsuredLifeDAO createQuotationParticipant(PayloadStore payloadStore, ApplicationConfigurationService applicationConfigurationService) {
+        InsuredLifeDAO quotationParticipant = new InsuredLifeDAO();
 
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
-
         BigDecimal periodNumber = safeBigDecimal(input, QuotationLifeDTO::getTerm, TermDTO::getNumber, BigDecimal.ZERO);
-        RefundsDTO refundPercentaje =calculateTotalReturnAmountOrRefundPercentaje(input,PERCENTAGE); ;
-        RefundsDTO totalAmount =calculateTotalReturnAmountOrRefundPercentaje(input,AMOUNT); ;
+        RefundsDTO refundPercentaje = calculateTotalReturnAmountOrRefundPercentaje(input,PERCENTAGE); ;
+        RefundsDTO totalAmount = calculateTotalReturnAmountOrRefundPercentaje(input,AMOUNT); ;
         InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
+
         quotationParticipant.setPolicyQuotaInternalId(input.getId());
         quotationParticipant.setInsuranceProductId(quotationDao.getInsuranceProductId());
         quotationParticipant.setInsuranceModalityType(plan.getId());
         quotationParticipant.setInsuredAmount(safeGetInsuredAmount(input));
-        quotationParticipant.setCurrencyId(safeGetInsuredCurrency(input));
-        quotationParticipant.setPeriodType(ANNUAL);
-        quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.IS_INSURED));
-        quotationParticipant.setPeriodNumber(periodNumber);
-        quotationParticipant.setRefundPer((Objects.nonNull(refundPercentaje) && refundPercentaje.getUnit().getPercentage() != null) ?
-                refundPercentaje.getUnit().getPercentage(): null);
-        quotationParticipant.setTotalReturnAmount((Objects.nonNull(totalAmount) && totalAmount.getUnit().getAmount() != null) ?
-                totalAmount.getUnit().getAmount(): null);
-        quotationParticipant.setCustomerEntryDate(getCustomerEntryDate(input));
+        quotationParticipant.setParticipant(getParticipantDao(input,applicationConfigurationService,payloadStore.getCustomerInformation()));
+        quotationParticipant.setTerm(getTermDAO(periodNumber));
+        quotationParticipant.setRefunds(getRefundsDAO(refundPercentaje,input,totalAmount));
         quotationParticipant.setCreationUser(input.getCreationUser());
         quotationParticipant.setUserAudit(input.getUserAudit());
 
         /** en caso que el term sea nulo period type nulo**/
-
         if(Objects.isNull(input.getTerm())){
-            quotationParticipant.setPeriodType(null);
+            quotationParticipant.getTerm().setPeriodType(null);
         }
+
+
+        return quotationParticipant;
+    }
+
+    private InsuredLifeDAO.RefundsDAO getRefundsDAO(RefundsDTO refundPercentaje,QuotationLifeDTO input,RefundsDTO totalAmount){
+        InsuredLifeDAO insuredLifeDAO = new InsuredLifeDAO();
+        InsuredLifeDAO.RefundsDAO refundsDAO = insuredLifeDAO.new RefundsDAO();
+
+        refundsDAO.setRefundPer((Objects.nonNull(refundPercentaje) && refundPercentaje.getUnit().getPercentage() != null) ?
+                refundPercentaje.getUnit().getPercentage(): null);
+        refundsDAO.setCurrencyId(safeGetInsuredCurrency(input));
+        refundsDAO.setTotalReturnAmount((Objects.nonNull(totalAmount) && totalAmount.getUnit().getAmount() != null) ?
+                totalAmount.getUnit().getAmount(): null);
+
+        return refundsDAO;
+    }
+
+    private InsuredLifeDAO.TermDAO getTermDAO(BigDecimal periodNumber){
+        InsuredLifeDAO insuredLife = new InsuredLifeDAO();
+        InsuredLifeDAO.TermDAO termDAO = insuredLife.new TermDAO();
+        termDAO.setPeriodNumber(periodNumber);
+        termDAO.setPeriodType(ANNUAL);
+
+        return termDAO;
+    }
+
+    private ParticipantDAO getParticipantDao(QuotationLifeDTO input,
+                                             ApplicationConfigurationService applicationConfigurationService,
+                                             CustomerListASO customerInformation){
+        ParticipantDAO participantDAO = new ParticipantDAO();
+
+        participantDAO.setCustomerEntryDate(getCustomerEntryDate(input));
+        participantDAO.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.IS_INSURED));
 
         /** verificar si participante existe**/
-
         ParticipantDTO participant = safeGetParticipant(input);
         if (Objects.nonNull(participant)) {
-            setParticipantProperties(quotationParticipant, participant,applicationConfigurationService,input);
+            setParticipantPropertiesFromInput(participantDAO, participant,applicationConfigurationService,input);
         } else {
             CustomerBO customerData = safeGetCustomerData(customerInformation, input);
-            setCustomerDataProperties(quotationParticipant, input, customerData,applicationConfigurationService);
+            setParticipantPreportiesFromCustomerData(participantDAO, input, customerData,applicationConfigurationService);
         }
-        return quotationParticipant;
+
+        return participantDAO;
     }
 
     private BigDecimal safeBigDecimal(QuotationLifeDTO input, Function<QuotationLifeDTO, TermDTO> getTerm,
@@ -124,24 +154,22 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
     }
 
     public static List<ContractDetailsDTO> getGroupedByTypeContactDetail(List<ContractDetailsDTO> customer, String tipoContacto) {
-        List<ContractDetailsDTO> filteredContacts = customer.stream()
+        return customer.stream()
                 .filter(contactInfo ->
                         contactInfo != null &&
                                 contactInfo.getContact() != null &&
                                 tipoContacto.equals(contactInfo.getContact().getContactDetailType())
                 )
                 .collect(Collectors.toList());
-        return filteredContacts;
     }
     public static List<ContactDetailsBO> getGroupedByTypeContactDetailBO(List<ContactDetailsBO> customer, String tipoContacto) {
-        List<ContactDetailsBO> filteredContacts = customer.stream()
+        return customer.stream()
                 .filter(contactInfo ->
                         contactInfo != null &&
                                 contactInfo.getContact() != null &&
                                 tipoContacto.equals(contactInfo.getContactType().getId())
                 )
                 .collect(Collectors.toList());
-        return filteredContacts;
     }
 
     private BigDecimal safeGetInsuredAmount(QuotationLifeDTO input) {
@@ -181,7 +209,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         return null;
     }
 
-    private void setParticipantProperties(CommonsLifeDAO quotationParticipant, ParticipantDTO participant,ApplicationConfigurationService applicationConfigurationService,QuotationLifeDTO input) {
+    private void setParticipantPropertiesFromInput(ParticipantDAO participantDAO, ParticipantDTO participant,
+                                          ApplicationConfigurationService applicationConfigurationService,QuotationLifeDTO input) {
         List<ContractDetailsDTO> tipoContratoEmail = getGroupedByTypeContactDetail(participant.getContactDetails(), EMAIL);
         List<ContractDetailsDTO> tipoContratoMov = getGroupedByTypeContactDetail(participant.getContactDetails(), MOBILE_NUMBER);
         String lastName = (participant.getLastName() != null ? participant.getLastName() : BLANK) +
@@ -193,25 +222,21 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
                 participant.getIdentityDocument().getDocumentType().getId(): null;
 
         /** Rellenar datos que trae host de holder **/
-
-        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
-        quotationParticipant.setInsuredCustomerName(participant.getFirstName());
-        quotationParticipant.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
-        quotationParticipant.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
-        quotationParticipant.setClientLastName(lastName);
-        quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ?
-                tipoContratoEmail.get(0).getContact().getAddress() : null);
-        quotationParticipant.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
-                tipoContratoMov.get(0).getContact().getNumber() : null);
-        quotationParticipant.setCustomerBirthDate(localDate);
-        quotationParticipant.setInsuredId(safeGetInsuredId(input));
-        quotationParticipant.setGenderId((participant.getGender() != null) ? participant.getGender().getId().substring(0,1) : null);
-
+        participantDAO.setInsuredId(safeGetInsuredId(input));
+        participantDAO.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
+        participantDAO.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
+        participantDAO.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        participantDAO.setInsuredCustomerName(participant.getFirstName());
+        participantDAO.setClientLastName(lastName);
+        participantDAO.setCustomerBirthDate(localDate);
+        participantDAO.setGenderId((participant.getGender() != null) ? participant.getGender().getId().substring(0,1) : null);
+        participantDAO.setContactDetails(getContactDetailsDAOFromInputParticipant(tipoContratoEmail, tipoContratoMov));
     }
 
-    private void setCustomerDataProperties(CommonsLifeDAO quotationParticipant, QuotationLifeDTO input, CustomerBO customerData,ApplicationConfigurationService applicationConfigurationService) {
-        List<ContactDetailsBO> tipoContratoEmail = new ArrayList<>();
-        List<ContactDetailsBO> tipoContratoMov = new ArrayList<>();
+    private void setParticipantPreportiesFromCustomerData(ParticipantDAO participantDAO, QuotationLifeDTO input,
+                                  CustomerBO customerData,ApplicationConfigurationService applicationConfigurationService) {
+        List<ContactDetailsBO> tipoContratoEmail;
+        List<ContactDetailsBO> tipoContratoMov;
 
         if(Objects.nonNull(customerData)&&customerData.getContactDetails()!=null) {
              tipoContratoEmail = getGroupedByTypeContactDetailBO(customerData.getContactDetails(), EMAIL);
@@ -219,34 +244,49 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         }
         else{
             tipoContratoEmail = null;
-             tipoContratoMov =null;
+            tipoContratoMov = null;
         }
 
         String documentType =(Objects.nonNull(customerData)&&!CollectionUtils.isEmpty(customerData.getIdentityDocuments()) &&
-                customerData.getIdentityDocuments().size() > 0 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
+                !customerData.getIdentityDocuments().isEmpty() && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null;
 
         /** Rellenar datos de participant **/
-
-        quotationParticipant.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
-        quotationParticipant.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
-        quotationParticipant.setClientLastName(getLastName(customerData));
-        quotationParticipant.setPersonalId(
+        participantDAO.setInsuredId(input.getHolder().getId());
+        participantDAO.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType):null);
+        participantDAO.setPersonalId(
                 Optional.ofNullable(customerData)
                         .map(CustomerBO::getIdentityDocuments)
                         .filter(documents -> !documents.isEmpty())
                         .map(documents -> documents.get(0).getDocumentNumber())
                         .orElse(null));
-        quotationParticipant.setPhoneId((Objects.nonNull(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
-        quotationParticipant.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
-        quotationParticipant.setInsuredId(input.getHolder().getId());
-        quotationParticipant.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId().substring(0, 1) : null));
+        participantDAO.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         if(Objects.nonNull(customerData) ) {
-            quotationParticipant.setCustomerBirthDate(ParseFecha(customerData));
-            quotationParticipant.setInsuredCustomerName(getSafeFirstName(customerData));
+            participantDAO.setInsuredCustomerName(getSafeFirstName(customerData));
+            participantDAO.setClientLastName(getLastName(customerData));
+            participantDAO.setCustomerBirthDate(parseDate(customerData));
         }
+        participantDAO.setGenderId((Objects.nonNull(customerData)&&(customerData.getGender() != null) ? customerData.getGender().getId().substring(0, 1) : null));
+        participantDAO.setContactDetails(getContactDetailsASOFromCustomerBO(tipoContratoEmail, tipoContratoMov));
     }
-    public static LocalDate ParseFecha(CustomerBO customerData) {
+
+    private static ContactDetailsDAO getContactDetailsDAOFromInputParticipant(List<ContractDetailsDTO> tipoContratoEmail, List<ContractDetailsDTO> tipoContratoMov) {
+        ContactDetailsDAO contactDetailsDAO = new ContactDetailsDAO();
+        contactDetailsDAO.setPhoneId((!CollectionUtils.isEmpty(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ?
+                tipoContratoMov.get(0).getContact().getNumber() : null);
+        contactDetailsDAO.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ?
+                tipoContratoEmail.get(0).getContact().getAddress() : null);
+        return contactDetailsDAO;
+    }
+
+    private static ContactDetailsDAO getContactDetailsASOFromCustomerBO(List<ContactDetailsBO> tipoContratoEmail, List<ContactDetailsBO> tipoContratoMov) {
+        ContactDetailsDAO contactDetailsDAO = new ContactDetailsDAO();
+        contactDetailsDAO.setPhoneId((Objects.nonNull(tipoContratoMov) && tipoContratoMov.get(0).getContact() != null) ? tipoContratoMov.get(0).getContact() : null);
+        contactDetailsDAO.setUserEmailPersonalDesc((!CollectionUtils.isEmpty(tipoContratoEmail) && tipoContratoEmail.get(0).getContact() != null) ? tipoContratoEmail.get(0).getContact() : null);
+        return contactDetailsDAO;
+    }
+
+    public static LocalDate parseDate(CustomerBO customerData) {
         Date birthday=null;
         if(customerData.getBirthData()!=null && customerData.getBirthData().getBirthDate()!=null) {
             LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));

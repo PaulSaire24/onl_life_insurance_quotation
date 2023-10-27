@@ -1,12 +1,9 @@
 package com.bbva.rbvd.lib.r304.pattern.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.InsuredLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePolicyDAOImpl;
@@ -61,7 +58,7 @@ public class QuotationStore implements PostQuotation {
 
         Gson gson = new Gson();
         InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
-        CommonsLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore,applicationConfigurationService);
+        InsuredLifeDAO quotationParticipant = insuranceQuotation.createQuotationParticipant(payloadStore,applicationConfigurationService);
         LOGGER.info("***** QuotationStore - saveParticipantInformation - QuotationParticipantDAO {} *****",gson.toJson(quotationParticipant));
         Map<String, Object> argumentForSaveParticipant = QuotationParticipantMap.createArgumentsForSaveParticipant(quotationParticipant);
         LOGGER.info("***** QuotationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);

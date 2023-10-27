@@ -1,7 +1,6 @@
 package com.bbva.rbvd.lib.r304.business.impl;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;

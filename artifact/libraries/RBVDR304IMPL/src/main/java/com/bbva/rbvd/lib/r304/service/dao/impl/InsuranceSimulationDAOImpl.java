@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import com.bbva.rbvd.lib.r304.impl.util.ValidationUtil;
 
-import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateSelectionQueries;
 import static java.util.Collections.singletonMap;
 
 public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
@@ -30,12 +30,7 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
                 singletonMap(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(),externalSimulationId)
         );
 
-
-
-        LOGGER.info("***** InsuranceSimulationDAOImpl - executeGetSimulationInformation | responseGetSimulationIdAndExpirationDate: {} *****",responseGetSimulationIdAndExpirationDate);
-
-
-        validateSelectionQueries(responseGetSimulationIdAndExpirationDate, RBVDErrors.INVALID_RIMAC_QUOTATION_ID);
+        ValidationUtil.validateSelectionQueries(responseGetSimulationIdAndExpirationDate, RBVDErrors.INVALID_RIMAC_QUOTATION_ID);
 
         return responseGetSimulationIdAndExpirationDate;
     }

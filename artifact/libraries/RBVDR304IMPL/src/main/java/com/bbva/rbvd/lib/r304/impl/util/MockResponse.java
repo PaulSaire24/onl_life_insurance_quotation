@@ -1,6 +1,5 @@
 package com.bbva.rbvd.lib.r304.impl.util;
 
-import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.EasyesQuotationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
