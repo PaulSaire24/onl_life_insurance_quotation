@@ -22,7 +22,6 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
-import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -41,7 +40,6 @@ public class RBVDR304ImplTest {
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
     private PISDR350 pisdR350;
     private QuotationLifeDTO input;
-    private PayloadStore payloadStore;
     private Map<String,Object> mapInformation;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
@@ -100,6 +98,7 @@ public class RBVDR304ImplTest {
 
 
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
+        when(applicationConfigurationService.getProperty("DNI")).thenReturn("L");
 
     }
 
@@ -236,6 +235,7 @@ public class RBVDR304ImplTest {
         HolderDTO holderDTO = new HolderDTO();
         holderDTO.setFirstName("Alec");
         holderDTO.setLastName("Alec taboada");
+        holderDTO.setIdentityDocument(identityDocumentDTO);
         ContractDetailsDTO contractDetail = new ContractDetailsDTO();
         contractDetail.setContact(new ContactDTO());
         contractDetail.getContact().setContactDetailType("MOBILE_NUMBER");
@@ -243,16 +243,15 @@ public class RBVDR304ImplTest {
         ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
         contractDetail2.setContact(new ContactDTO());
         contractDetail2.getContact().setContactDetailType("EMAIL");
-        contractDetail2.getContact().setAddress("@gmail.com");
+        contractDetail2.getContact().setAddress("xd@gmail.com");
         List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
         contractDetailsList.add(contractDetail);
         contractDetailsList.add(contractDetail2);
 
+
         this.input.setHolder(holderDTO);
         this.input.setTerm(new TermDTO());
         this.input.getTerm().setNumber(45);
-
-
 
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);

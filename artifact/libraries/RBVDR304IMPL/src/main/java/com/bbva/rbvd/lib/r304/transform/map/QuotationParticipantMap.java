@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class QuotationParticipantMap {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationParticipantMap.class);
@@ -40,12 +41,16 @@ public class QuotationParticipantMap {
         arguments.put(RBVDProperties.FIELD_CUSTOMER_DOCUMENT_TYPE.getValue(), quotationParticipant.getParticipant().getCustomerDocumentType());
         arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(), quotationParticipant.getParticipant().getIsBbvaCustomerType());
         arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(), quotationParticipant.getParticipant().getPersonalId());
-        arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),quotationParticipant.getParticipant().getContactDetails().getPhoneId());
+        arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),
+                Objects.nonNull(quotationParticipant.getParticipant().getContactDetails())
+                ? quotationParticipant.getParticipant().getContactDetails().getPhoneId() : null);
         arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),quotationParticipant.getParticipant().getCustomerEntryDate());
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),quotationParticipant.getParticipant().getParticipantRoleId());
         arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(),quotationParticipant.getParticipant().getInsuredCustomerName());
         arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),quotationParticipant.getParticipant().getClientLastName());
-        arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),quotationParticipant.getParticipant().getContactDetails().getUserEmailPersonalDesc());
+        arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),
+                Objects.nonNull(quotationParticipant.getParticipant().getContactDetails())
+                ? quotationParticipant.getParticipant().getContactDetails().getUserEmailPersonalDesc() : null);
         arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),quotationParticipant.getParticipant().getCustomerBirthDate());
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),quotationParticipant.getUserAudit());
         arguments.put(RBVDProperties.FIELD_GENDER_ID.getValue(),quotationParticipant.getParticipant().getGenderId());
