@@ -4,10 +4,19 @@ import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.pisd.dto.insurance.bo.*;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
+import com.bbva.pisd.dto.insurance.bo.GenderBO;
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
+import com.bbva.pisd.dto.insurance.bo.AddressesBO;
+import com.bbva.pisd.dto.insurance.bo.LocationBO;
+import com.bbva.pisd.dto.insurance.bo.GeographicGroupsBO;
+import com.bbva.pisd.dto.insurance.bo.CountryBO;
+import com.bbva.pisd.dto.insurance.bo.DocumentTypeBO;
+import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
+import com.bbva.pisd.dto.insurance.bo.AddressTypeBO;
 
-import com.bbva.pisd.dto.insurance.utils.PISDProperties;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
@@ -79,22 +88,8 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 
 	}
 
-	@Override
-	public CustomerBO executeListCustomerService(final String customerId) {
-		LOGGER.info("***** RBVDR303Impl - executeListCustomerService START *****");
 
-		final String key = "customerId";
 
-		try {
-			CustomerListASO customerInformationASO = this.internalApiConnector.getForObject(PISDProperties.ID_API_CUSTOMER_INFORMATION.getValue(),
-					CustomerListASO.class, singletonMap(key, customerId));
-			LOGGER.info("***** RBVDR303Impl - executeListCustomerService END *****");
-			return customerInformationASO.getData().get(0);
-		} catch (RestClientException exception) {
-			LOGGER.info("***** RBVDR303Impl - executeListCustomerService ***** Exception: {}", exception.getMessage());
-			return null;
-		}
-	}
 	@Override
 	public CustomerListASO executeGetCustomerHost(String customerId) {
 		LOGGER.info("***** PISDR008Impl - executeGetCustomerHost Start *****");

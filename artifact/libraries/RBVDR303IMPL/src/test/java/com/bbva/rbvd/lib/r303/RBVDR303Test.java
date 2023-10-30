@@ -20,10 +20,8 @@ import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r303.factory.ApiConnectorFactoryMock;
 import com.bbva.rbvd.lib.r303.impl.RBVDR303Impl;
 
-import com.bbva.rbvd.mock.MockBundleContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,14 +85,8 @@ public class RBVDR303Test {
 		mockDTO = MockDTO.getInstance();
 
 
-
 		when(pisdr014.executeSignatureConstruction(anyString(), anyString(), anyString(), anyString(), anyString()))
 				.thenReturn(new SignatureAWS("", "", "", ""));
-
-
-
-
-
 
 		errorMessage = "Something went wrong!!";
 	}
@@ -131,20 +123,6 @@ public class RBVDR303Test {
 	}
 
 	@Test
-	public void executeListCustomerServiceOK() throws IOException {
-		CustomerListASO customerList = MockDTO.getInstance().getCustomerDataResponse();
-
-		when(this.internalApiConnector.getForObject(anyString(), (Class<CustomerListASO>) any(), anyMap())).
-				thenReturn(customerList);
-
-		CustomerBO validation = this.rbvdR303.executeListCustomerService("customerId");
-
-		assertNotNull(validation);
-		assertNotNull(validation.getFirstName());
-		assertNotNull(validation.getLastName());
-		assertNotNull(validation.getSecondLastName());
-	}
-	@Test
 	public void executeGetCustomerHostOk() {
 
 		PEWUResponse responseHost = new PEWUResponse();
@@ -165,13 +143,27 @@ public class RBVDR303Test {
 
 		assertNotNull(validation);
 	}
-	@Test
-	public void executeListCustomerServiceWithRestClientException() {
-		when(this.internalApiConnector.getForObject(anyString(), (Class<CustomerListASO>) any(), anyMap())).
-				thenThrow(new RestClientException(errorMessage));
 
-		CustomerBO validation = this.rbvdR303.executeListCustomerService("customerId");
+	@Test
+	public void executeGetCustomerHost_Null() {
+
+		PEWUResponse responseHost = new PEWUResponse();
+
+		PEMSALWU data = new PEMSALWU();
+		data.setTdoi("L");
+		data.setSexo("M");
+		data.setContact("123123123");
+		data.setContac2("123123123");
+		data.setContac3("123123123");
+		responseHost.setPemsalwu(data);
+		responseHost.setPemsalw5(new PEMSALW5());
+		responseHost.setHostAdviceCode("code");
+		when(pbtqr002.executeSearchInHostByCustomerId("00000000"))
+				.thenReturn(responseHost);
+
+		CustomerListASO validation = rbvdR303.executeGetCustomerHost("00000000");
 
 		assertNull(validation);
 	}
+
 }

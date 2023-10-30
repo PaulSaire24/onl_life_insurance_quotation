@@ -18,5 +18,7 @@ public class ConstantUtils {
     public static final String SLASH="|";
     public static final String YES_S = "S";
     public static final String BLANK_SPACE = " ";
-    public static final ZoneId ZONE_ID = ZoneId.of("GMT");
+    public static final String GMT_TIME_ZONE = "GMT";
+    public static  final String ZONE_AMERICA_LIMA = "America/Lima";
+    public static final ZoneId ZONE_ID = ZoneId.of(GMT_TIME_ZONE);
 }

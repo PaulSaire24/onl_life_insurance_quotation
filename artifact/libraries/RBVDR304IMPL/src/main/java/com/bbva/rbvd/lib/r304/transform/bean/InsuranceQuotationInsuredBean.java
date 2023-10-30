@@ -15,11 +15,11 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
+import com.bbva.rbvd.lib.r304.impl.util.ConvertUtils;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -168,8 +168,7 @@ public class InsuranceQuotationInsuredBean {
 
     private static LocalDate getBirthDateFromParticipant(ParticipantDTO participant){
         if(participant.getBirthDate() != null){
-            Instant instant = participant.getBirthDate().toInstant();
-            return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+            return ConvertUtils.convertDateToLocalDate(participant.getBirthDate());
         }else{
             return null;
         }
@@ -255,7 +254,7 @@ public class InsuranceQuotationInsuredBean {
         Date birthday=null;
         if(customerData.getBirthData() != null && customerData.getBirthData().getBirthDate() != null) {
             LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            ZoneId localZone = ZoneId.of("America/Lima");
+            ZoneId localZone = ZoneId.of(ConstantUtils.ZONE_AMERICA_LIMA);
             birthday = Date.from(lc.atStartOfDay(localZone).toInstant());
         }
         return (Objects.nonNull(birthday)) ? birthday.toInstant().atZone(ConstantUtils.ZONE_ID).toLocalDate() : null;

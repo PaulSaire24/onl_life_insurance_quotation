@@ -12,7 +12,6 @@ import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceQuotationModDAOImpl;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationInsuredBean;
 import com.bbva.rbvd.lib.r304.transform.map.QuotationParticipantMap;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
