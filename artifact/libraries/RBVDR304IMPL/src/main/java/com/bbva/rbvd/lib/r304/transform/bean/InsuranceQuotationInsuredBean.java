@@ -88,7 +88,7 @@ public class InsuranceQuotationInsuredBean {
         ParticipantDAO participantDAO = new ParticipantDAO();
 
         participantDAO.setCustomerEntryDate(getCustomerEntryDate(input));
-        participantDAO.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.ROLE_INSURED));
+        participantDAO.setParticipantRoleId(BigDecimal.valueOf(ConstantUtils.ROLE_INSURED_ID));
 
         ParticipantDTO participantDTO = getParticipantsArrayFromInput(input);
         if (Objects.nonNull(participantDTO)) {
@@ -176,7 +176,7 @@ public class InsuranceQuotationInsuredBean {
 
     private static String getLastNameFromParticipant(ParticipantDTO participant) {
         return (participant.getLastName() != null ? participant.getLastName() : ConstantUtils.BLANK) +
-                ConstantUtils.SLASH + (participant.getSecondLastName() != null ? participant.getSecondLastName() : ConstantUtils.BLANK);
+                ConstantUtils.VERTICAL_BAR + (participant.getSecondLastName() != null ? participant.getSecondLastName() : ConstantUtils.BLANK);
     }
 
     private static String getDocumentTypeFromParticipant(ParticipantDTO participant) {
@@ -272,7 +272,7 @@ public class InsuranceQuotationInsuredBean {
             lastName.append(ConstantUtils.BLANK_SPACE);
         }
 
-        lastName.append(ConstantUtils.SLASH);
+        lastName.append(ConstantUtils.VERTICAL_BAR);
 
         if (customerData.getSecondLastName() != null) {
             lastName.append(customerData.getSecondLastName());
