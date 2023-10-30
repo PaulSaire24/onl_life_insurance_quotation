@@ -7,7 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.bbva.rbvd.lib.r304.impl.util.ConstantUtils.*;
+import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
+
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public final class ValidationUtil {
@@ -35,8 +36,9 @@ public final class ValidationUtil {
         }
     }
     public static boolean isBBVAClient(String clientId){
-        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) &&
-                clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
+        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(ConstantUtils.REGEX_CONTAIN_ONLY_LETTERS) &&
+                clientId.matches(ConstantUtils.REGEX_CONTAIN_ONLY_NUMBERS) &&
+                clientId.length() > ConstantUtils.CLIENT_BANK_LENGHT);
     }
 
 

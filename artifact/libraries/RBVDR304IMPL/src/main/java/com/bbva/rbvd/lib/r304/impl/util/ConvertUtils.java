@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class ConvertUtils {
 
+    private ConvertUtils(){}
+
     public static LocalDate convertDateToLocalDate(Date date){
         return date.toInstant()
                 .atZone(ZoneId.systemDefault())
