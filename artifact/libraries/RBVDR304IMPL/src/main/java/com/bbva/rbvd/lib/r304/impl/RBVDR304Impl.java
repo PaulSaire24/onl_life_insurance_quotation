@@ -1,8 +1,5 @@
 package com.bbva.rbvd.lib.r304.impl;
 
-
-
-import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.product.QuotationEasyYes;

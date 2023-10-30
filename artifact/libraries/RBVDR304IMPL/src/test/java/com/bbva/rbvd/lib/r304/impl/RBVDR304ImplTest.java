@@ -8,11 +8,12 @@ import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
 import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.pisd.dto.insurance.commons.ContactDetailDTO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.dao.ParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-import com.bbva.rbvd.dto.lifeinsrc.quotation.EasyesQuotationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO;
@@ -23,7 +24,6 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r304.transfer.PayloadProperties;
-import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -42,7 +42,6 @@ public class RBVDR304ImplTest {
     private final RBVDR304Impl rbvdr304 = new RBVDR304Impl();
     private PISDR350 pisdR350;
     private QuotationLifeDTO input;
-    private PayloadStore payloadStore;
     private Map<String,Object> mapInformation;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
@@ -101,6 +100,7 @@ public class RBVDR304ImplTest {
 
 
         when(pisdR350.executeInsertSingleRow(anyString(),anyMap())).thenReturn(1);
+        when(applicationConfigurationService.getProperty("DNI")).thenReturn("L");
 
     }
 
@@ -237,6 +237,7 @@ public class RBVDR304ImplTest {
         HolderDTO holderDTO = new HolderDTO();
         holderDTO.setFirstName("Alec");
         holderDTO.setLastName("Alec taboada");
+        holderDTO.setIdentityDocument(identityDocumentDTO);
         ContractDetailsDTO contractDetail = new ContractDetailsDTO();
         contractDetail.setContact(new ContactDTO());
         contractDetail.getContact().setContactDetailType("MOBILE_NUMBER");
@@ -244,22 +245,84 @@ public class RBVDR304ImplTest {
         ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
         contractDetail2.setContact(new ContactDTO());
         contractDetail2.getContact().setContactDetailType("EMAIL");
-        contractDetail2.getContact().setAddress("@gmail.com");
+        contractDetail2.getContact().setAddress("xd@gmail.com");
         List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
         contractDetailsList.add(contractDetail);
         contractDetailsList.add(contractDetail2);
 
+
         this.input.setHolder(holderDTO);
         this.input.setTerm(new TermDTO());
         this.input.getTerm().setNumber(45);
-
-
 
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
+
+    private List<ParticipantDTO> participantsInput(){
+        List<ParticipantDTO> participantDTOS = new ArrayList<>();
+        ParticipantDTO insured = new ParticipantDTO();
+
+        insured.setId("73944043");
+        insured.setFirstName("Daniel");
+        insured.setLastName("Leroy");
+        insured.setSecondLastName("Silverson");
+        ParticipantTypeDTO participantType = new ParticipantTypeDTO();
+        participantType.setId("INSURED");
+        insured.setParticipantType(participantType);
+        List<ContractDetailsDTO> contractDetails = new ArrayList<>();
+        ContractDetailsDTO phone = new ContractDetailsDTO();
+        phone.setContact(new ContactDTO());
+        phone.getContact().setContactDetailType("MOBILE_NUMBER");
+        phone.getContact().setNumber("999999999");
+        ContractDetailsDTO email = new ContractDetailsDTO();
+        email.setContact(new ContactDTO());
+        email.getContact().setContactDetailType("EMAIL");
+        email.getContact().setAddress("xd@gmail.com");
+        contractDetails.add(phone);
+        contractDetails.add(email);
+        insured.setContactDetails(contractDetails);
+        IdentityDocumentDTO identityDocument = new IdentityDocumentDTO();
+        identityDocument.setDocumentNumber("36384943");
+        DocumentTypeDTO documentType = new DocumentTypeDTO();
+        documentType.setId("DNI");
+        identityDocument.setDocumentType(documentType);
+        insured.setIdentityDocument(identityDocument);
+        GenderDTO gender = new GenderDTO();
+        gender.setId("MALE");
+        insured.setGender(gender);
+
+        participantDTOS.add(insured);
+        return participantDTOS;
+    }
+
+    @Test
+    public void testExecuteBusinessLogicDynamicLifeQuotationInsert_InputParticipantsNotNull() {
+        this.input.getProduct().setId("841");
+        DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
+        documentTypeDTO.setId("DNI");
+        IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
+        identityDocumentDTO.setDocumentNumber("14457841");
+        identityDocumentDTO.setDocumentType(documentTypeDTO);
+        HolderDTO holderDTO = new HolderDTO();
+        holderDTO.setFirstName("Alec");
+        holderDTO.setLastName("Alec taboada");
+        holderDTO.setIdentityDocument(identityDocumentDTO);
+        this.input.setHolder(holderDTO);
+        this.input.setTerm(new TermDTO());
+        this.input.getTerm().setNumber(45);
+        this.input.setRefunds(null);
+        this.input.setParticipants(participantsInput());
+
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+
+        assertNotNull(validation);
+    }
+
     @Test
     public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_NullParticipant() {
         input.setInsuredAmount(null);
