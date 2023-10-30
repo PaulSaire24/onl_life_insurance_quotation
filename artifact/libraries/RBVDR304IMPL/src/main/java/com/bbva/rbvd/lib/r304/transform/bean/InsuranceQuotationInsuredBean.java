@@ -253,7 +253,7 @@ public class InsuranceQuotationInsuredBean {
     public static LocalDate getBirthDateFromCustomerData(CustomerBO customerData) {
         Date birthday=null;
         if(customerData.getBirthData() != null && customerData.getBirthData().getBirthDate() != null) {
-            LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern(ConstantUtils.PATTERN_DATE));
             ZoneId localZone = ZoneId.of(ConstantUtils.ZONE_AMERICA_LIMA);
             birthday = Date.from(lc.atStartOfDay(localZone).toInstant());
         }

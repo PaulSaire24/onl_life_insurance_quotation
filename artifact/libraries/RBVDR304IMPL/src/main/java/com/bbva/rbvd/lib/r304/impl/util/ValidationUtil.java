@@ -7,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Objects;
 
-import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
-
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public final class ValidationUtil {
@@ -30,9 +28,9 @@ public final class ValidationUtil {
 
     public static String validateIsDataTreatment(Boolean isDataTreatment){
         if(Objects.nonNull(isDataTreatment)){
-            return Boolean.TRUE.equals(isDataTreatment) ? "S" : "N";
+            return Boolean.TRUE.equals(isDataTreatment) ? ConstantUtils.YES_S : ConstantUtils.NO_N;
         }else{
-            return "N";
+            return ConstantUtils.NO_N;
         }
     }
     public static boolean isBBVAClient(String clientId){

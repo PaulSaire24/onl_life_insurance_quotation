@@ -9,7 +9,7 @@ public class ConstantUtils {
     public static final String ANNUAL="A";
     public static final String AMOUNT="AMOUNT";
     public static final String BLANK ="";
-    public static final int CLIENT_BANK_LENGHT =8;
+    public static final int CLIENT_BANK_LENGHT = 8;
     public static final String EMAIL="EMAIL";
     public static final int ROLE_INSURED = 2;
     public static final String MOBILE_NUMBER="MOBILE";
@@ -24,4 +24,5 @@ public class ConstantUtils {
     public static final String GMT_TIME_ZONE = "GMT";
     public static  final String ZONE_AMERICA_LIMA = "America/Lima";
     public static final ZoneId ZONE_ID = ZoneId.of(GMT_TIME_ZONE);
+    public static final String PATTERN_DATE = "yyyy-MM-dd";
 }

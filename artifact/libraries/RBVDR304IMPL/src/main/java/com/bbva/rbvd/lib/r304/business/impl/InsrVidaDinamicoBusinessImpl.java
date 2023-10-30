@@ -67,8 +67,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         QuotationLifeBO responseRimac = this.rbvdR303.executeQuotationRimac(requestRimac, payload.getInput().getExternalSimulationId(), payload.getInput().getTraceId());
 
         if (isNull(responseRimac)) {
-
-            LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | responseRimac: {} *****", responseRimac);
             throw RBVDValidation.build(RBVDErrors.COULDNT_SELECT_MODALITY_RIMAC_ERROR);
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - callQuotationRimacService | responseRimac: {} *****", responseRimac);

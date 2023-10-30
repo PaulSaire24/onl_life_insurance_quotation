@@ -32,7 +32,7 @@ public class InsuranceQuotationModBeanTest{
     private ApplicationConfigurationService applicationConfigurationService;
     private PayloadStore payloadStore;
     @Before
-        public void setUp() throws Exception {
+    public void setUp() throws Exception {
 
         input = MockData.getInstance().getEasyesInsuranceQuotationRequest();
 
@@ -70,7 +70,7 @@ public class InsuranceQuotationModBeanTest{
         payloadStore.setMyQuotation(myQuotation);
         payloadStore.setRimacResponse(rimacResponse);
         payloadStore.setFrequencyType("M");
-}
+    }
 
     @Test
     public void testCreateQuotationModDao() {
