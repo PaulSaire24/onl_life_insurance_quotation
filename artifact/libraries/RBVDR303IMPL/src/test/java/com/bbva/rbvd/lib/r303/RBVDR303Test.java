@@ -54,7 +54,6 @@ public class RBVDR303Test {
 
 	private ApplicationConfigurationService applicationConfigurationService;
 	private APIConnector externalApiConnector;
-	private APIConnector internalApiConnector;
 	private PISDR014 pisdr014;
 	private PBTQR002 pbtqr002;
 	private CustomerListASO customerList;
@@ -70,8 +69,6 @@ public class RBVDR303Test {
 		when(this.applicationConfigurationService.getProperty(RBVDProperties.QUOTATION_EASYES_RIMAC_URI.getValue()))
 				.thenReturn("/api-vida/V1/cotizaciones/ideCotizacion/seleccionar");
 
-		internalApiConnector =mock(APIConnector.class);
-		rbvdR303.setInternalApiConnector(internalApiConnector);
 
 		externalApiConnector = mock(APIConnector.class);
 		rbvdR303.setExternalApiConnector(externalApiConnector);
