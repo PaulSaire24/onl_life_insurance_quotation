@@ -105,7 +105,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}-${project.version}</Bundle-SymbolicName>
-						<Bundle-Category>library-extapiconnector-intapiconnector</Bundle-Category>
+						<Bundle-Category>library-extapiconnector</Bundle-Category>
 						<Export-Package>
 							!*;version="${osgi.version.manifest}"
 						</Export-Package>
