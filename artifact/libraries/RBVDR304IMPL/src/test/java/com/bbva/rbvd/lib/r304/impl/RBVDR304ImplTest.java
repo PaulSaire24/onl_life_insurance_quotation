@@ -174,7 +174,7 @@ public class RBVDR304ImplTest {
         assertNotNull(validation);
     }
     @Test
-    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_Passport() {
+    public void testExecuteBusinessLogicEasyesQuotationInsertQuotation_DNI() {
         EasyesQuotationDAO myQuotation = mock(EasyesQuotationDAO.class);
         CustomerListASO customerListASO= new CustomerListASO();
         CustomerBO customerBO =new CustomerBO();
@@ -260,7 +260,7 @@ public class RBVDR304ImplTest {
         IdentityDocumentsBO identityDocumentsBO = new IdentityDocumentsBO();
         identityDocumentsBO.setDocumentNumber("75874332");
         DocumentTypeBO type = new DocumentTypeBO();
-        type.setId("DNI");
+        type.setId("P");
         identityDocumentsBO.setDocumentType(type);
         documents.add(identityDocumentsBO);
         customerBO.setIdentityDocuments(documents);
