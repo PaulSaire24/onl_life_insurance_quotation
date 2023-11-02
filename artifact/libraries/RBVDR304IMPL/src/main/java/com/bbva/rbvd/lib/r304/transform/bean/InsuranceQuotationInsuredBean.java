@@ -83,8 +83,8 @@ public class InsuranceQuotationInsuredBean {
     }
 
     private static ParticipantDAO getParticipantDao(QuotationLifeDTO input,
-                                             ApplicationConfigurationService applicationConfigurationService,
-                                             CustomerListASO customerInformation){
+                                                    ApplicationConfigurationService applicationConfigurationService,
+                                                    CustomerListASO customerInformation){
         ParticipantDAO participantDAO = new ParticipantDAO();
 
         participantDAO.setCustomerEntryDate(getCustomerEntryDate(input));
@@ -149,7 +149,7 @@ public class InsuranceQuotationInsuredBean {
     }
 
     private static void setParticipantPropertiesFromInput(ParticipantDAO participantDAO, ParticipantDTO participant,
-                                                   ApplicationConfigurationService applicationConfigurationService) {
+                                                          ApplicationConfigurationService applicationConfigurationService) {
 
         ContractDetailsDTO tipoContratoEmail = getGroupedByTypeContactDetailDTO(participant.getContactDetails(), ConstantUtils.EMAIL);
         ContractDetailsDTO tipoContratoMov = getGroupedByTypeContactDetailDTO(participant.getContactDetails(), ConstantUtils.MOBILE_NUMBER);
@@ -185,7 +185,7 @@ public class InsuranceQuotationInsuredBean {
     }
 
     private static void setParticipantPreportiesFromCustomerData(ParticipantDAO participantDAO, QuotationLifeDTO input,
-                                  CustomerBO customerData,ApplicationConfigurationService applicationConfigurationService) {
+                                                                 CustomerBO customerData,ApplicationConfigurationService applicationConfigurationService) {
 
         if(Objects.nonNull(customerData)){
             participantDAO.setInsuredCustomerName(getSafeFirstNameFromCustomerData(customerData));
@@ -193,7 +193,7 @@ public class InsuranceQuotationInsuredBean {
             participantDAO.setCustomerBirthDate(getBirthDateFromCustomerData(customerData));
             participantDAO.setGenderId(customerData.getGender() != null ? customerData.getGender().getId().substring(0, 1) : null);
             String documentType = getDocumentTypeFromCUstomerData(customerData);
-            participantDAO.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType) : null);
+            participantDAO.setCustomerDocumentType(setDocumentTypeWithCustomerData(documentType,applicationConfigurationService));
             participantDAO.setPersonalId(getDocumentNumberFromCustomerData(customerData));
 
             ContactDetailsBO tipoContratoEmail;
@@ -235,7 +235,19 @@ public class InsuranceQuotationInsuredBean {
                 && customerData.getIdentityDocuments().get(0).getDocumentType() != null) ?
                 customerData.getIdentityDocuments().get(0).getDocumentType().getId() : null;
     }
+    private static String setDocumentTypeWithCustomerData(String documentType,ApplicationConfigurationService applicationConfigurationService) {
+        String result = null;
+        if(documentType!=null){
+            if (documentType.equals("DNI")){
+                result=applicationConfigurationService.getProperty(documentType);
 
+            }
+            else {
+                result= documentType;
+            }
+        }
+        return result;
+    }
     private static ContactDetailsDAO getContactDetailsDAOFromInputParticipant(ContractDetailsDTO tipoContratoEmail, ContractDetailsDTO tipoContratoMov) {
         ContactDetailsDAO contactDetailsDAO = new ContactDetailsDAO();
         contactDetailsDAO.setPhoneId(Objects.nonNull(tipoContratoMov) ? tipoContratoMov.getContact().getNumber() : null);
@@ -285,14 +297,14 @@ public class InsuranceQuotationInsuredBean {
 
     public static ContractDetailsDTO getGroupedByTypeContactDetailDTO(List<ContractDetailsDTO> contacts, String tipoContacto) {
         return !CollectionUtils.isEmpty(contacts)
-        ? contacts.stream()
+                ? contacts.stream()
                 .filter(contactInfo ->
                         contactInfo != null &&
                                 contactInfo.getContact() != null &&
                                 tipoContacto.equals(contactInfo.getContact().getContactDetailType())
                 ).findFirst()
                 .orElse(null)
-        : null;
+                : null;
     }
     public static ContactDetailsBO getGroupedByTypeContactDetailBO(List<ContactDetailsBO> customer, String tipoContacto) {
         return customer.stream()
