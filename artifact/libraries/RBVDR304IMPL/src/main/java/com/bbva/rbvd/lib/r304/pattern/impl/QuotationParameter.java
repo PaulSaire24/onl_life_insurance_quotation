@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r303.RBVDR303;
+import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.pattern.PreQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsurancePaymentPeriodDAO;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceProductModalityDAO;
@@ -54,7 +55,7 @@ public class QuotationParameter implements PreQuotation {
 
         EasyesQuotationDAO myQuotation = QuotationBean.createQuotationDao(simulation, product, paymentFrequency);
         CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
-        LOGGER.info("***** QuotationParameter: customerResponse {} *****",customerResponse);
+        LOGGER.info("***** QuotationParameter: customerResponse {} *****", JsonHelper.getInstance().convertObjectToJsonString(customerResponse));
         String policyQuotaid = this.getGeneratePolicyQuotaid(myQuotation);
 
         input.setId(policyQuotaid);
@@ -74,13 +75,13 @@ public class QuotationParameter implements PreQuotation {
 
         StringBuilder policyQuotaInternalId = new StringBuilder("0814");
         int sizeToComplete = requiredSize - myQuotation.getInsuranceSimulationId().toString().length();
-        LOGGER.info("***** getGeneratePolicyQuotaid myQuotation : {} *****",myQuotation.toString());
-        LOGGER.info("***** getGeneratePolicyQuotaid getInsuranceSimulationId : {} *****",myQuotation.getInsuranceSimulationId().toString());
+        LOGGER.info("***** getGeneratePolicyQuotaid myQuotation : {} *****",JsonHelper.getInstance().convertObjectToJsonString(myQuotation));
+        LOGGER.info("***** getGeneratePolicyQuotaid getInsuranceSimulationId : {} *****",JsonHelper.getInstance().convertObjectToJsonString(myQuotation.getInsuranceSimulationId()));
         for(int i = 0; i < sizeToComplete; i++) {
             policyQuotaInternalId.append("0");
         }
         policyQuotaInternalId.append(myQuotation.getInsuranceSimulationId());
-        LOGGER.info("***** getGeneratePolicyQuotaid policyQuotaInternalId : {} *****",policyQuotaInternalId.toString());
+        LOGGER.info("***** getGeneratePolicyQuotaid policyQuotaInternalId : {} *****",JsonHelper.getInstance().convertObjectToJsonString(policyQuotaInternalId));
         return policyQuotaInternalId.toString();
     }
 

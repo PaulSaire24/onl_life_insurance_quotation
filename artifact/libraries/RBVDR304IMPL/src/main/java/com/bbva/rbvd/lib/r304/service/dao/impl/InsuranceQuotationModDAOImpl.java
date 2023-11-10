@@ -8,11 +8,11 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationModDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
 import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationModMap;
-import com.bbva.rbvd.lib.r304.transform.map.QuotationParticipantMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,10 +38,12 @@ public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
     }
     @Override
     public void executeInsertQuotationModQuery(PayloadStore payloadStore) {
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore INPUT",payloadStore.getInput().toString());
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore RIMAC RESPONSE",payloadStore.getRimacResponse().toString());
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore MY QUOTATION",payloadStore.getMyQuotation().toString());
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore getFrequencyType",payloadStore.getFrequencyType());
+
+
+        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore INPUT",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getInput()));
+        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore RIMAC RESPONSE",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getRimacResponse()));
+        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore MY QUOTATION",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
+        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore getFrequencyType",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getFrequencyType()));
         InsuranceQuotationModDAO insuranceQuotationModDao = InsuranceQuotationModBean.createQuotationModDao(payloadStore);
         Map<String, Object> argumentsQuotationModDao = InsuranceQuotationModMap.createArgumentsQuotationModDao(insuranceQuotationModDao);
         LOGGER.info("********** executeInsertQuotationModQuery - argumentsQuotationModDao : {}",argumentsQuotationModDao.values());
