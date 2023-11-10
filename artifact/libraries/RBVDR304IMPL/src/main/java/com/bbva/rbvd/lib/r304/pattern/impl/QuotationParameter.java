@@ -74,12 +74,13 @@ public class QuotationParameter implements PreQuotation {
 
         StringBuilder policyQuotaInternalId = new StringBuilder("0814");
         int sizeToComplete = requiredSize - myQuotation.getInsuranceSimulationId().toString().length();
-
+        LOGGER.info("***** getGeneratePolicyQuotaid myQuotation : {} *****",myQuotation.toString());
+        LOGGER.info("***** getGeneratePolicyQuotaid getInsuranceSimulationId : {} *****",myQuotation.getInsuranceSimulationId().toString());
         for(int i = 0; i < sizeToComplete; i++) {
             policyQuotaInternalId.append("0");
         }
         policyQuotaInternalId.append(myQuotation.getInsuranceSimulationId());
-
+        LOGGER.info("***** getGeneratePolicyQuotaid policyQuotaInternalId : {} *****",policyQuotaInternalId.toString());
         return policyQuotaInternalId.toString();
     }
 
