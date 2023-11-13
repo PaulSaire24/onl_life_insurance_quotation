@@ -16,14 +16,19 @@ public class InsuranceQuotationModMap {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(), updateInsuranceQuotationModDao.getPolicyQuotaInternalId());
         LOGGER.info(" ************ createUpdateQuotationModArguments - PolicyQuotaInternalId {}",updateInsuranceQuotationModDao.getPolicyQuotaInternalId());
+        LOGGER.info(" ************ createUpdateQuotationModArguments - FIELD_POLICY_QUOTA_INTERNAL_ID {}",RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), updateInsuranceQuotationModDao.getInsuranceProductId());
+        LOGGER.info(" ************ createUpdateQuotationModArguments - FIELD_OR_FILTER_INSURANCE_PRODUCT_ID {}",RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue());
         LOGGER.info(" ************ createUpdateQuotationModArguments - getInsuranceProductId {}",updateInsuranceQuotationModDao.getInsuranceProductId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), updateInsuranceQuotationModDao.getInsuranceModalityType());
+        LOGGER.info(" ************ createUpdateQuotationModArguments - FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE {}",RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue());
         LOGGER.info(" ************ createUpdateQuotationModArguments - getInsuranceModalityType {}",updateInsuranceQuotationModDao.getInsuranceModalityType());
         arguments.put(RBVDProperties.FIELD_PREMIUM_AMOUNT.getValue(), updateInsuranceQuotationModDao.getPremiumAmount());
         LOGGER.info(" ************ createUpdateQuotationModArguments - getPremiumAmount {}",updateInsuranceQuotationModDao.getPremiumAmount());
+        LOGGER.info(" ************ createUpdateQuotationModArguments - FIELD_PREMIUM_AMOUNT {}",RBVDProperties.FIELD_PREMIUM_AMOUNT.getValue());
         arguments.put(RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue(), updateInsuranceQuotationModDao.getLastChangeBranchId());
         LOGGER.info(" ************ createUpdateQuotationModArguments - getLastChangeBranchId {}",updateInsuranceQuotationModDao.getLastChangeBranchId());
+        LOGGER.info(" ************ createUpdateQuotationModArguments - FIELD_LAST_CHANGE_BRANCH_ID {}",RBVDProperties.FIELD_LAST_CHANGE_BRANCH_ID.getValue());
         return arguments;
     }
 
