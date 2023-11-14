@@ -30,11 +30,8 @@ public class QuotationStore implements PostQuotation {
     @Override
     public void end(PayloadStore payloadStore,ApplicationConfigurationService applicationConfigurationService) {
         BigDecimal resultCount = this.getQuotationIdFromDB(payloadStore);
-
         this.save(payloadStore, resultCount,applicationConfigurationService);
     }
-
-
     private BigDecimal getQuotationIdFromDB(PayloadStore payloadStore){
 
         LOGGER.info("***** QuotationStore - getQuotationIdFromDB START *****");
@@ -63,10 +60,10 @@ public class QuotationStore implements PostQuotation {
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getInput()));
-            insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
             insuranceQuotation.updateQuotationInsured(argumentForUpdateParticipant);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getInput()));
+            insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
             ;
          } else {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));

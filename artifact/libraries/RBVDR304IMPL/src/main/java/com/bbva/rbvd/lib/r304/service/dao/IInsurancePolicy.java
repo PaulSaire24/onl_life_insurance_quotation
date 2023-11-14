@@ -4,4 +4,4 @@ import java.util.Map;
 
 public interface IInsurancePolicy {
     Map<String, Object> executeValidateQuotation(String policyQuotaInternalId);
-}
+    }

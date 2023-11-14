@@ -19,4 +19,5 @@ public class InsurancePolicyDAOImpl implements IInsurancePolicy {
         Map<String, Object> argument = PolicyQuotaInternalMap.createArgumentForValidateQuotation(policyQuotaInternalId);
         return this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_VALIDATE_IF_QUOTATION_EXISTS.getValue(), argument);
     }
+
 }
