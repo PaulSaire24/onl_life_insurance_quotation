@@ -78,14 +78,13 @@ public class QuotationStore implements PostQuotation {
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
             LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
-            if(BigDecimal.ONE.compareTo(this.existQuotationLifeOnDB(payloadStore)) == 0){
+
                LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
-                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
-               insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
-             } else {
-                 insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
-                 insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
-             }
+            insuranceQuotation.deleteQuotationInsuredLife(payloadStore.getInput().getId());
+            insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
+            insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
+              // insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
+
 
          } else {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));

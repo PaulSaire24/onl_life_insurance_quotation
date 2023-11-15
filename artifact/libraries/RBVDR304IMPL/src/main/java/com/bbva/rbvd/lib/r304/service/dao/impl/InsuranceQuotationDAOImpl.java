@@ -11,6 +11,7 @@ import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationBean;
 import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationMap;
+import com.bbva.rbvd.lib.r304.transform.map.QuotationLifeInternalMap;
 
 import java.util.Map;
 
@@ -33,8 +34,9 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         }
     }
     @Override
-    public void updateQuotationInsuredLife(Map<String, Object> argumentForSaveParticipant) {
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.UPDATE_INSURED_QUOTATION_LIFE,argumentForSaveParticipant);
+    public void deleteQuotationInsuredLife(String policyQuotaInternalId) {
+        Map<String, Object> argument = QuotationLifeInternalMap.createArgumentForValidateQuotation(policyQuotaInternalId);
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.DELETE_INSURED_QUOTATION_LIFE,argument);
         if(idNewSimulation != 1){
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }
