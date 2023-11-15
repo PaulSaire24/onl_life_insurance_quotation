@@ -23,7 +23,7 @@ public class InsurancePolicyDAOImpl implements IInsurancePolicy {
     @Override
     public Map<String, Object> executeValidateQuotationMod(String policyQuotaInternalId, BigDecimal insuranceProductId, String insuranceModalityType) {
         Map<String, Object> argument = PolicyQuotaInternalMap.createArgumentForValidateQuotationMod(policyQuotaInternalId,insuranceProductId,insuranceModalityType);
-        return this.pisdR350.executeGetASingleRow("PISD.VALIDATE_IF_QUOTATION_EXISTS", argument);
+        return this.pisdR350.executeGetASingleRow("PISD.VALIDATE_IF_QUOTATION_LIFE_EXISTS", argument);
     }
 
 }

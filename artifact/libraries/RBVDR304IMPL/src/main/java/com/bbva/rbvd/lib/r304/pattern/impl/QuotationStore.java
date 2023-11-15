@@ -34,7 +34,7 @@ public class QuotationStore implements PostQuotation {
     public void end(PayloadStore payloadStore,ApplicationConfigurationService applicationConfigurationService) {
         BigDecimal resultCount = this.getQuotationIdFromDB(payloadStore);
         BigDecimal alredyExist = this.getQuotationIdFromDBMod(payloadStore);
-        this.save(payloadStore, resultCount,applicationConfigurationService);
+        this.save(payloadStore, resultCount,applicationConfigurationService,alredyExist);
     }
     private BigDecimal getQuotationIdFromDB(PayloadStore payloadStore){
 
