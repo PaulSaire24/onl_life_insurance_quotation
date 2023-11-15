@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface IInsurancePolicy {
     Map<String, Object> executeValidateQuotation(String policyQuotaInternalId);
-    public Map<String, Object> executeValidateQuotationMod(String policyQuotaInternalId, BigDecimal insuranceProductId, String insuranceModalityType) ;
+    public Map<String, Object> executeValidateQuotationLife(String policyQuotaInternalId, BigDecimal insuranceProductId, String insuranceModalityType) ;
 
     }
