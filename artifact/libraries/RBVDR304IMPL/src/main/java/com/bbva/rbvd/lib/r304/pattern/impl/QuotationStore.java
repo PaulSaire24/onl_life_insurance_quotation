@@ -80,8 +80,8 @@ public class QuotationStore implements PostQuotation {
             LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
             if(BigDecimal.ONE.compareTo(this.existQuotationLifeOnDB(payloadStore)) == 0){
                LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
+                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
                insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
-               insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
              } else {
                  insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
                  insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
