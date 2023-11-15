@@ -77,7 +77,7 @@ public class QuotationStore implements PostQuotation {
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
-             if(BigDecimal.ONE.compareTo(resultCount) == 0){
+             if(BigDecimal.ONE.compareTo(alredyExist) == 0){
                LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
                insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
            }
