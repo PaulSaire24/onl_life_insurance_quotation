@@ -2,8 +2,12 @@ package com.bbva.rbvd.lib.r304.pattern.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuredLifeDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.service.dao.impl.InsurancePolicyDAOImpl;
@@ -32,17 +36,28 @@ public class QuotationStore implements PostQuotation {
 
         this.save(payloadStore, resultCount,applicationConfigurationService);
     }
-
-
     private BigDecimal getQuotationIdFromDB(PayloadStore payloadStore){
 
         LOGGER.info("***** QuotationStore - getQuotationIdFromDB START *****");
-        LOGGER.info("***** QuotationStore - getQuotationIdFromDB START, parameter payloadStore: {} *****", payloadStore);
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDB START, parameter payloadStore: {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
 
         InsurancePolicyDAOImpl insurancePolicy = new InsurancePolicyDAOImpl(this.pisdR350);
         Map<String, Object> responseValidateQuotation = insurancePolicy.executeValidateQuotation(payloadStore.getInput().getId());
 
-        LOGGER.info("***** QuotationStore - getQuotationIdFromDB | responseValidateQuotation: {} *****",responseValidateQuotation);
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDB | responseValidateQuotation: {} *****",JsonHelper.getInstance().convertObjectToJsonString(responseValidateQuotation));
+
+        return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
+    }
+    private BigDecimal existQuotationLifeOnDB(PayloadStore payloadStore){
+
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START *****");
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START, parameter payloadStore: {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
+        EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
+        QuotationLifeDTO input = payloadStore.getInput();
+        InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
+        InsurancePolicyDAOImpl insurancePolicy = new InsurancePolicyDAOImpl(this.pisdR350);
+        Map<String, Object> responseValidateQuotation = insurancePolicy.executeValidateQuotationLife(payloadStore.getInput().getId(),quotationDao.getInsuranceProductId(),plan.getId());
+        LOGGER.info("***** QuotationStore - existQuotationLifeOnDB | responseValidateQuotation: {} *****",JsonHelper.getInstance().convertObjectToJsonString(responseValidateQuotation));
 
         return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
     }
@@ -50,7 +65,7 @@ public class QuotationStore implements PostQuotation {
     private void save(PayloadStore payloadStore, BigDecimal resultCount,ApplicationConfigurationService applicationConfigurationService){
         InsuranceQuotationModDAOImpl insuranceQuotationMod = new InsuranceQuotationModDAOImpl(pisdR350);
 
-        LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",payloadStore);
+        LOGGER.info("***** QuotationStore - SaveQuotation START - arguments: payloadStore {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
 
         InsuranceQuotationDAOImpl insuranceQuotation = new InsuranceQuotationDAOImpl(pisdR350);
         InsuredLifeDAO quotationInsured = InsuranceQuotationInsuredBean.createQuotationParticipant(payloadStore,applicationConfigurationService);
@@ -61,16 +76,22 @@ public class QuotationStore implements PostQuotation {
         IInsuranceQuotationDAO insuranceSimulationDao= new InsuranceQuotationDAOImpl(pisdR350);
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",payloadStore.getMyQuotation());
-            insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant);
-            insuranceQuotation.updateQuotationInsured(argumentForUpdateParticipant);
-            ;
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
+            LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
+            if(BigDecimal.ONE.compareTo(this.existQuotationLifeOnDB(payloadStore)) == 0){
+               LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
+                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
+               insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
+             } else {
+                 insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
+                 insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
+             }
+
          } else {
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", payloadStore);
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
             insuranceQuotationMod.executeInsertQuotationModQuery(payloadStore);
-            insuranceSimulationDao.insertQuotationInsured(argumentForSaveParticipant);
+            insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
         }
     }
 

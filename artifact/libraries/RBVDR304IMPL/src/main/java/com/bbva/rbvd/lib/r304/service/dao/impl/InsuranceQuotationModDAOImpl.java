@@ -8,10 +8,13 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationModDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
 import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationModMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -19,6 +22,8 @@ import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.validateInsertionQ
 
 public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
     private final PISDR350 pisdR350;
+    private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationModDAOImpl.class);
+
 
     public InsuranceQuotationModDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;

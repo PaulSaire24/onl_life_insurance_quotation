@@ -2,11 +2,15 @@ package com.bbva.rbvd.lib.r304.transform.map;
 
 import com.bbva.pisd.dto.insurance.dao.InsuranceQuotationModDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r304.service.dao.impl.InsuranceQuotationModDAOImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class InsuranceQuotationModMap {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationModMap.class);
     private InsuranceQuotationModMap(){}
     public static Map<String, Object> createUpdateQuotationModArguments(InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();

@@ -44,6 +44,7 @@ public class QuotationParticipantMap {
         arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),
                 Objects.nonNull(quotationParticipant.getParticipant().getContactDetails())
                 ? quotationParticipant.getParticipant().getContactDetails().getPhoneId() : null);
+
         arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),quotationParticipant.getParticipant().getCustomerEntryDate());
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),quotationParticipant.getParticipant().getParticipantRoleId());
         arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(),quotationParticipant.getParticipant().getInsuredCustomerName());
