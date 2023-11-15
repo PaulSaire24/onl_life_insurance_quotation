@@ -48,7 +48,7 @@ public class QuotationStore implements PostQuotation {
 
         return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
     }
-    private Boolean existQuotationLifeOnDB(PayloadStore payloadStore){
+    private BigDecimal existQuotationLifeOnDB(PayloadStore payloadStore){
 
         LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START *****");
         LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START, parameter payloadStore: {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
@@ -57,9 +57,9 @@ public class QuotationStore implements PostQuotation {
         InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
         InsurancePolicyDAOImpl insurancePolicy = new InsurancePolicyDAOImpl(this.pisdR350);
         Map<String, Object> responseValidateQuotation = insurancePolicy.executeValidateQuotationLife(payloadStore.getInput().getId(),quotationDao.getInsuranceProductId(),plan.getId());
-        LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod | responseValidateQuotation: {} *****",JsonHelper.getInstance().convertObjectToJsonString(responseValidateQuotation));
+        LOGGER.info("***** QuotationStore - existQuotationLifeOnDB | responseValidateQuotation: {} *****",JsonHelper.getInstance().convertObjectToJsonString(responseValidateQuotation));
 
-        return  responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue())!=null ;
+        return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
     }
 
     private void save(PayloadStore payloadStore, BigDecimal resultCount,ApplicationConfigurationService applicationConfigurationService){
@@ -77,7 +77,8 @@ public class QuotationStore implements PostQuotation {
 
         if(BigDecimal.ONE.compareTo(resultCount) == 0) {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
-             if(this.existQuotationLifeOnDB(payloadStore)){
+            LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
+            if(BigDecimal.ONE.compareTo(this.existQuotationLifeOnDB(payloadStore)) == 0){
                LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
                insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
