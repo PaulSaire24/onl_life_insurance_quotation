@@ -5,6 +5,7 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
 import com.bbva.rbvd.lib.r304.impl.util.ValidationUtil;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
@@ -26,14 +27,14 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
 
     @Override
     public void insertQuotationInsuredLife(Map<String, Object> argumentForSaveParticipant) {
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow("PISD.INSERT_INSURED_QUOTATION_LIFE",argumentForSaveParticipant);
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.INSERT_INSURED_QUOTATION_LIFE,argumentForSaveParticipant);
         if(idNewSimulation != 1){
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }
     }
     @Override
     public void updateQuotationInsuredLife(Map<String, Object> argumentForSaveParticipant) {
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow("PISD.UPDATE_INSURED_QUOTATION_LIFE",argumentForSaveParticipant);
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.UPDATE_INSURED_QUOTATION_LIFE,argumentForSaveParticipant);
         if(idNewSimulation != 1){
             throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
         }

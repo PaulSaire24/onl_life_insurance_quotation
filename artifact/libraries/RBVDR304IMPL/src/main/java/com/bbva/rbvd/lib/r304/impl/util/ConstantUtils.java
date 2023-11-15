@@ -8,6 +8,9 @@ public class ConstantUtils {
 
     public static final String ANNUAL="A";
     public static final String AMOUNT="AMOUNT";
+    public static final String VALIDATE_IF_QUOTATION_LIFE_EXISTS ="PISD.VALIDATE_IF_QUOTATION_LIFE_EXISTS";
+    public static final String UPDATE_INSURED_QUOTATION_LIFE ="PISD.UPDATE_INSURED_QUOTATION_LIFE";
+    public static final String INSERT_INSURED_QUOTATION_LIFE ="PISD.INSERT_INSURED_QUOTATION_LIFE";
     public static final String BLANK ="";
     public static final int CLIENT_BANK_LENGHT = 8;
     public static final String EMAIL="EMAIL";

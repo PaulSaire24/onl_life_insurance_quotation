@@ -38,15 +38,8 @@ public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
     }
     @Override
     public void executeInsertQuotationModQuery(PayloadStore payloadStore) {
-
-
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore INPUT",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getInput()));
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore RIMAC RESPONSE",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getRimacResponse()));
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore MY QUOTATION",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
-        LOGGER.info(" *********** executeInsertQuotationModQuery -  payloadStore getFrequencyType",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getFrequencyType()));
         InsuranceQuotationModDAO insuranceQuotationModDao = InsuranceQuotationModBean.createQuotationModDao(payloadStore);
         Map<String, Object> argumentsQuotationModDao = InsuranceQuotationModMap.createArgumentsQuotationModDao(insuranceQuotationModDao);
-        LOGGER.info("********** executeInsertQuotationModQuery - argumentsQuotationModDao : {}",argumentsQuotationModDao.values());
         Integer quotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_QUOTATION_MOD.getValue(), argumentsQuotationModDao);
         validateInsertionQueries(quotationModResult, RBVDErrors.QUOTATION_MOD_INSERTION_WAS_WRONG);
     }
