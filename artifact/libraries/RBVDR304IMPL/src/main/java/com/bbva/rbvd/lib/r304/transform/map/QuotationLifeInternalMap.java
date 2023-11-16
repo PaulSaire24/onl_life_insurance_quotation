@@ -20,4 +20,9 @@ public class QuotationLifeInternalMap {
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), insuranceModalityType);
         return arguments;
     }
+    public static Map<String, Object> createArgumentForDeleteQuotation(String policyQuotaInternalId) {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(),policyQuotaInternalId);
+        return arguments;
+    }
 }

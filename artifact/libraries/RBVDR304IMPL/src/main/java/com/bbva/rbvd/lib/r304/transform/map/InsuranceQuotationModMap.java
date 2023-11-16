@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InsuranceQuotationModMap {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationModMap.class);
     private InsuranceQuotationModMap(){}
     public static Map<String, Object> createUpdateQuotationModArguments(InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();
