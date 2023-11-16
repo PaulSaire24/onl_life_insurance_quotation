@@ -42,10 +42,8 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         Map<String, Object> argument = QuotationLifeInternalMap.createArgumentForDeleteQuotation(policyQuotaInternalId);
         LOGGER.info("***** deleteQuotationInsuredLife - policyQuotaInternalId {} *****",policyQuotaInternalId);
         LOGGER.info("***** deleteQuotationInsuredLife - argument {} *****",argument.values());
-        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.DELETE_INSURED_QUOTATION_LIFE,argument);
-        if(idNewSimulation != 1){
-            throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
-        }
+        this.pisdR350.executeInsertSingleRow(ConstantUtils.DELETE_INSURED_QUOTATION_LIFE,argument);
+
     }
 
 
