@@ -52,7 +52,7 @@ public class QuotationStore implements PostQuotation {
     private Boolean existQuotationLifeOnDB(PayloadStore payloadStore){
 
         LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START *****");
-        LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START, parameter payloadStore: {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
+        LOGGER.info("***** QuotationStore - getQuotationIdFromDBMod START, parameters payloadStore: {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
         EasyesQuotationDAO quotationDao = payloadStore.getMyQuotation();
         QuotationLifeDTO input = payloadStore.getInput();
         InsurancePlanDTO plan = input.getProduct().getPlans().get(0);
