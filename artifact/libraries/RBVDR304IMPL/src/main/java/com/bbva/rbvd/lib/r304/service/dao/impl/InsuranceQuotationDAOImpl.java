@@ -28,7 +28,13 @@ public class InsuranceQuotationDAOImpl implements IInsuranceQuotationDAO {
         this.pisdR350 = pisdR350;
     }
 
-
+    @Override
+    public void updateQuotationInsuredLife(Map<String, Object> argumentForSaveParticipant) {
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.UPDATE_INSURED_QUOTATION_LIFE,argumentForSaveParticipant);
+        if(idNewSimulation != 1){
+            throw RBVDValidation.build(RBVDErrors.QUOTATION_INSERTION_WAS_WRONG);
+        }
+    }
     @Override
     public void insertQuotationInsuredLife(Map<String, Object> argumentForSaveParticipant) {
         int idNewSimulation = this.pisdR350.executeInsertSingleRow(ConstantUtils.INSERT_INSURED_QUOTATION_LIFE,argumentForSaveParticipant);

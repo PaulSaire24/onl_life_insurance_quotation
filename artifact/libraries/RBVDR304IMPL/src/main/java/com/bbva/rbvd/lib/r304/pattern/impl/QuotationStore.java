@@ -79,13 +79,16 @@ public class QuotationStore implements PostQuotation {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForUpdateQuotationMod 1 {} *****",JsonHelper.getInstance().convertObjectToJsonString(payloadStore.getMyQuotation()));
             LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
 
-               LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
-            insuranceQuotation.deleteQuotationInsuredLife(payloadStore.getInput().getId());
-            insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
-            insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
-              // insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
 
-
+            LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
+            if(BigDecimal.ONE.compareTo(existQuotationLifeOnDB(payloadStore)) == 0) {
+                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
+                insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
+            } else{
+                insuranceQuotation.deleteQuotationInsuredLife(payloadStore.getInput().getId());
+                insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
+                insuranceSimulationDao.insertQuotationInsuredLife(argumentForSaveParticipant);
+            }
          } else {
             LOGGER.info("***** QuotationStore - SaveQuotation - argumentsForInsertQuotation payloadstore {} *****", JsonHelper.getInstance().convertObjectToJsonString(payloadStore));
             insuranceQuotation.executeInsertQuotationQuery(payloadStore);
