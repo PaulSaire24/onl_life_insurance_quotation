@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InsuranceQuotationModMap {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InsuranceQuotationModMap.class);
     private InsuranceQuotationModMap(){}
     public static Map<String, Object> createUpdateQuotationModArguments(InsuranceQuotationModDAO updateInsuranceQuotationModDao) {
         final Map<String, Object> arguments = new HashMap<>();
@@ -42,6 +41,11 @@ public class InsuranceQuotationModMap {
         arguments.put(RBVDProperties.FIELD_CONTACT_EMAIL_DESC.getValue(), insuranceQuotationModDao.getContactEmailDesc());
         arguments.put(RBVDProperties.FIELD_CUSTOMER_PHONE_DESC.getValue(), insuranceQuotationModDao.getCustomerPhoneDesc());
         arguments.put(RBVDProperties.FIELD_DATA_TREATMENT_IND_TYPE.getValue(), insuranceQuotationModDao.getDataTreatmentIndType());
+        return arguments;
+    }
+    public static Map<String, Object> createArgumentForDeleteQuotationMod(String policyQuotaInternalId) {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put(RBVDProperties.FIELD_POLICY_QUOTA_INTERNAL_ID.getValue(),policyQuotaInternalId);
         return arguments;
     }
 }
