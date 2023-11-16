@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.InsuredLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
 import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.pattern.PostQuotation;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationDAO;
@@ -59,7 +60,7 @@ public class QuotationStore implements PostQuotation {
         Map<String, Object> responseValidateQuotation = insurancePolicy.executeValidateQuotationLife(payloadStore.getInput().getId(),quotationDao.getInsuranceProductId(),plan.getId());
         LOGGER.info("***** QuotationStore - existQuotationLifeOnDB | responseValidateQuotation: {} *****",JsonHelper.getInstance().convertObjectToJsonString(responseValidateQuotation));
 
-        return (BigDecimal) responseValidateQuotation.get(RBVDProperties.FIELD_RESULT_NUMBER.getValue());
+        return (BigDecimal) responseValidateQuotation.get(ConstantUtils.FIELD_RESULT_NUMBER_LIFE);
     }
 
     private void save(PayloadStore payloadStore, BigDecimal resultCount,ApplicationConfigurationService applicationConfigurationService){

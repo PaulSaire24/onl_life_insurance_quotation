@@ -10,6 +10,7 @@ public class ConstantUtils {
     public static final String AMOUNT="AMOUNT";
     public static final String VALIDATE_IF_QUOTATION_LIFE_EXISTS ="PISD.VALIDATE_IF_QUOTATION_LIFE_EXISTS";
     public static final String UPDATE_INSURED_QUOTATION_LIFE ="PISD.UPDATE_INSURED_QUOTATION_LIFE";
+    public static final String FIELD_RESULT_NUMBER_LIFE ="RESULT_NUMBER_LIFE";
     public static final String DELETE_INSURED_QUOTATION_LIFE ="PISD.DELETE_INSURED_QUOTATION_LIFE";
     public static final String INSERT_INSURED_QUOTATION_LIFE ="PISD.INSERT_INSURED_QUOTATION_LIFE";
     public static final String BLANK ="";
