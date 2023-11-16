@@ -81,7 +81,7 @@ public class QuotationStore implements PostQuotation {
             LOGGER.info("***** QuotationStore - SaveQuotation - existQuotationLifeOnDB  {} *****",this.existQuotationLifeOnDB(payloadStore));
 
 
-            LOGGER.info("***** QuotationStore - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
+            LOGGER.info("***** QuotationStores - SaveQuotation - argumentForUpdateParticipant  {} *****",argumentForUpdateParticipant.values());
             if(BigDecimal.ONE.compareTo(existQuotationLifeOnDB(payloadStore)) == 0) {
                 insuranceQuotationMod.executeUpdateQuotationModQuery(payloadStore.getMyQuotation(), payloadStore.getInput());
                 insuranceQuotation.updateQuotationInsuredLife(argumentForUpdateParticipant);
