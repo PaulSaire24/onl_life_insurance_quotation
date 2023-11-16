@@ -6,5 +6,6 @@ import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 
 public interface IInsuranceQuotationModDAO {
     void executeUpdateQuotationModQuery(EasyesQuotationDAO easyesQuotationDao, QuotationLifeDTO quotation);
+    void deleteQuotationInsuredMod(String policyQuotaInternalId);
     void executeInsertQuotationModQuery(PayloadStore payloadStore);
 }

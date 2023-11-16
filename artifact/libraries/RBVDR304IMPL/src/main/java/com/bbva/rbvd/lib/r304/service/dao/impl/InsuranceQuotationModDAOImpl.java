@@ -8,11 +8,13 @@ import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
 import com.bbva.rbvd.lib.r304.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r304.service.dao.IInsuranceQuotationModDAO;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r304.transform.bean.InsuranceQuotationModBean;
 import com.bbva.rbvd.lib.r304.transform.map.InsuranceQuotationModMap;
+import com.bbva.rbvd.lib.r304.transform.map.QuotationLifeInternalMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,12 @@ public class InsuranceQuotationModDAOImpl implements IInsuranceQuotationModDAO {
         Integer updateQuotationModResult = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_UPDATE_QUOTATION_MOD.getValue(), argumentsUpdateQuotationMod);
         validateInsertionQueries(updateQuotationModResult, RBVDErrors.QUOTATION_MOD_UPDATE_WAS_WRONG);
     }
+    @Override
+    public void deleteQuotationInsuredMod(String policyQuotaInternalId) {
+        Map<String, Object> argument = InsuranceQuotationModMap.createArgumentForDeleteQuotationMod(policyQuotaInternalId);
+        this.pisdR350.executeInsertSingleRow(ConstantUtils.DELETE_QUOTATION_MOD,argument);
+    }
+
     @Override
     public void executeInsertQuotationModQuery(PayloadStore payloadStore) {
         InsuranceQuotationModDAO insuranceQuotationModDao = InsuranceQuotationModBean.createQuotationModDao(payloadStore);
