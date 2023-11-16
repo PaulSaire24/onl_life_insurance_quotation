@@ -169,6 +169,7 @@ public class RBVDR304ImplTest {
         customerBOS.add(customerBO);
         customerListASO.setData(customerBOS);
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(0));
+        mapInformation.put(ConstantUtils.FIELD_RESULT_NUMBER_LIFE,new BigDecimal(1));
         when(rbvdr304.rbvdR303.executeGetCustomerHost(anyString())).thenReturn(customerListASO);
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
@@ -510,6 +511,8 @@ public class RBVDR304ImplTest {
     public void testExecuteBusinessLogicEasyesQuotationUpdateQuotation_OK() {
 
         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
+        mapInformation.put(ConstantUtils.FIELD_RESULT_NUMBER_LIFE,new BigDecimal(0));
+
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
@@ -531,7 +534,8 @@ public class RBVDR304ImplTest {
     @Test
     public void testExecuteBusinessLogicDynamicLifeUpdateQuotation_OK() {
         input.getProduct().setId("841");
-         mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
+        mapInformation.put(ConstantUtils.FIELD_RESULT_NUMBER_LIFE,new BigDecimal(0));
+        mapInformation.put(RBVDProperties.FIELD_RESULT_NUMBER.getValue(),new BigDecimal(1));
         when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(mapInformation);
 
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
