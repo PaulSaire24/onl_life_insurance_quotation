@@ -190,7 +190,7 @@ public class InsuranceQuotationInsuredBean {
         if(Objects.nonNull(customerData)){
             participantDAO.setInsuredCustomerName(getSafeFirstNameFromCustomerData(customerData));
             participantDAO.setClientLastName(getLastNameFromCustomerData(customerData));
-            participantDAO.setCustomerBirthDate(getBirthDateFromCustomerData(customerData));
+            participantDAO.setCustomerBirthDate(toLocalDate(ParseFecha(customerData.getBirthData().getBirthDate())));
             participantDAO.setGenderId(customerData.getGender() != null ? customerData.getGender().getId().substring(0, 1) : null);
             String documentType = getDocumentTypeFromCUstomerData(customerData);
             participantDAO.setCustomerDocumentType(setDocumentTypeWithCustomerData(documentType,applicationConfigurationService));
@@ -262,14 +262,18 @@ public class InsuranceQuotationInsuredBean {
         return contactDetailsDAO;
     }
 
-    public static LocalDate getBirthDateFromCustomerData(CustomerBO customerData) {
-        Date birthday=null;
-        if(customerData.getBirthData() != null && customerData.getBirthData().getBirthDate() != null) {
-            LocalDate lc = LocalDate.parse(customerData.getBirthData().getBirthDate(), DateTimeFormatter.ofPattern(ConstantUtils.PATTERN_DATE));
-            ZoneId localZone = ZoneId.of(ConstantUtils.ZONE_AMERICA_LIMA);
-            birthday = Date.from(lc.atStartOfDay(localZone).toInstant());
+
+    public static LocalDate toLocalDate(Date date) {
+        if(!Objects.nonNull(date)){
+            return null;
         }
-        return (Objects.nonNull(birthday)) ? birthday.toInstant().atZone(ConstantUtils.ZONE_ID).toLocalDate() : null;
+        return date.toInstant().atZone(ZoneId.of("GMT")).toLocalDate();
+    }
+
+    public static Date ParseFecha(String fecha) {
+        LocalDate lc = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        ZoneId localZone = ZoneId.of("America/Lima");
+        return Date.from(lc.atStartOfDay(localZone).toInstant());
     }
     private static String getSafeFirstNameFromCustomerData(CustomerBO customerData){
         return customerData.getFirstName() != null ? customerData.getFirstName() : null;
