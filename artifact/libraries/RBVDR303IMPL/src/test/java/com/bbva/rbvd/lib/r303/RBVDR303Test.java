@@ -12,7 +12,6 @@ import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r014.PISDR014;
 
@@ -37,7 +36,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.anyString;

@@ -4,15 +4,20 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
+import com.bbva.pisd.dto.insurance.bo.DocumentTypeBO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
-import com.bbva.pisd.dto.insurance.bo.DocumentTypeBO;
-import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.pisd.dto.insurance.commons.ContactDetailDTO;
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
-import com.bbva.rbvd.dto.lifeinsrc.dao.ParticipantDAO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.GenderDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
@@ -32,10 +37,17 @@ import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -322,6 +334,8 @@ public class RBVDR304ImplTest {
         customerBO.setFirstName("Alec");
         customerBO.setSecondLastName("Taboada");
         customerBO.setLastName("Taboada");
+        customerBO.setBirthData(new BirthDataBO());
+        customerBO.getBirthData().setBirthDate("1990-12-12");
         List<IdentityDocumentsBO> documents= new ArrayList<>();
         IdentityDocumentsBO identityDocumentsBO = new IdentityDocumentsBO();
         identityDocumentsBO.setDocumentNumber("75874332");
@@ -396,6 +410,8 @@ public class RBVDR304ImplTest {
         customerBO.setFirstName("Alec");
         customerBO.setSecondLastName("Taboada");
         customerBO.setLastName("Taboada");
+        customerBO.setBirthData(new BirthDataBO());
+        customerBO.getBirthData().setBirthDate("1990-12-12");
         List<IdentityDocumentsBO> documents= new ArrayList<>();
         IdentityDocumentsBO identityDocumentsBO = new IdentityDocumentsBO();
         identityDocumentsBO.setDocumentNumber("75874332");
