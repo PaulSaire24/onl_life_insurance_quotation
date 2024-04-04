@@ -16,18 +16,16 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
 import com.bbva.rbvd.lib.r304.impl.util.ConvertUtils;
+import com.bbva.rbvd.lib.r304.impl.util.ValidationUtil;
 import com.bbva.rbvd.lib.r304.transfer.PayloadStore;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.bbva.rbvd.lib.r304.impl.util.ValidationUtil.isBBVAClient;
+
 
 public class InsuranceQuotationInsuredBean {
 
@@ -158,7 +156,7 @@ public class InsuranceQuotationInsuredBean {
         participantDAO.setInsuredId(safeGetInsuredId(participant));
         participantDAO.setCustomerDocumentType((documentType != null) ? applicationConfigurationService.getProperty(documentType) : null);
         participantDAO.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
-        participantDAO.setIsBbvaCustomerType(isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        participantDAO.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(participant.getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
         participantDAO.setInsuredCustomerName(participant.getFirstName());
         participantDAO.setClientLastName(getLastNameFromParticipant(participant));
         participantDAO.setCustomerBirthDate(getBirthDateFromParticipant(participant));
@@ -190,7 +188,7 @@ public class InsuranceQuotationInsuredBean {
         if(Objects.nonNull(customerData)){
             participantDAO.setInsuredCustomerName(getSafeFirstNameFromCustomerData(customerData));
             participantDAO.setClientLastName(getLastNameFromCustomerData(customerData));
-            participantDAO.setCustomerBirthDate(toLocalDate(ParseFecha(customerData.getBirthData().getBirthDate())));
+            participantDAO.setCustomerBirthDate(ConvertUtils.convertDateToLocalDate(ConvertUtils.parseFecha(customerData.getBirthData().getBirthDate())));
             participantDAO.setGenderId(customerData.getGender() != null ? customerData.getGender().getId().substring(0, 1) : null);
             String documentType = getDocumentTypeFromCUstomerData(customerData);
             participantDAO.setCustomerDocumentType(setDocumentTypeWithCustomerData(documentType,applicationConfigurationService));
@@ -220,7 +218,7 @@ public class InsuranceQuotationInsuredBean {
         }
 
         participantDAO.setInsuredId(input.getHolder().getId());
-        participantDAO.setIsBbvaCustomerType(isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
+        participantDAO.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(input.getHolder().getId()) ? ConstantUtils.YES_S : ConstantUtils.NO_N);
 
     }
 
@@ -263,18 +261,8 @@ public class InsuranceQuotationInsuredBean {
     }
 
 
-    public static LocalDate toLocalDate(Date date) {
-        if(!Objects.nonNull(date)){
-            return null;
-        }
-        return date.toInstant().atZone(ZoneId.of("GMT")).toLocalDate();
-    }
 
-    public static Date ParseFecha(String fecha) {
-        LocalDate lc = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        ZoneId localZone = ZoneId.of("America/Lima");
-        return Date.from(lc.atStartOfDay(localZone).toInstant());
-    }
+
     private static String getSafeFirstNameFromCustomerData(CustomerBO customerData){
         return customerData.getFirstName() != null ? customerData.getFirstName() : null;
     }
