@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r303;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
@@ -21,18 +22,23 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.impl.RBVDR303Impl;
 
+import com.bbva.rbvd.lib.r303.impl.business.ExceptionBusiness;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -51,6 +57,8 @@ import static org.mockito.Mockito.anyString;
 		"classpath:/META-INF/spring/RBVDR303-arc-test.xml" })
 public class RBVDR303Test {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR303Test.class);
+	private final ExceptionBusiness rimacExceptionHandler = new ExceptionBusiness();
 	private final RBVDR303Impl rbvdR303 = new RBVDR303Impl();
 
 	private ApplicationConfigurationService applicationConfigurationService;
@@ -119,6 +127,25 @@ public class RBVDR303Test {
 
 		assertNull(validation);
 	}
+
+
+	@Test(expected = BusinessException.class)
+	public void handler_HttpClientErrorException() {
+		LOGGER.info("RBVDR303Test - Executing handler_HttpClientErrorException");
+		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"ErroralValidarDatos.\",\"details\":[\"Elcúmulodelclientehasuperadoellímitemáximoparasucotización.\",\"Elcumulodelclienteerroneo\"],\"httpStatus\":400}}";
+		HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "", responseBody.getBytes(), StandardCharsets.UTF_8);
+		this.rimacExceptionHandler.handler(clientErrorException);
+	}
+
+	@Test(expected = BusinessException.class)
+	public void handler_HttpClientErrorExceptionElse() {
+		LOGGER.info("RBVDR303Test - Executing handler_HttpClientErrorException");
+		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"Elplazo10solopermitelossiguientesporcentajesdedevolución:75,100\",\"httpStatus\":400}}";
+		HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "", responseBody.getBytes(), StandardCharsets.UTF_8);
+		this.rimacExceptionHandler.handler(clientErrorException);
+	}
+
+
 
 	@Test
 	public void executeGetCustomerHostOk() {
