@@ -6,6 +6,7 @@ import com.bbva.rbvd.lib.r303.impl.util.Constans;
 import com.bbva.rbvd.lib.r303.impl.util.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
@@ -17,19 +18,19 @@ public class ExceptionBusiness {
 
     public void handler(RestClientException exception) {
         if(exception instanceof HttpClientErrorException) {
-            LOGGER.info("RimacExceptionHandler - HttpClientErrorException");
+            LOGGER.info("ExceptionBusiness - HttpClientErrorException");
             this.clientExceptionHandler((HttpClientErrorException) exception);
         } else {
-            LOGGER.info("RimacExceptionHandler - HttpServerErrorException");
+            LOGGER.info("ExceptionBusiness - HttpServerErrorException");
             throw new BusinessException("RBVD00000158", false, "Ocurrio un problema en el servidor");
         }
     }
 
     private void clientExceptionHandler(HttpClientErrorException exception) {
         String responseBody = exception.getResponseBodyAsString();
-        LOGGER.info("HttpClientErrorException - Response body: {}", responseBody);
+        LOGGER.info("ExceptionBusiness - clientExceptionHandler() - Response body: {}", responseBody);
         ErrorRimacBO rimacError = this.getErrorObject(responseBody);
-        LOGGER.info("HttpClientErrorException - rimacError details: {}", rimacError.getError().getDetails());
+        LOGGER.info("ExceptionBusiness - clientExceptionHandler() - rimacError details: {}", rimacError.getError().getDetails());
         this.throwingBusinessException(rimacError);
     }
 
@@ -41,7 +42,7 @@ public class ExceptionBusiness {
 
     private static void setBusinessException(ErrorRimacBO rimacError, BusinessException businessException) {
         StringBuilder details = new StringBuilder();
-        if (rimacError.getError().getDetails() != null && !rimacError.getError().getDetails().isEmpty()) {
+        if (!CollectionUtils.isEmpty(rimacError.getError().getDetails())) {
             for (String detail : rimacError.getError().getDetails()) {
                 if (details.length() > 0) {
                     details.append(" | ");

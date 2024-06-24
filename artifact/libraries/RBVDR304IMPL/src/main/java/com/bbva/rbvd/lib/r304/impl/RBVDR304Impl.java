@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r304.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.product.QuotationEasyYes;
@@ -15,31 +16,36 @@ public class RBVDR304Impl extends RBVDR304Abstract {
 
 	@Override
 	public QuotationLifeDTO executeBusinessLogicQuotation(QuotationLifeDTO input) {
+		try{
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  START *****");
+			LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  ***** {}", input);
+			LOGGER.info("***** RBVDR304Impl - userAudit  ***** {}", input.getUserAudit());
 
-		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  START *****");
-		LOGGER.info("***** RBVDR304Impl - executeBusinessLogicEasyesQuotation  ***** {}", input);
-		LOGGER.info("***** RBVDR304Impl - userAudit  ***** {}", input.getUserAudit());
+			LOGGER.info("***** RBVDR304Impl - user  ***** {}", input.getCreationUser());
+			QuotationLifeDTO response = new QuotationLifeDTO();
+			Quotation quotation = null;
 
-		LOGGER.info("***** RBVDR304Impl - user  ***** {}", input.getCreationUser());
-		QuotationLifeDTO response = new QuotationLifeDTO();
-		Quotation quotation = null;
-
-		if (input.getProduct().getId().equals("840")) {
-			quotation = new QuotationEasyYes(
-					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303)
-					, new QuotationStore(this.pisdR350)
-			);
-			response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
+			if (input.getProduct().getId().equals("840")) {
+				quotation = new QuotationEasyYes(
+						new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303)
+						, new QuotationStore(this.pisdR350)
+				);
+				response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
 
 
-		} else if (input.getProduct().getId().equals("841")) {
-			quotation = new QuotationVidaDinamico(
-					new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303),
-					new QuotationStore(this.pisdR350)
-			);
-			response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
+			} else if (input.getProduct().getId().equals("841")) {
+				quotation = new QuotationVidaDinamico(
+						new QuotationParameter(this.pisdR350, this.applicationConfigurationService,this.rbvdR303),
+						new QuotationStore(this.pisdR350)
+				);
+				response = quotation.start(input, this.rbvdR303,this.applicationConfigurationService);
+			}
+
+			return response;
+		}catch (BusinessException bex){
+			this.addAdviceWithDescription(bex.getAdviceCode(), bex.getMessage());
+			return null;
 		}
 
-		return response;
 	}
 }
