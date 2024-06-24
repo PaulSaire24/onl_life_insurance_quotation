@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
+import java.nio.charset.StandardCharsets;
+
 public class ExceptionBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionBusiness.class);
@@ -44,7 +46,7 @@ public class ExceptionBusiness {
                 if (details.length() > 0) {
                     details.append(" | ");
                 }
-                details.append(detail);
+                details.append(decodeMessage(detail));
             }
         }
         // E1:ERROR DE DATOS, E2:ERROR FUNCIONAL
@@ -55,6 +57,11 @@ public class ExceptionBusiness {
             businessException.setAdviceCode(Constans.Error.BBVAE2 + Constans.Error.COD_008411);
             businessException.setMessage(rimacError.getError().getMessage());
         }
+    }
+
+    public static String decodeMessage(String message) {
+        byte[] bytes = message.getBytes(StandardCharsets.ISO_8859_1);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private ErrorRimacBO getErrorObject(String responseBody) {
