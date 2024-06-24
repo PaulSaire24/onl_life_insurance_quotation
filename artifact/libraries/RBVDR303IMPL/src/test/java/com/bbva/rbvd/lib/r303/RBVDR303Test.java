@@ -32,7 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -125,7 +125,7 @@ public class RBVDR303Test {
 	@Test(expected = BusinessException.class)
 	public void handler_HttpClientErrorExceptionWithTwoDetails() {
 		LOGGER.info("RBVDR303Test - Executing handler_HttpClientErrorException");
-		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"Error al Validar Datos.\",\"details\":[\"El plazo 10 solo permite los siguientes porcentajes de devolución: 75,100.\",\"El codigo de plan no existe\"],\"httpStatus\":400}}";
+		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"Error al Validar Datos.\",\"details\":[\"El plan 533721, no existe en la cotización.\",\"El codigo de plan no existe\"],\"httpStatus\":400}}";
 		HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "", responseBody.getBytes(), StandardCharsets.UTF_8);
 		this.rimacExceptionHandler.handler(clientErrorException);
 	}
@@ -133,12 +133,17 @@ public class RBVDR303Test {
 	@Test(expected = BusinessException.class)
 	public void handler_HttpClientErrorExceptionWithoutDetails() {
 		LOGGER.info("RBVDR303Test - Executing handler_HttpClientErrorException");
-		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"El plazo 10 solo permite los siguientes porcentajes de devolución:75,100\",\"httpStatus\":400}}";
+		String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"El plan 533721, no existe en la cotización.\",\"httpStatus\":400}}";
 		HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "", responseBody.getBytes(), StandardCharsets.UTF_8);
 		this.rimacExceptionHandler.handler(clientErrorException);
 	}
 
-
+	@Test(expected = BusinessException.class)
+	public void handler_HttpServerErrorException() {
+		LOGGER.info("RBVDR303Test - Executing handler_HttpServerErrorException");
+		HttpServerErrorException serverErrorException = new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "");
+		this.rimacExceptionHandler.handler(serverErrorException);
+	}
 
 	@Test
 	public void executeGetCustomerHostOk() {
