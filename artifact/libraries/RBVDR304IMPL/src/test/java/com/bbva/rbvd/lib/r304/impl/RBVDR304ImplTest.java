@@ -22,10 +22,7 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.quotation.EasyesQuotationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.*;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r303.RBVDR303;
 import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
@@ -45,6 +42,7 @@ import java.util.Map;
 import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyMap;
@@ -626,5 +624,17 @@ public class RBVDR304ImplTest {
         QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
         assertNotNull(validation);
     }
+
+
+    @Test
+    public void testExecuteBusinessLogicQuotation_Error() {
+
+        input.getProduct().setId("841");
+        when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(null);
+        QuotationLifeDTO validation = this.rbvdr304.executeBusinessLogicQuotation(input);
+        assertNull(validation);
+
+    }
+
 
 }

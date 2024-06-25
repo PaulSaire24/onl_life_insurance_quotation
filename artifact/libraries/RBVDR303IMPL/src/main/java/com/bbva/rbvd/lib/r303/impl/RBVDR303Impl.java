@@ -21,6 +21,7 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r303.impl.business.ExceptionBusiness;
 import com.bbva.rbvd.lib.r303.impl.util.JsonHelper;
 
 import org.apache.commons.lang3.StringUtils;
@@ -82,6 +83,8 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac END *****");
 			return easyQuotationRimacResponse;
 		} catch (RestClientException exception) {
+			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
+			exceptionHandler.handler(exception);
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Exception: {}", exception.getMessage());
 			return null;
 		}
