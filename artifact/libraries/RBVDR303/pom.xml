@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_life_insurance_quotation</artifactId>
-		<version>0.8.12</version>
+		<version>0.8.13</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR303</artifactId>
 	<name>RBVDR303</name>
-	<version>0.8.12</version>
+	<version>0.8.13</version>
 	<packaging>bundle</packaging>
 	<description>Lib to execute required services to get some information</description>
 	<properties>
