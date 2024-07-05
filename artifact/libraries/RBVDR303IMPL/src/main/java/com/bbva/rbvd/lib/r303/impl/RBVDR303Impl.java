@@ -92,7 +92,7 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 			return null;
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR303Impl - executeEasyesQuotationRimac ***** TimeoutException: {}", ex.getMessage());
-			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
+			throw new BusinessException(Constans.Error.BBVAE2 + Constans.Error.COD_008411, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 
 	}
