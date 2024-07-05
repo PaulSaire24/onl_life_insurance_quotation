@@ -1,5 +1,7 @@
 package com.bbva.rbvd.lib.r303.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
@@ -22,6 +24,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.quotation.QuotationLifeBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r303.impl.business.ExceptionBusiness;
+import com.bbva.rbvd.lib.r303.impl.util.Constans;
 import com.bbva.rbvd.lib.r303.impl.util.JsonHelper;
 
 import org.apache.commons.lang3.StringUtils;
@@ -87,6 +90,9 @@ public class RBVDR303Impl extends RBVDR303Abstract {
 			exceptionHandler.handler(exception);
 			LOGGER.info("***** RBVDR303Impl - executeEasyesQuotationRimac ***** Exception: {}", exception.getMessage());
 			return null;
+		}catch(TimeoutException ex){
+			LOGGER.debug("***** RBVDR303Impl - executeEasyesQuotationRimac ***** TimeoutException: {}", ex.getMessage());
+			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 
 	}

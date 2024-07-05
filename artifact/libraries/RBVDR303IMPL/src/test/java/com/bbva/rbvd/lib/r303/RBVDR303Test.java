@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r303;
 
 import com.bbva.apx.exception.business.BusinessException;
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
@@ -33,6 +34,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -111,16 +113,23 @@ public class RBVDR303Test {
 		assertNotNull(validation.getPayload().getDetalleCotizacion().get(0).getFechaExpiracion());
 	}
 
-	@Test
+	@Test(expected = BusinessException.class)
 	public void executeEasyesQuotationRimacWithRestClientException() {
 		when(this.externalApiConnector.exchange(anyString(), Mockito.any(HttpMethod.class), any(), (Class<QuotationLifeBO>) any(), anyMap())).
-				thenReturn(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
+				thenThrow(new RestClientException("ANY ERROR",new Throwable()));
 
 		QuotationLifeBO validation = this.rbvdR303.executeQuotationRimac(new QuotationLifeBO(), "rimacQuotation", "traceId");
 
-		assertNull(validation);
 	}
 
+	@Test(expected = BusinessException.class)
+	public void executeEasyesQuotationRimacWithTimeException() {
+		when(this.externalApiConnector.exchange(anyString(), Mockito.any(HttpMethod.class), any(), (Class<QuotationLifeBO>) any(), anyMap())).
+				thenThrow(new TimeoutException("BBVAE2008411", "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde."));
+
+		QuotationLifeBO validation = this.rbvdR303.executeQuotationRimac(new QuotationLifeBO(), "rimacQuotation", "traceId");
+
+	}
 
 	@Test(expected = BusinessException.class)
 	public void handler_HttpClientErrorExceptionWithTwoDetails() {

@@ -2,6 +2,7 @@ package com.bbva.rbvd.lib.r304.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.rbvd.dto.lifeinsrc.quotation.QuotationLifeDTO;
+import com.bbva.rbvd.lib.r304.impl.util.ConstantUtils;
 import com.bbva.rbvd.lib.r304.pattern.Quotation;
 import com.bbva.rbvd.lib.r304.pattern.product.QuotationEasyYes;
 import com.bbva.rbvd.lib.r304.pattern.impl.QuotationParameter;
