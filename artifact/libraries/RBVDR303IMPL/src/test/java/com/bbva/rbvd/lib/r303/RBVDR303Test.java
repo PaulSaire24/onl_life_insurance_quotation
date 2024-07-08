@@ -125,7 +125,7 @@ public class RBVDR303Test {
 	@Test(expected = BusinessException.class)
 	public void executeEasyesQuotationRimacWithTimeException() {
 		when(this.externalApiConnector.exchange(anyString(), Mockito.any(HttpMethod.class), any(), (Class<QuotationLifeBO>) any(), anyMap())).
-				thenThrow(new TimeoutException("BBVAE2008411", "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde."));
+				thenThrow(new TimeoutException("BBVAE2008411", "Actualmente estamos experimentando demoras al contactar con el servicio de Rimac. Por favor, inténtelo de nuevo más tarde."));
 
 		QuotationLifeBO validation = this.rbvdR303.executeQuotationRimac(new QuotationLifeBO(), "rimacQuotation", "traceId");
 
