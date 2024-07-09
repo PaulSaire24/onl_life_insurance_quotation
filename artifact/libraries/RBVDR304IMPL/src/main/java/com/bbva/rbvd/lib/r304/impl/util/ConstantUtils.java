@@ -31,4 +31,11 @@ public class ConstantUtils {
     public static  final String ZONE_AMERICA_LIMA = "America/Lima";
     public static final ZoneId ZONE_ID = ZoneId.of(GMT_TIME_ZONE);
     public static final String PATTERN_DATE = "yyyy-MM-dd";
+    public static final String BBVAE1 = "BBVAE1";
+    public static final String BBVAE2 = "BBVAE2";
+    public static final String COD_008411 = "008411";
+
+
+
+
 }
